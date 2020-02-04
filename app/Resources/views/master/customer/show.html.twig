@@ -1,0 +1,142 @@
+{% extends 'master/layout.html.twig' %}
+
+{% block title 'Show Customer' %}
+
+{% block actions %}
+    {{ include('master/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Office Address</th>
+                <td>{{ customer.officeAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>Office City</th>
+                <td>{{ customer.officeCity|default }}</td>
+            </tr>
+            <tr>
+                <th>Office Province</th>
+                <td>{{ customer.officeProvince|default }}</td>
+            </tr>
+            <tr>
+                <th>Office Zip Code</th>
+                <td>{{ customer.officeZipCode|default }}</td>
+            </tr>
+            <tr>
+                <th>Warehouse Address</th>
+                <td>{{ customer.warehouseAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>Warehouse City</th>
+                <td>{{ customer.warehouseCity|default }}</td>
+            </tr>
+            <tr>
+                <th>Warehouse Province</th>
+                <td>{{ customer.warehouseProvince|default }}</td>
+            </tr>
+            <tr>
+                <th>Warehouse Zip Code</th>
+                <td>{{ customer.warehouseZipCode|default }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ customer.phone|default }}</td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>{{ customer.fax|default }}</td>
+            </tr>
+            <tr>
+                <th>Mobile Phone</th>
+                <td>{{ customer.mobilePhone|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ customer.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Position</th>
+                <td>{{ customer.position|default }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ customer.email|default }}</td>
+            </tr>
+            <tr>
+                <th>Tax Number</th>
+                <td>{{ customer.taxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Web Page</th>
+                <td>{{ customer.webPage|default }}</td>
+            </tr>
+            <tr>
+                <th>Business Field</th>
+                <td>{{ customer.businessField|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Two Hino Population</th>
+                <td>{{ customer.categoryTwoHinoPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Two Mitsubishi Population</th>
+                <td>{{ customer.categoryTwoMitsubishiPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Two Toyota Population</th>
+                <td>{{ customer.categoryTwoToyotaPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Two Isuzu Population</th>
+                <td>{{ customer.categoryTwoIsuzuPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Two Other Population</th>
+                <td>{{ customer.categoryTwoOtherPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Three Hino Population</th>
+                <td>{{ customer.categoryThreeHinoPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Three Mitsubishi Population</th>
+                <td>{{ customer.categoryThreeMitsubishiPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Three Nissan Population</th>
+                <td>{{ customer.categoryThreeNissanPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Three Isuzu Population</th>
+                <td>{{ customer.categoryThreeIsuzuPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Category Three Benz Population</th>
+                <td>{{ customer.categoryThreeBenzPopulation|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ customer.note|default }}</td>
+            </tr>
+            <tr>
+                <th>Is Personal</th>
+                <td>{{ customer.isPersonal|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Is Company</th>
+                <td>{{ customer.isCompany|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Is Active</th>
+                <td>{{ customer.isActive|default ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

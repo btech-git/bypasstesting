@@ -1,0 +1,236 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+#    app.security_listener:
+#        class: AppBundle\Listener\SecurityListener
+#        arguments: ["@security.context"]
+#        tags:
+#            - { name: kernel.event_listener, event: security.interactive_login }
+
+    app.master.account_repository:
+        class: AppBundle\Repository\Master\AccountRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Master\Account
+
+    app.master.supplier_repository:
+        class: AppBundle\Repository\Master\SupplierRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Master\Supplier
+
+    app.transaction.sale_discount_application_repository:
+        class: AppBundle\Repository\Transaction\SaleDiscountApplicationRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\SaleDiscountApplication
+
+    app.transaction.sale_discount_application_form:
+        class: AppBundle\Service\Transaction\SaleDiscountApplicationForm
+        arguments: ["@app.transaction.sale_discount_application_repository"]
+
+    app.transaction.sale_order_repository:
+        class: AppBundle\Repository\Transaction\SaleOrderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\SaleOrder
+
+    app.transaction.sale_order_form:
+        class: AppBundle\Service\Transaction\SaleOrderForm
+        arguments: ["@app.transaction.sale_order_repository"]
+
+    app.transaction.sale_order_stock_form:
+        class: AppBundle\Service\Transaction\SaleOrderStockForm
+        arguments: ["@app.transaction.sale_order_repository"]
+
+    app.transaction.delivery_inspection_header_repository:
+        class: AppBundle\Repository\Transaction\DeliveryInspectionHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\DeliveryInspectionHeader
+
+    app.transaction.delivery_inspection_header_form:
+        class: AppBundle\Service\Transaction\DeliveryInspectionHeaderForm
+        arguments: ["@app.transaction.delivery_inspection_header_repository"]
+
+    app.transaction.receive_order_repository:
+        class: AppBundle\Repository\Transaction\ReceiveOrderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\ReceiveOrder
+
+    app.transaction.receive_order_form:
+        class: AppBundle\Service\Transaction\ReceiveOrderForm
+        arguments: ["@app.transaction.receive_order_repository"]
+
+    app.transaction.delivery_workshop_repository:
+        class: AppBundle\Repository\Transaction\DeliveryWorkshopRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\DeliveryWorkshop
+
+    app.transaction.delivery_workshop_form:
+        class: AppBundle\Service\Transaction\DeliveryWorkshopForm
+        arguments: ["@app.transaction.delivery_workshop_repository"]
+
+    app.transaction.delivery_order_repository:
+        class: AppBundle\Repository\Transaction\DeliveryOrderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\DeliveryOrder
+
+    app.transaction.delivery_order_form:
+        class: AppBundle\Service\Transaction\DeliveryOrderForm
+        arguments: ["@app.transaction.delivery_order_repository"]
+
+    app.transaction.purchase_workshop_header_repository:
+        class: AppBundle\Repository\Transaction\PurchaseWorkshopHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\PurchaseWorkshopHeader
+
+    app.transaction.purchase_workshop_header_form:
+        class: AppBundle\Service\Transaction\PurchaseWorkshopHeaderForm
+        arguments: ["@app.transaction.purchase_workshop_header_repository"]
+
+    app.transaction.receive_workshop_repository:
+        class: AppBundle\Repository\Transaction\ReceiveWorkshopRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\ReceiveWorkshop
+
+    app.transaction.receive_workshop_form:
+        class: AppBundle\Service\Transaction\ReceiveWorkshopForm
+        arguments: ["@app.transaction.receive_workshop_repository"]
+
+    app.transaction.sale_invoice_downpayment_repository:
+        class: AppBundle\Repository\Transaction\SaleInvoiceDownpaymentRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\SaleInvoiceDownpayment
+
+    app.transaction.sale_invoice_downpayment_form:
+        class: AppBundle\Service\Transaction\SaleInvoiceDownpaymentForm
+        arguments: ["@app.transaction.sale_invoice_downpayment_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.sale_invoice_header_repository:
+        class: AppBundle\Repository\Transaction\SaleInvoiceHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\SaleInvoiceHeader
+
+    app.transaction.sale_invoice_header_unit_form:
+        class: AppBundle\Service\Transaction\SaleInvoiceHeaderUnitForm
+        arguments: ["@app.transaction.sale_invoice_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.sale_invoice_header_general_form:
+        class: AppBundle\Service\Transaction\SaleInvoiceHeaderGeneralForm
+        arguments: ["@app.transaction.sale_invoice_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.sale_payment_header_repository:
+        class: AppBundle\Repository\Transaction\SalePaymentHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\SalePaymentHeader
+
+    app.transaction.sale_payment_header_form:
+        class: AppBundle\Service\Transaction\SalePaymentHeaderForm
+        arguments: ["@app.transaction.sale_payment_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.purchase_invoice_header_repository:
+        class: AppBundle\Repository\Transaction\PurchaseInvoiceHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\PurchaseInvoiceHeader
+
+    app.transaction.purchase_invoice_header_form:
+        class: AppBundle\Service\Transaction\PurchaseInvoiceHeaderForm
+        arguments: ["@app.transaction.purchase_invoice_header_repository", "@app.report.journal_ledger_repository"]
+
+    app.transaction.purchase_invoice_header_unit_form:
+        class: AppBundle\Service\Transaction\PurchaseInvoiceHeaderUnitForm
+        arguments: ["@app.transaction.purchase_invoice_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.purchase_invoice_header_workshop_form:
+        class: AppBundle\Service\Transaction\PurchaseInvoiceHeaderWorkshopForm
+        arguments: ["@app.transaction.purchase_invoice_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.purchase_invoice_header_general_form:
+        class: AppBundle\Service\Transaction\PurchaseInvoiceHeaderGeneralForm
+        arguments: ["@app.transaction.purchase_invoice_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.purchase_payment_header_repository:
+        class: AppBundle\Repository\Transaction\PurchasePaymentHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\PurchasePaymentHeader
+
+    app.transaction.purchase_payment_header_form:
+        class: AppBundle\Service\Transaction\PurchasePaymentHeaderForm
+        arguments: ["@app.transaction.purchase_payment_header_repository", "@app.report.journal_ledger_repository", "@app.master.account_repository"]
+
+    app.transaction.purchase_delivery_order_repository:
+        class: AppBundle\Repository\Transaction\PurchaseDeliveryOrderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\PurchaseDeliveryOrder
+
+    app.transaction.purchase_delivery_order_form:
+        class: AppBundle\Service\Transaction\PurchaseDeliveryOrderForm
+        arguments: ["@app.transaction.purchase_delivery_order_repository", "@app.master.supplier_repository"]
+
+    app.transaction.sale_invoice_sparepart_header_repository:
+        class: LibBundle\Doctrine\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\SaleInvoiceSparepartHeader
+
+    app.transaction.sale_invoice_sparepart_header_sheet:
+        class: AppBundle\Service\Transaction\SaleInvoiceSparepartHeaderSheet
+        arguments: ["@validator",  "@lib.excel.object_parser", "@app.transaction.sale_invoice_sparepart_header_repository"]
+
+    app.transaction.deposit_header_repository:
+        class: AppBundle\Repository\Transaction\DepositHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\DepositHeader
+
+    app.transaction.deposit_header_form:
+        class: AppBundle\Service\Transaction\DepositHeaderForm
+        arguments: ["@app.transaction.deposit_header_repository", "@app.report.journal_ledger_repository"]
+
+    app.transaction.expense_header_repository:
+        class: AppBundle\Repository\Transaction\ExpenseHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\ExpenseHeader
+
+    app.transaction.expense_header_form:
+        class: AppBundle\Service\Transaction\ExpenseHeaderForm
+        arguments: ["@app.transaction.expense_header_repository", "@app.report.journal_ledger_repository"]
+
+    app.transaction.journal_voucher_header_repository:
+        class: AppBundle\Repository\Transaction\JournalVoucherHeaderRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Transaction\JournalVoucherHeader
+
+    app.transaction.journal_voucher_header_form:
+        class: AppBundle\Service\Transaction\JournalVoucherHeaderForm
+        arguments: ["@app.transaction.journal_voucher_header_repository", "@app.report.journal_ledger_repository"]
+
+    app.report.journal_ledger_repository:
+        class: AppBundle\Repository\Report\JournalLedgerRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - AppBundle\Entity\Report\JournalLedger
+
+    app.report.account_journal_ledger_summary:
+        class: AppBundle\Service\Report\AccountJournalLedgerSummary
+        arguments: ["@app.report.journal_ledger_repository"]

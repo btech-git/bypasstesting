@@ -1,0 +1,48 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr class="alert alert-info">
+            <th>SPK #</th>
+            <th>Tanggal</th>
+            <th>Customer</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleOrder in grid.data %}
+            <tr data-field-id="{{ saleOrder.id }}">
+                <td class="text-left">{{ saleOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ saleOrder.transactionDate|default ? saleOrder.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ saleOrder.customer.name|default }}</td>
+                <td class="text-center">{{ saleOrder.quantity|default }}</td>
+                <td class="text-right">{{ saleOrder.unitPrice|default|number_format(2) }}</td>
+                <td class="text-right">{{ saleOrder.total|default|number_format(2) }}</td>
+                <td class="text-left">
+                    <a class="btn btn-success" href="{{ path('transaction_sale_order_approve', {'id': saleOrder.id}) }}">
+                        <span class="glyphicon glyphicon-check"></span>
+                    </a>
+                    <a class="btn btn-danger" href="{{ path('transaction_sale_order_reject', {'id': saleOrder.id}) }}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    <a class="btn btn-info" href="{{ path('transaction_sale_order_show', {'id': saleOrder.id}) }}">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

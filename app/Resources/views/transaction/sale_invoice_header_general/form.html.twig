@@ -1,0 +1,214 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% import _self as self %}
+
+{% macro details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td>
+            {{ form_row(object.itemName, {'label': false}) }}
+        </td>
+        <td>
+            {{ form_row(object.quantity, {'label': false, 'attr': {'data-name': 'quantity'} }) }}
+        </td>
+        <td>
+            {{ form_row(object.unitPrice, {'label': false, 'attr': {'data-name': 'price', 'data-bind-target': '[data-name=unit-price-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+            <span data-name="unit-price-text-{{ object.vars.name }}">{{ object.vars.value.unitPrice|default|number_format(0) }}</span>
+        </td>
+        <td>
+            {{ form_row(object.discount, {'label': false, 'attr': {'data-name': 'discount', 'data-bind-target': '[data-name=discount-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+            <span data-name="discount-text-{{ object.vars.name }}">{{ object.vars.value.discount|default|number_format(0) }}</span>
+        </td>
+        <td class="text-right">
+            <span data-name="total-{{ object.vars.name }}">{{ object.vars.value.total|default|number_format(0) }}</span>
+        </td>
+        <td>
+            <button type="button" class="btn btn-info remove-sale-invoice-detail-general-prototype">Delete</button>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal Piutang'}) }}
+                {{ form_row(form.taxDate, {'label': 'Tanggal F. Pajak'}) }}
+                {{ form_row(form.taxNumber, {'label': 'Faktur Pajak #'}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.customer, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#customer-dialog'} }) }}
+                <div class="form-group" id="customer-info">
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ saleInvoiceHeader.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="customer-contact-person">{{ saleInvoiceHeader.customer.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Office Address:</label>
+                        <span data-name="customer-office-address">{{ saleInvoiceHeader.customer.officeAddress|default }}</span>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+            
+        <hr />
+        
+        <div>
+            <button type="button" class="btn btn-default" id="add-sale-invoice-detail-general-prototype">Add Detail</button>
+        </div>
+        
+        <br />
+        
+        <table class="table table-bordered" id="sale-invoice-detail-general-list">
+            <thead>
+                <tr class="bg-info">
+                    <th>Nama Barang</th>
+                    <th style="width: 10%">Quantity</th>
+                    <th style="width: 15%">Price</th>
+                    <th style="width: 15%">Disc (Rp.)</th>
+                    <th style="width: 15%">Total</th>
+                    <th style="width: 0"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.details_row(form.saleInvoiceDetailGenerals.vars.prototype)|e }}">
+                {% for saleInvoiceDetailGeneral in form.saleInvoiceDetailGenerals %}
+                    {{ self.details_row(saleInvoiceDetailGeneral) }}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="4">Sub Total</td>
+                    <td class="text-right"><span data-name="sub-total">{{ saleInvoiceHeader.grandTotalBeforeDownpayment|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="4">
+                        <span style="display: inline-block">PPn 10%</span>
+                        <span style="display: inline-block">{{ form_row(form.isTax, {'label': false, 'attr': {'data-name': 'is-tax'} }) }}</span>
+                    </td>
+                    <td class="text-right">
+                        {{ form_row(form.taxNominal, {'label': false}) }}
+                        {{ form_row(form.taxNominalReplacement, {'label': false, 'attr': {'data-name': 'tax-nominal-replacement', 'data-bind-target': '[data-name=tax-nominal-replacement-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                        <span data-name="tax-nominal-replacement-text">{{ form.vars.value.taxNominalReplacement|default|number_format(0) }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="4">Grand Total</td>
+                    <td class="text-right"><span data-name="grand-total">{{ saleInvoiceHeader.grandTotalAfterDownpayment|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+        
+        <div id="customer-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Customer List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="customer-grid" data-grid="{{ path('common_customer_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+    
+    <div id="receive-order-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Receive Order List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="receive-order-grid" data-grid="{{ path('common_receive_order_grid', {'form': form.vars.id, 'options': {'customer_id': saleInvoiceHeader.customer.id|default(0)} }) }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind(updateTextNominal) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        $.each(data.saleInvoiceDetailGenerals, function(index, saleInvoiceDetailGeneral) {
+                            $("[data-name=total-" + index + "]", "#sale-invoice-detail-general-list").text($.numberFormat(saleInvoiceDetailGeneral.total, 2));
+                        });
+                        $("[data-name=sub-total]", "#sale-invoice-detail-general-list").text($.numberFormat(data.subTotal, 2));
+                        $("#{{ form.taxNominal.vars.id }}", "#sale-invoice-detail-general-list").val(data.taxNominal);
+                        if (updateTextNominal) {
+                            $("[data-name=tax-nominal-replacement]", "#sale-invoice-detail-general-list").val(data.taxNominal);
+                            $("[data-name=tax-nominal-replacement-text]", "#sale-invoice-detail-general-list").text($.numberFormat(data.taxNominal, 2));
+                        }
+                        $("[data-name=grand-total]", "#sale-invoice-detail-general-list").text($.numberFormat(data.grandTotal, 2));
+                    }
+                });
+            }
+            
+            var table = $("#sale-invoice-detail-general-list");
+            var tableBody = $("tbody", table);
+            var tableFoot = $("tfoot", table);
+            
+            tableBody.on("change", "[data-name=quantity]", function() {
+                bind(true);
+            });
+            tableBody.on("change", "[data-name=price]", function() {
+                bind(true);
+            });
+            tableBody.on("change", "[data-name=discount]", function() {
+                bind(true);
+            });
+            tableFoot.on("change", "[data-name=is-tax]", function() {
+                bind(true);
+            });
+            tableFoot.on("change", "[data-name=tax-nominal-replacement]", function() {
+                bind(false);
+            });
+            tableBody.on("click", ".remove-sale-invoice-detail-general-prototype", function() {
+                $(this).closest("tr").remove();
+                bind(true);
+            });
+            
+            $("#customer-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#customer-dialog").modal("hide");
+                $("#{{ form.customer.vars.id }}").val($(this).attr("data-field-id")).trigger("change");
+                $("[data-name=customer-name]", "#customer-info").text($(this).attr("data-field-name"));
+                $("[data-name=customer-contact-person]", "#customer-info").text($(this).attr("data-field-contact-person"));
+                $("[data-name=customer-office-address]", "#customer-info").text($(this).attr("data-field-office-address"));
+            });
+            
+            $("#add-sale-invoice-detail-general-prototype").on("click", function() {
+                var name = "{{ form.saleInvoiceDetailGenerals.vars.prototype.vars.name }}";
+                var rows = tableBody.children("tr");
+                var index = Math.max({{ saleInvoiceDetailGeneralsCount }}, (rows.length > 0) ? parseInt(rows.last().attr("data-index")) + 1 : 0);
+                tableBody.appendByPrototype(tableBody.attr("data-prototype"), name, index, function(prototype) {
+                    var quantityPrototype = prototype.find("#{{ form.saleInvoiceDetailGenerals.vars.prototype.quantity.vars.id }}");
+                    quantityPrototype.attr("value", $("[data-name=sale-invoice-detail-general-quantity]", "#sale-invoice-header-info").text());
+                });
+                bind();
+            });
+        });
+    </script>
+{% endblock %}

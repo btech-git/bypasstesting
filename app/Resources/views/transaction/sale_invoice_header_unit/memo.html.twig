@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo">
+        <div class="header">
+            <h1 class="title">PT. Bypassindo Jaya Indah</h1>
+            <h2 class="title">INVOICE PENJUALAN</h2>
+        </div>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table full">
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Invoice #</div>
+                            <div class="cell value">{{ saleInvoiceHeader.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Tanggal Piutang</div>
+                            <div class="cell value">{{ saleInvoiceHeader.receivableDate|default ? saleInvoiceHeader.receivableDate|date('d M Y') }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Customer</div>
+                            <div class="cell value">{{ saleInvoiceHeader.customer.name|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Faktur Pajak #</div>
+                            <div class="cell value">{{ saleInvoiceHeader.taxNumber|default }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <table class="detail">
+            <thead>
+                <tr>
+                    <th class="center">Rangka #</th>
+                    <th class="center">Mesin #</th>
+                    <th class="center">Quantity</th>
+                    <th class="center">Price</th>
+                    <th class="center">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for saleInvoiceDetail in saleInvoiceHeader.saleInvoiceDetails %}
+                    <tr>
+                        <td class="left">{{ saleInvoiceDetail.vehicleChassisNumber|default }}</td>
+                        <td class="left">{{ saleInvoiceDetail.vehicleMachineNumber|default }}</td>
+                        <td class="center">{{ saleInvoiceDetail.quantity|default|number_format(0) }}</td>
+                        <td class="right">{{ saleInvoiceDetail.unitPrice|default|number_format(0) }}</td>
+                        <td class="right">{{ saleInvoiceDetail.total|default|number_format(0) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="label right">Grand Total</td>
+                    <td class="right">{{ saleInvoiceHeader.grandTotal|default|number_format(0) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Terbilang:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ saleInvoiceHeader.grandTotal|default|number_format(0, '.', '')|say|capitalize }} rupiah.</div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Catatan:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ saleInvoiceHeader.note|default }}</div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <div class="signature">
+            <div class="table full">
+                <div class="cell sig">
+                    <div>Penerima,</div>
+                </div>
+                <div class="cell sig">
+                    <div>Hormat Kami,</div>
+                    <div class="blank"></div>
+                    <div class="blank"></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .col:nth-child(1) { width: 50% }
+        .col:nth-child(2) { width: 50% }
+        
+        .col:nth-child(1) .label { width: 35% }
+        .col:nth-child(1) .value { width: 65% }
+        .col:nth-child(2) .label { width: 35% }
+        .col:nth-child(2) .value { width: 65% }
+        
+        .sig:nth-child(1) { width: 50% }
+        .sig:nth-child(2) { width: 50% }
+    </style>
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo">
+        <div class="header">
+            <h2 class="title">PT. BYPASSINDO JAYAINDAH</h2>
+            <h2 class="title">JL. JEND. A. YANI KAV. 52</h2>
+            <h2 class="title">JAKARTA PUSAT</h2>
+            <h2 class="title">TELP: 021-4207757</h2>
+            <br />
+            <h1 class="title">PURCHASE ORDER</h1>
+        </div>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table full">
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Kepada YTH</div>
+                            <div class="cell value">{{ purchaseWorkshopHeader.supplier.name|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label"></div>
+                            <div class="cell value">{{ purchaseWorkshopHeader.supplier.officeAddress|default }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">PO #</div>
+                            <div class="cell value">{{ purchaseWorkshopHeader.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Tanggal PO</div>
+                            <div class="cell value">{{ purchaseWorkshopHeader.transactionDate|default ? purchaseWorkshopHeader.transactionDate|date('d M Y') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <table class="detail">
+            <thead>
+                <tr>
+                    <th class="center">No. Urut</th>
+                    <th class="center">Keterangan</th>
+                    <th class="center">Rangka</th>
+                    <th class="center">Mesin</th>
+                    <th class="center">Jumlah</th>
+                    <th class="center">Harga</th>
+                    <th class="center">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set num = 1 %}
+                {% set rowspan = show ? 15 : 15 %}
+                {% for row in purchaseWorkshopHeader.purchaseWorkshopDetails|batch(rowspan, '') %}
+                    {% for purchaseWorkshopDetail in row %}
+                        <tr>
+                            {% for i in 1..7 if purchaseWorkshopDetail is empty %}
+                                <td>&nbsp;</td>
+                            {% else %}
+                                <td class="center" style="width: 3%">{{ num }}</td>
+                                <td>{{ purchaseWorkshopDetail.itemName|default }}</td>
+                                <td class="left">{{ purchaseWorkshopDetail.purchaseWorkshopHeader.vehicleChassisNumber|default }}</td>
+                                <td style="width: 15%">{{ purchaseWorkshopDetail.purchaseWorkshopHeader.vehicleMachineNumber|default }}</td>
+                                <td class="center" style="width: 10%">{{ purchaseWorkshopDetail.quantity|default|number_format(0) }}</td>
+                                <td class="right" style="width: 15%">{{ purchaseWorkshopDetail.unitPrice|default|number_format(0) }}</td>
+                                <td class="right" style="width: 15%">{{ purchaseWorkshopDetail.total|default|number_format(0) }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% set num = num + 1 %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6" class="label right">Sub Total</td>
+                    <td class="right">Rp. {{ purchaseWorkshopHeader.subTotal|default|number_format(0) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="label right">PPN 10%</td>
+                    <td class="right">Rp. {{ purchaseWorkshopHeader.taxNominal|default|number_format(0) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="6" class="label right">Grand Total</td>
+                    <td class="right">Rp. {{ purchaseWorkshopHeader.grandTotal|default|number_format(0) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Terbilang:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ purchaseWorkshopHeader.grandTotal|default|number_format(0, '.', '')|say|capitalize }} rupiah.</div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">BARANG SUDAH HARUS DITERIMA DI TEMPAT KAMI PADA TANGGAL: </div>
+            </div>
+            <div class="table">
+                <div class="cell label">SYARAT PEMBAYARAN: </div>
+            </div>
+            <div class="table">
+                <div class="cell label">1. HARGA TIDAK MENGIKAT DAN GARANSI 6 BULAN DARI TANGGAL PENYERAHAN </div>
+            </div>
+            <div class="table">
+                <div class="cell label">2. HARGA TERMASUK PPN, TIDAK TERMASUK PPH (JIKA ADA)</div>
+            </div>
+            <div class="table">
+                <div class="cell label">3. TERMIN PEMBAYARAN: CASH/KREDIT ... HARI SEJAK TAGIHAN DITERIMA LENGKAP OLEH KAMI. (PO ASLI HARUS DISERTAKAN PADA SAAT PENAGIHAN)</div>
+            </div>
+            <div class="table">
+                <div class="cell label">4. TANPA SURAT UJI TYPE DAN TIDAK TERMASUK KEUR</div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <div class="signature">
+            <div class="table full">
+                <div class="cell sig">
+                    <div>PEMOHON,</div>
+                </div>
+                <div class="cell sig">
+                    <div>DIKETAHUI,</div>
+                </div>
+                <div class="cell sig">
+                    <div>DISETUJUI OLEH VENDOR,</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .col:nth-child(1) { width: 50% }
+        .col:nth-child(2) { width: 50% }
+        
+        .col:nth-child(1) .label { width: 35% }
+        .col:nth-child(1) .value { width: 65% }
+        .col:nth-child(2) .label { width: 35% }
+        .col:nth-child(2) .value { width: 65% }
+        
+        .sig:nth-child(1) { width: 30% }
+        .sig:nth-child(2) { width: 30% }
+        .sig:nth-child(3) { width: 30% }
+    </style>
+{% endblock %}

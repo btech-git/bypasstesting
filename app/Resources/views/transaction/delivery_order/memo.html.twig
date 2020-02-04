@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-empty top">
+            &nbsp;
+        </div>
+        <div class="rows-1 content-left">
+            &nbsp;
+        </div>
+        <div class="rows-1 content-right">
+            {{ deliveryOrder.codeNumber|default }}
+        </div>
+        <div class="rows-empty middle">
+            &nbsp;
+        </div>
+        <table style="width: 90%">
+            <tr>
+                <td style="width: 70%">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+                <td style="width: 25%; padding-left: 90mm;">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|nl2br }}</td>
+                <td style="padding-left: 60mm;">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.transactionDate|default ? deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.phone|default }}</td>
+                <td style="padding-left: 60mm;">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.staffFirst.name|default }}</td>
+            </tr>
+        </table>
+        <br />
+        <br />
+        <table style="width: 100%">
+            <tr>
+                <td style="padding-left: 30mm;">
+                    {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.manufactureCode|default }}<br />
+                    {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.vosModelName|default }}<br />
+                    {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.dmsVariantName|default }}
+                </td>
+                <td style="width: 20%">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                <td style="width: 20%; text-align: center">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                <td style="width: 20%; text-align: right">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 20cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 7mm;
+            padding-left: 60mm;
+        }
+        div.memo-content div.rows-1.nominal {
+            height: 11mm;
+            padding-left: 40mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left, div.memo-content div.rows-1.price-info.content-right {
+            height: 7mm;
+        }
+        div.memo-content div.rows-1.content-left {
+            width: 125mm;
+            padding-left: 2mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.content-right {
+            width: 155mm;
+            padding-right: 5mm;
+            text-align: right;
+        }
+        div.memo-content div.rows-1.total-price {
+            height: 10mm;
+            padding-left: 18mm;
+        }
+        div.memo-content div.rows-2 {
+            height: 15.4mm;
+            padding-left: 35mm;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 1mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 20mm;
+        }
+        div.memo-content div.rows-empty.bottom {
+            height: 12mm;
+        }
+        div.table-payment {
+            height: 38mm;
+        }
+    </style>
+{% endblock %}

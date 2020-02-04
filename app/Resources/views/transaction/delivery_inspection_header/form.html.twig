@@ -1,0 +1,197 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal'}) }}
+                {{ form_row(form.isVehicleComplete, {'label': 'Vehicle Complete', 'attr': {'data-choice-group': 'completion-part-type'} }) }}
+                {{ form_row(form.isVehicleIncomplete, {'label': 'Vehicle Incomplete', 'attr': {'data-choice-group': 'completion-part-type'} }) }}
+                {{ form_row(form.isBodyBuilderExecuted, {'label': 'Body builder Executed?' }) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.receiveOrder, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#receive-order-dialog'}, 'label': 'SPK' }) }}
+                <div class="form-group" id="receive-order-info">
+                    <div>
+                        <label>SPK #:</label>
+                        <span data-name="sale-order-code-number">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Merk:</label>
+                        <span data-name="sale-order-vehicle-brand">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</span>
+                    </div>
+                    <div>
+                        <label>Serial Number:</label>
+                        <span data-name="sale-order-vehicle-serial-number">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleSerialNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Warna:</label>
+                        <span data-name="sale-order-vehicle-color">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</span>
+                    </div>
+                    <div>
+                        <label>Tahun Pembuatan:</label>
+                        <span data-name="vehicle-production-year">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</span>
+                    </div>
+                    <div>
+                        <label>Rangka #:</label>
+                        <span data-name="vehicle-chassis-number">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Mesin #:</label>
+                        <span data-name="vehicle-machine-number">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Deskripsi:</label>
+                        <span data-name="vehicle-description">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</span>
+                    </div>
+                    <div>
+                        <label>Manufacture Code:</label>
+                        <span data-name="vehicle-model-manufacture-code">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.manufactureCode|default }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <hr />
+        
+        <div class="form-group {{ deliveryInspectionHeader.id ? 'show' : 'hide' }}">
+            <button type="button" class="btn btn-default" id="check-all-details">Check All</button>
+            <button type="button" class="btn btn-default" id="uncheck-all-details">Unheck All</button>
+        </div>
+        
+        {% set last_id = '' %}
+        {% set starts, ends, names = {}, {}, {} %}
+        {% for detail in form.details %}
+            {% set id = detail.vars.value.inspectionItem.inspectionItemCategory.id %}
+            {% if last_id != id %}
+                {% set starts = starts|merge({('0' ~ id): loop.index0}) %}
+                {% set names = names|merge({('0' ~ id): detail.vars.value.inspectionItem.inspectionItemCategory.name}) %}
+            {% endif %}
+            {% set ends = ends|merge({('0' ~ id): loop.index0}) %}
+            {% set last_id = id %}
+        {% endfor %}
+        
+        <div id="item-list" class="{{ deliveryInspectionHeader.id ? 'show' : 'hide' }}">
+            {% for detail in form.details %}
+                {% set id = detail.vars.value.inspectionItem.inspectionItemCategory.id %}
+                {% set diff = ends['0' ~ id] - starts['0' ~ id] + 1 %}
+                {% set range = diff + (3 - (diff % 3 == 0 ? 3 : diff % 3)) %}
+                {% set column = 0 %}
+                {% if loop.index0 < starts['0' ~ id] + 1 * (range // 3) %}
+                    {% set column = 1 %}
+                {% elseif loop.index0 < starts['0' ~ id] + 2 * (range // 3) %}
+                    {% set column = 2 %}
+                {% elseif loop.index0 < starts['0' ~ id] + 3 * (range // 3) %}
+                    {% set column = 3 %}
+                {% endif %}
+                <div data-category-id="{{ id }}" data-column="{{ column }}">
+                    {{ form_row(detail.inspectionItem) }}
+                    {{ form_widget(detail.isSelected, {'label': detail.vars.value.inspectionItem.name|default, 'attr': {'class': 'detail-input-selection'} }) }}
+                    {{ form_errors(detail.isSelected) }}
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div id="input-check-list" class="{{ deliveryInspectionHeader.id ? 'show' : 'hide' }}">
+            {% for key, name in names %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <span class="lead">
+                            <label>{{ name|default }}</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="row" data-category-id="{{ key }}">
+                    <div class="col-sm-4" data-column="1"></div>
+                    <div class="col-sm-4" data-column="2"></div>
+                    <div class="col-sm-4" data-column="3"></div>
+                </div>
+                <br />
+            {% endfor %}
+        </div>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="receive-order-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Receive Order List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="receive-order-grid" data-grid="{{ path('common_receive_order_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function showBodyBuilderExecuted() {
+                $("#{{ form.isBodyBuilderExecuted.vars.id }}").parent().show();
+            }
+            function hideBodyBuilderExecuted() {
+                $("#{{ form.isBodyBuilderExecuted.vars.id }}").parent().hide();
+            }
+            $("#item-list > [data-column]").each(function() {
+                var categoryId = $(this).attr("data-category-id");
+                var column = $(this).attr("data-column");
+                
+                $(this).contents().appendTo("#input-check-list > [data-category-id=0"+categoryId+"] > [data-column="+column+"]");
+            });
+            
+            $("#item-list").remove();
+            
+            $("#check-all-details").on("click", function() {
+                $(".detail-input-selection").prop("checked", true);
+            });
+            $("#uncheck-all-details").on("click", function() {
+                $(".detail-input-selection").prop("checked", false);
+            });
+            
+            if (!$("#{{ form.isVehicleComplete.vars.id }}").is(":checked")) {
+                hideBodyBuilderExecuted();
+            }
+            $("#{{ form.isVehicleIncomplete.vars.id }}").on("change", function() {
+                hideBodyBuilderExecuted();
+            });
+            $("#{{ form.isVehicleComplete.vars.id }}").on("change", function() {
+                if ($(this).is(":checked")) {
+                    showBodyBuilderExecuted();
+                } else {
+                    hideBodyBuilderExecuted();
+                }
+            });
+            $("#receive-order-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#receive-order-dialog").modal("hide");
+                $("#{{ form.receiveOrder.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=customer-name]", "#receive-order-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=vehicle-production-year]", "#receive-order-info").text($(this).attr("data-field-vehicle-production-year"));
+                $("[data-name=vehicle-description]", "#receive-order-info").text($(this).attr("data-field-vehicle-description"));
+                $("[data-name=vehicle-chassis-number]", "#receive-order-info").text($(this).attr("data-field-vehicle-chassis-number"));
+                $("[data-name=vehicle-machine-number]", "#receive-order-info").text($(this).attr("data-field-vehicle-machine-number"));
+                $("[data-name=sale-order-code-number]", "#receive-order-info").text($(this).attr("data-field-sale-order-code-number"));
+                $("[data-name=sale-order-vehicle-brand]", "#receive-order-info").text($(this).attr("data-field-sale-order-vehicle-brand"));
+                $("[data-name=sale-order-vehicle-serial-number]", "#receive-order-info").text($(this).attr("data-field-sale-order-vehicle-serial-number"));
+                $("[data-name=sale-order-vehicle-color]", "#receive-order-info").text($(this).attr("data-field-sale-order-vehicle-color"));
+                $("[data-name=vehicle-model-manufacture-code]", "#receive-order-info").text($(this).attr("data-field-vehicle-model-manufacture-code"));
+            });
+        });
+    </script>
+{% endblock %}

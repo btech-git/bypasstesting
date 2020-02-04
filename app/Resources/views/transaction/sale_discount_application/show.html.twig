@@ -1,0 +1,210 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Proposal Penjualan Unit' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Code Number</th>
+                <td>{{ saleDiscountApplication.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ saleDiscountApplication.transactionDate|default ? saleDiscountApplication.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ saleDiscountApplication.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ saleDiscountApplication.customer.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ saleDiscountApplication.customer.phone|default }}</td>
+            </tr>
+            <tr>
+                <th>Komisi a/n</th>
+                <td>{{ saleDiscountApplication.mediatorName|default }}</td>
+            </tr>
+            <tr>
+                <th>Hub</th>
+                <td>{{ saleDiscountApplication.mediatorRanking|default }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ saleDiscountApplication.mediatorPhone|default }}</td>
+            </tr>
+            <tr>
+                <th>Nett/PPN/PPH</th>
+                <td>{{ saleDiscountApplication.mediatorTaxSelection|default }}</td>
+            </tr>
+            <tr>
+                <th>Komisi (Rp.)</th>
+                <td>{{ saleDiscountApplication.mediatorPrice|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Manufacture Code</th>
+                <td>{{ saleDiscountApplication.vehicleModel.manufactureCode|default }}</td>
+            </tr>
+            <tr>
+                <th>VOS Model</th>
+                <td>{{ saleDiscountApplication.vehicleModel.vosModelName|default }}</td>
+            </tr>
+            <tr>
+                <th>DMS Variant</th>
+                <td>{{ saleDiscountApplication.vehicleModel.dmsVariantName|default }}</td>
+            </tr>
+            <tr>
+                <th>NIK</th>
+                <td>{{ saleDiscountApplication.assemblyYear|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ saleDiscountApplication.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Karoseri</th>
+                <td>{{ saleDiscountApplication.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ saleDiscountApplication.supplier.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Alamat</th>
+                <td>{{ saleDiscountApplication.supplier.officeAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>No. HP</th>
+                <td>{{ saleDiscountApplication.supplier.mobilePhone|default }}</td>
+            </tr>
+            <tr>
+                <th>Modal (incl PPN)</th>
+                <td>{{ saleDiscountApplication.workshopPrice|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Profit</th>
+                <td>{{ saleDiscountApplication.workshopProfit|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Split PO</th>
+                <td>{{ saleDiscountApplication.isWorkshopSplitPurchase|default }}</td>
+            </tr>
+            <tr>
+                <th>Area</th>
+                <td>{{ saleDiscountApplication.orderArea|default }}</td>
+            </tr>
+            <tr>
+                <th>Bentuk Karoseri</th>
+                <td>{{ saleDiscountApplication.workshopType|default }}</td>
+            </tr>
+            <tr>
+                <th>Referensi</th>
+                <td>{{ saleDiscountApplication.workshopReference|default }}</td>
+            </tr>
+            <tr>
+                <th>Kirim (karoseri/KIR/customer</th>
+                <td>{{ saleDiscountApplication.deliveryType|default }}</td>
+            </tr>
+            <tr>
+                <th>BBN Off TR / On TR</th>
+                <td>{{ saleDiscountApplication.ownershipStatus|default }}</td>
+            </tr>
+            <tr>
+                <th>Hitam / Kuning</th>
+                <td>{{ saleDiscountApplication.ownershipCategory|default }}</td>
+            </tr>
+            <tr>
+                <th>Jumlah Unit</th>
+                <td>{{ saleDiscountApplication.requestQuantity|default }}</td>
+            </tr>
+            <tr>
+                <th>Harga Jual / Unit (incl PPN)</th>
+                <td>{{ saleDiscountApplication.unitPrice|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Harga Disetujui (incl PPN)</th>
+                <td>{{ saleDiscountApplication.approvedPrice|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Cara Pembayaran</th>
+                <td>{{ saleDiscountApplication.paymentMethodType|default }}</td>
+            </tr>
+            <tr>
+                <th>CBD, unit dikirim setelah pelunasan 100%</th>
+                <td>{{ saleDiscountApplication.isCashBeforeDelivery|default }}</td>
+            </tr>
+            <tr>
+                <th>TOP, dengan syarat: 1. PO 2. Tanda Jadi 3. DP 30%</th>
+                <td>{{ saleDiscountApplication.isPaymentTerm|default }}</td>
+            </tr>
+            <tr>
+                <th>Leasing Company</th>
+                <td>{{ saleDiscountApplication.financeCompany|default }}</td>
+            </tr>
+            <tr>
+                <th>Tenor (tahun)</th>
+                <td>{{ saleDiscountApplication.termOfPayment|default }}</td>
+            </tr>
+            <tr>
+                <th>Referensi Oleh</th>
+                <td>{{ saleDiscountApplication.leasingReference|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanda Jadi</th>
+                <td>{{ saleDiscountApplication.bookingFee|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Total DP I</th>
+                <td>{{ saleDiscountApplication.downpayment1|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Total DP II</th>
+                <td>{{ saleDiscountApplication.downpayment2|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Pelunasan</th>
+                <td>{{ saleDiscountApplication.totalPayment|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Wajib Bayar PPN 10% senilai pengajuan harga ke leasing (Rp.)</th>
+                <td>{{ saleDiscountApplication.leasingTaxAmount|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Invoice vs PO leasing sesuai?</th>
+                <td>{{ saleDiscountApplication.leasingStatus|default }}</td>
+            </tr>
+            <tr>
+                <th>Harga PO Leasing</th>
+                <td>{{ saleDiscountApplication.leasingPrice|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Selisih PO-Invoice</th>
+                <td>{{ saleDiscountApplication.leasingPriceDifference|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Lebih Bayar</th>
+                <td>{{ saleDiscountApplication.leasingOverPaid|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Nett Lebih Bayar</th>
+                <td>{{ saleDiscountApplication.leasingOverPaidNett|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ saleDiscountApplication.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+            
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_sale_discount_application_memo', {'id': saleDiscountApplication.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Proposal
+    </a>
+{% endblock %}

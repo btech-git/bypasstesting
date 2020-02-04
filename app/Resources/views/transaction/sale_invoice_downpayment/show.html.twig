@@ -1,0 +1,54 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Sale Invoice Downpayment' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Invoice #</th>
+                <td>{{ saleInvoiceDownpayment.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ saleInvoiceDownpayment.transactionDate|default ? saleInvoiceDownpayment.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ saleInvoiceDownpayment.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ saleInvoiceDownpayment.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Faktur Pajak #</th>
+                <td>{{ saleInvoiceDownpayment.formattedTaxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Jenis Pembayaran</th>
+                <td>{{ saleInvoiceDownpayment.paymentMethod.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ saleInvoiceDownpayment.amount|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Akun Pelunasan</th>
+                <td>{{ saleInvoiceDownpayment.account.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ saleInvoiceDownpayment.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_sale_invoice_downpayment_memo', {'id': saleInvoiceDownpayment.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Invoice
+    </a>
+{% endblock %}

@@ -1,0 +1,416 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div style="background-color: #999999"><h3>1. Persetujuan Harga Jual</h3></div>
+            <div class="col-sm-6">
+                {{ form_row(form.transactionStatus) }}
+                {{ form_row(form.transactionDate, {'label' : 'Tanggal'}) }}
+                {{ form_row(form.customer, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#customer-dialog'} }) }}
+                <div class="form-group" id="customer-info">
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ saleDiscountApplication.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="customer-contact-person">{{ saleDiscountApplication.customer.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Phone:</label>
+                        <span data-name="customer-phone">{{ saleDiscountApplication.customer.phone|default }}</span>
+                    </div>
+                    <div>
+                        <label>Business Field:</label>
+                        <span data-name="customer-business-field">{{ saleDiscountApplication.customer.businessField|default }}</span>
+                    </div>
+                </div>
+                {{ form_row(form.mediatorName, {'label' : 'Komisi a/n'}) }}
+                {{ form_row(form.mediatorRanking, {'label' : 'Hub'}) }}
+                {{ form_row(form.mediatorPhone, {'label' : 'Phone'}) }}
+                {{ form_row(form.mediatorTaxSelection, {'label' : 'Nett/PPN/PPH'}) }}
+                <div class="form-group">
+                    {{ form_row(form.mediatorPrice, {'label' : 'Komisi (Rp.)', 'attr': {'data-bind-target': '[data-name=mediator-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="mediator-price-text">{{ saleDiscountApplication.mediatorPrice|default|number_format(0) }}</span>
+                </div>
+                {{ form_row(form.vehicleModel, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#vehicle-model-dialog'}, 'label' : 'Tipe Kendaraan' }) }}
+                <div class="form-group" id="vehicle-model-info">
+                    <div>
+                        <label>Manufacture Code:</label>
+                        <span data-name="vehicle-model-manufacture-code">{{ saleDiscountApplication.vehicleModel.manufactureCode|default }}</span>
+                    </div>
+                    <div>
+                        <label>VOS Model:</label>
+                        <span data-name="vehicle-model-vos-model-name">{{ saleDiscountApplication.vehicleModel.vosModelName|default }}</span>
+                    </div>
+                    <div>
+                        <label>DMS Variant:</label>
+                        <span data-name="vehicle-model-dms-variant-name">{{ saleDiscountApplication.vehicleModel.dmsVariantName|default }}</span>
+                    </div>
+                </div>
+                {{ form_row(form.assemblyYear, {'label' : 'NIK' }) }}
+                {{ form_row(form.vehicleColor, {'label' : 'Warna' }) }}
+                {{ form_row(form.ownershipStatus, {'label' : 'BBN Off TR / On TR' }) }}
+                {{ form_row(form.ownershipCategory, {'label' : 'Hitam / Kuning' }) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.supplier, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#supplier-dialog'}, 'label' : 'Karoseri' }) }}
+                <div class="form-group" id="supplier-info">
+                    <div>
+                        <label>Karoseri:</label>
+                        <span data-name="supplier-name">{{ saleDiscountApplication.supplier.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="supplier-contact-person">{{ saleDiscountApplication.supplier.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Alamat:</label>
+                        <span data-name="supplier-office-address">{{ saleDiscountApplication.supplier.officeAddress|default }}</span>
+                    </div>
+                    <div>
+                        <label>No. HP:</label>
+                        <span data-name="supplier-mobile-phone">{{ saleDiscountApplication.supplier.mobilePhone|default }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.workshopPrice, {'label' : 'Modal (incl PPN)', 'attr': {'data-bind-target': '[data-name=workshop-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="workshop-price-text">{{ saleDiscountApplication.workshopPrice|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.workshopProfit, {'label' : 'Profit', 'attr': {'data-bind-target': '[data-name=workshop-profit-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="workshop-profit-text">{{ saleDiscountApplication.workshopProfit|default|number_format(0) }}</span>
+                </div>
+                {{ form_row(form.isWorkshopSplitPurchase, {'label' : 'Split PO' }) }}
+                {{ form_row(form.orderArea, {'label' : 'Area' }) }}
+                {{ form_row(form.workshopType, {'label' : 'Bentuk Karoseri' }) }}
+                {{ form_row(form.workshopReference, {'label' : 'Referensi' }) }}
+                {{ form_row(form.deliveryType, {'label' : 'Kirim (karoseri/KIR/customer)' }) }}
+                {{ form_row(form.requestQuantity, {'label' : 'Jumlah Unit' }) }}
+                <div class="form-group">
+                    {{ form_row(form.unitPrice, {'label' : 'Harga Jual / Unit (incl PPN)', 'attr': {'data-bind-target': '[data-name=unit-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="unit-price-text">{{ saleDiscountApplication.unitPrice|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.otherUnitPrice, {'label' : 'Harga BBN', 'attr': {'data-bind-target': '[data-name=other-unit-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="other-unit-price-text">{{ saleDiscountApplication.otherUnitPrice|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.approvedPrice, {'label' : 'Harga Disetujui (incl PPN)', 'attr': {'data-bind-target': '[data-name=approved-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="approved-price-text">{{ saleDiscountApplication.approvedPrice|default|number_format(0) }}</span>
+                </div>
+            </div>
+                
+            <table class="table table-bordered" id="pricing-list">
+                <thead>
+                    <tr class="alert alert-info">
+                        <td class="font-weight-bold lead">Biaya lainnya (per unit):</td>
+                        <td></td>
+                        <td style="width: 20%"></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--<tr>
+                        <td>Harga Off The Road (Rp.)</td>
+                        <td>
+                           {# {{ form_widget(form.offTheRoadPrice, {'attr': {'data-bind-target': '[data-name=off-the-road-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.offTheRoadPrice) }} 
+                        </td>
+                        <td class="text-right">
+                            <span data-name="off-the-road-price-text">{{ saleDiscountApplication.offTheRoadPrice|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>BBN Notice (Rp.)</td>
+                        <td>
+                            {{ form_widget(form.registrationPrice, {'attr': {'data-bind-target': '[data-name=registration-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.registrationPrice) }}
+                        </td>
+                        <td class="text-right">
+                            <span data-name="registration-price-text">{{ saleDiscountApplication.registrationPrice|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr class="alert alert-warning font-weight-bold">
+                        <td class="text-right" colspan="2">Sub Total (Rp.)</td>
+                        <td class="text-right">
+                            <span data-name="sub-total-price">{{ saleDiscountApplication.subTotalPrice|default|number_format(0) }}</span>
+                        </td> #}
+                    </tr>-->
+                    <tr>
+                        <td>
+                            {{ form_widget(form.otherPricingName1, {'attr': {'placeholder': 'Biaya lain-lain 1'} }) }}
+                            {{ form_errors(form.otherPricingName1) }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.otherPricingAmount1, {'attr': {'placeholder': 'Jumlah lain-lain 1', 'data-bind-target': '[data-name=other-pricing-amount1-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.otherPricingAmount1) }}
+                        </td>
+                        <td class="text-right">
+                            <span data-name="other-pricing-amount1-text">{{ saleDiscountApplication.otherPricingAmount1|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form_widget(form.otherPricingName2, {'attr': {'placeholder': 'Biaya lain-lain 2'} }) }}
+                            {{ form_errors(form.otherPricingName2) }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.otherPricingAmount2, {'attr': {'placeholder': 'Jumlah lain-lain 2', 'data-bind-target': '[data-name=other-pricing-amount2-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.otherPricingAmount2) }}
+                        </td>
+                        <td class="text-right">
+                            <span data-name="other-pricing-amount2-text">{{ saleDiscountApplication.otherPricingAmount2|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form_widget(form.otherPricingName3, {'attr': {'placeholder': 'Biaya lain-lain 3'} }) }}
+                            {{ form_errors(form.otherPricingName3) }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.otherPricingAmount3, {'attr': {'placeholder': 'Jumlah lain-lain 3', 'data-bind-target': '[data-name=other-pricing-amount3-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.otherPricingAmount3) }}
+                        </td>
+                        <td class="text-right">
+                            <span data-name="other-pricing-amount3-text">{{ saleDiscountApplication.otherPricingAmount3|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form_widget(form.otherPricingName4, {'attr': {'placeholder': 'Biaya lain-lain 4'} }) }}
+                            {{ form_errors(form.otherPricingName4) }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.otherPricingAmount4, {'attr': {'placeholder': 'Jumlah lain-lain 4', 'data-bind-target': '[data-name=other-pricing-amount4-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.otherPricingAmount4) }}
+                        </td>
+                        <td class="text-right">
+                            <span data-name="other-pricing-amount4-text">{{ saleDiscountApplication.otherPricingAmount4|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form_widget(form.otherPricingName5, {'attr': {'placeholder': 'Biaya lain-lain 5'} }) }}
+                            {{ form_errors(form.otherPricingName5) }}
+                        </td>
+                        <td>
+                            {{ form_widget(form.otherPricingAmount5, {'attr': {'placeholder': 'Jumlah lain-lain 5', 'data-bind-target': '[data-name=other-pricing-amount5-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                            {{ form_errors(form.otherPricingAmount5) }}
+                        </td>
+                        <td class="text-right">
+                            <span data-name="other-pricing-amount5-text">{{ saleDiscountApplication.otherPricingAmount5|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                    <tr class="alert alert-warning font-weight-bold">
+                        <td class="text-right" colspan="2">Grand Total (Rp.)</td>
+                        <td class="text-right">
+                            <span data-name="grand-total-price">{{ saleDiscountApplication.grandTotalPrice|default|number_format(0) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>  
+                
+        <hr />
+            
+        <div class="row">
+            <div style="background-color: #999999"><h3>2. Cara Pembayaran</h3></div>
+            <div class="col-sm-6">
+                {{ form_row(form.paymentMethodType, {'label' : 'Cara Pembayaran' }) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.isCashBeforeDelivery, {'label': 'CBD, unit dikirim setelah pelunasan 100%', 'attr': {'data-choice-group': 'payment-type'} }) }}
+                {{ form_row(form.isPaymentTerm, {'label': 'TOP, dengan syarat: 1. PO 2. Tanda Jadi 3. DP 30%', 'attr': {'data-choice-group': 'payment-type'} }) }}
+                {{ form_row(form.financeCompany, {'label': 'Leasing Company'}) }}
+                {{ form_row(form.termOfPayment, {'label': 'Tenor (tahun)'}) }}
+                {{ form_row(form.leasingReference, {'label': 'Referensi Oleh'}) }}
+            </div>
+        </div>
+                
+        <hr />
+            
+        <div class="row">
+            <div style="background-color: #999999"><h3>3. Term of Payment</h3></div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    {{ form_row(form.bookingFee, {'label' : 'Tanda Jadi', 'attr': {'data-bind-target': '[data-name=booking-fee-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="booking-fee-text">{{ saleDiscountApplication.bookingFee|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.downpayment1, {'label': 'Total DP I', 'attr': {'data-bind-target': '[data-name=downpayment-1-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="downpayment-1-text">{{ saleDiscountApplication.downpayment1|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.downpayment2, {'label': 'Total DP II', 'attr': {'data-bind-target': '[data-name=downpayment-2-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="downpayment-2-text">{{ saleDiscountApplication.downpayment2|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.totalPayment, {'label': 'Pelunasan', 'attr': {'data-bind-target': '[data-name=total-payment-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="total-payment-text">{{ saleDiscountApplication.totalPayment|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.leasingTaxAmount, {'label': 'Wajib Bayar PPN 10% senilai pengajuan harga ke leasing (Rp.)', 'attr': {'data-bind-target': '[data-name=leasing-tax-amount-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="leasing-tax-amount-text">{{ saleDiscountApplication.leasingTaxAmount|default|number_format(0) }}</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.leasingStatus, {'label' : 'Invoice vs PO leasing sesuai?' }) }}
+                {{ form_row(form.leasingPrice, {'label': 'Harga PO Leasing', 'attr': {'data-choice-group': 'payment-type'} }) }}
+                {{ form_row(form.leasingPriceDifference, {'label': 'Selisih PO-Invoice', 'attr': {'data-choice-group': 'payment-type'} }) }}
+                {{ form_row(form.leasingOverPaid, {'label': 'Lebih Bayar'}) }}
+                {{ form_row(form.leasingOverPaidNett, {'label': 'Nett Lebih Bayar'}) }}
+            </div>
+        </div>
+            
+        <div>{{ form_row(form.note) }}</div>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="customer-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Customer List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="customer-grid" data-grid="{{ path('common_customer_grid') }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
+        <div id="vehicle-model-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Vehicle Model List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="vehicle-model-grid" data-grid="{{ path('common_vehicle_model_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
+        <div id="supplier-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Supplier List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="supplier-grid" data-grid="{{ path('common_supplier_grid',  {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+              
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        $("[data-name=sub-total-price]", "#pricing-list").text($.numberFormat(data.subTotalPrice, 2));
+                        $("[data-name=grand-total-price]", "#pricing-list").text($.numberFormat(data.grandTotalPrice, 2));
+                    }
+                });
+            }
+            
+            function setCashVisibility(sel) {
+                $("#{{ form.isCashBeforeDelivery.vars.id }}").parent().hide();
+                $("#{{ form.isPaymentTerm.vars.id }}").parent().hide();
+                if (sel.val() === "{{ constant('PAYMENT_METHOD_CASH', saleDiscountApplication) }}") {
+                    $("#{{ form.isCashBeforeDelivery.vars.id }}").parent().show();
+                    $("#{{ form.isPaymentTerm.vars.id }}").parent().show();
+                }
+            }
+            
+            setCashVisibility($(":checked", "#{{ form.paymentMethodType.vars.id }}"));
+            
+            function setCompaniesVisibility(sel) {
+                $("#{{ form.financeCompany.vars.id }}").parent().hide();
+                $("#{{ form.termOfPayment.vars.id }}").parent().hide();
+                $("#{{ form.leasingReference.vars.id }}").parent().hide();
+                if (sel.val() === "{{ constant('PAYMENT_METHOD_FINANCE_COMPANY', saleDiscountApplication) }}") {
+                    $("#{{ form.financeCompany.vars.id }}").parent().show();
+                    $("#{{ form.termOfPayment.vars.id }}").parent().show();
+                    $("#{{ form.leasingReference.vars.id }}").parent().show();
+                }
+            }
+            
+            setCompaniesVisibility($(":checked", "#{{ form.paymentMethodType.vars.id }}"));
+            
+            $("#{{ form.otherPricingAmount1.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.otherPricingAmount2.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.otherPricingAmount3.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.otherPricingAmount4.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.otherPricingAmount5.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.paymentMethodType.vars.id }}").on("change", function() {
+                setCompaniesVisibility($(":checked", this));
+                setCashVisibility($(":checked", this));
+            });
+            $("#customer-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#customer-dialog").modal("hide");
+                $("#{{ form.customer.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=customer-name]", "#customer-info").text($(this).attr("data-field-name"));
+                $("[data-name=customer-contact-person]", "#customer-info").text($(this).attr("data-field-contact-person"));
+                $("[data-name=customer-phone]", "#customer-info").text($(this).attr("data-field-phone"));
+                $("[data-name=customer-business-field]", "#customer-info").text($(this).attr("data-field-business-field"));
+                $("[data-name=customer-category-two-hino-population]", "#customer-info").text($(this).attr("data-field-category-two-hino-population"));
+                $("[data-name=customer-category-two-mitsubishi-population]", "#customer-info").text($(this).attr("data-field-category-two-mitsubishi-population"));
+                $("[data-name=customer-category-two-toyota-population]", "#customer-info").text($(this).attr("data-field-category-two-toyota-population"));
+                $("[data-name=customer-category-two-isuzu-population]", "#customer-info").text($(this).attr("data-field-category-two-isuzu-population"));
+                $("[data-name=customer-category-two-other-population]", "#customer-info").text($(this).attr("data-field-category-two-other-population"));
+                $("[data-name=customer-category-three-hino-population]", "#customer-info").text($(this).attr("data-field-category-three-hino-population"));
+                $("[data-name=customer-category-three-mitsubishi-population]", "#customer-info").text($(this).attr("data-field-category-three-mitsubishi-population"));
+                $("[data-name=customer-category-three-nissan-population]", "#customer-info").text($(this).attr("data-field-category-three-nissan-population"));
+                $("[data-name=customer-category-three-isuzu-population]", "#customer-info").text($(this).attr("data-field-category-three-isuzu-population"));
+                $("[data-name=customer-category-three-benz-population]", "#customer-info").text($(this).attr("data-field-category-three-benz-population"));
+            });
+            $("#vehicle-model-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#vehicle-model-dialog").modal("hide");
+                $("#{{ form.vehicleModel.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=vehicle-model-manufacture-code]", "#vehicle-model-info").text($(this).attr("data-field-manufacture-code"));
+                $("[data-name=vehicle-model-vos-model-name]", "#vehicle-model-info").text($(this).attr("data-field-vos-model-name"));
+                $("[data-name=vehicle-model-dms-variant-name]", "#vehicle-model-info").text($(this).attr("data-field-dms-variant-name"));
+            });
+            $("#supplier-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#supplier-dialog").modal("hide");
+                $("#{{ form.supplier.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=supplier-name]", "#supplier-info").text($(this).attr("data-field-name"));
+                $("[data-name=supplier-contact-person]", "#supplier-info").text($(this).attr("data-field-contact-person"));
+                $("[data-name=supplier-office-address]", "#supplier-info").text($(this).attr("data-field-office-address"));
+                $("[data-name=supplier-mobile-phone]", "#supplier-info").text($(this).attr("data-field-mobile-phone"));
+            });
+        });
+    </script>
+{% endblock %}

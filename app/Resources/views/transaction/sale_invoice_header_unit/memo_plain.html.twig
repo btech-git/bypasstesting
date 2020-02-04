@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    {% for batch in saleInvoiceHeader.saleInvoiceDetailUnits | batch(5) %}
+        <div class="memo-content">
+            <div class="rows-empty top">
+                &nbsp;
+            </div>
+            <div class="rows-1 header">
+                {{ saleInvoiceHeader.codeNumber|default }}
+            </div>
+            <div class="rows-1 header">
+                {{ saleInvoiceHeader.dueDate|default ? saleInvoiceHeader.dueDate|date('d M Y') }}
+            </div>
+            <div class="rows-empty middle">
+                &nbsp;
+            </div>
+            <div class="rows-2">
+                {{ saleInvoiceHeader.customer.name|default }} <br />
+                {{ saleInvoiceHeader.customer.officeAddress|nl2br }}
+            </div>
+            <div class="rows-1 nominal">
+                {{ saleInvoiceHeader.grandTotalAfterDownpayment|default|number_format(0, '.', '')|say|capitalize }} rupiah.
+            </div>
+            <div class="rows-empty bottom">
+                &nbsp;
+            </div>
+            <div class="table-payment">
+                {% for saleInvoiceDetailUnit in batch %}
+                    <div class="rows-1 price-info content-left">
+                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleModel.vldModelName|default }}
+                    </div>
+                    <div class="rows-1 price-info content-right">
+                        {{ saleInvoiceDetailUnit.vehicleChassisNumber|default }} - {{ saleInvoiceDetailUnit.vehicleMachineNumber|default }} - {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }} - {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="rows-3">
+                {{ saleInvoiceHeader.transactionDate|default ? saleInvoiceHeader.transactionDate|date('d M Y') }}
+            </div>
+            <div class="rows-1 total-price">
+                {{ saleInvoiceHeader.grandTotalAfterDownpayment|default|number_format(0) }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 20cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 10mm;
+            padding-left: 148mm;
+        }
+        div.memo-content div.rows-1.nominal {
+            height: 11mm;
+            padding-left: 40mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left, div.memo-content div.rows-1.price-info.content-right {
+            height: 7mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left {
+            width: 55mm;
+            padding-left: 2mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.price-info.content-right {
+            width: 125mm;
+            padding-left: 5mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.total-price {
+            height: 5mm;
+            padding-left: 18mm;
+        }
+        div.memo-content div.rows-2 {
+            height: 15.4mm;
+            padding-left: 38mm;
+        }
+        div.memo-content div.rows-3 {
+            height: 10mm;
+            padding-left: 60mm;
+            text-align: center;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 6mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 4mm;
+        }
+        div.memo-content div.rows-empty.bottom {
+            height: 9mm;
+        }
+        div.table-payment {
+            height: 35mm;
+        }
+    </style>
+{% endblock %}

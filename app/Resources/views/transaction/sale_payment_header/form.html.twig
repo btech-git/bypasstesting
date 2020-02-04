@@ -1,0 +1,291 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% import _self as self %}
+
+{% macro details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td class="hide">
+            {{ form_row(object.account, {'label': false}) }}
+        </td>
+        <td>
+            <span data-name="account-code-{{ object.vars.name }}">{{ object.vars.value.account.code|default }}</span>
+        </td>
+        <td>
+            <span data-name="account-name-{{ object.vars.name }}">{{ object.vars.value.account.name|default }}</span>
+        </td>
+        <td>
+            {{ form_row(object.memo, {'label': false}) }}
+        </td>
+        <td>
+            {{ form_row(object.paymentMethod, {'label': false}) }}
+        </td>
+        <td>
+            {{ form_row(object.amount, {'label': false, 'attr': {'data-name': 'amount', 'data-bind-target': '[data-name=amount-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+        </td>
+        <td class="text-right" >
+            <span data-name="amount-text-{{ object.vars.name }}">{{ object.vars.value.amount|default|number_format(0) }}</span>
+        </td>
+        <td>
+            <button type="button" class="btn btn-info remove-sale-payment-detail-prototype">Delete</button>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal'}) }}
+                {{ form_row(form.saleInvoiceDownpayment, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#sale-invoice-downpayment-dialog'} }) }}
+                <div class="form-group" id="sale-invoice-downpayment-info">
+                    <div>
+                        <label>Invoice DP #:</label>
+                        <span data-name="code-number">{{ salePaymentHeader.saleInvoiceDownpayment.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Tanggal:</label>
+                        <span data-name="transaction-date">{{ salePaymentHeader.saleInvoiceDownpayment.transactionDate|default|date('j M Y') }}</span>
+                    </div>
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ salePaymentHeader.saleInvoiceDownpayment.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Faktur Pajak #:</label>
+                        <span data-name="tax-number">{{ salePaymentHeader.saleInvoiceDownpayment.taxNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Grand Total:</label>
+                        <span data-name="grand-total">{{ salePaymentHeader.saleInvoiceDownpayment.amount|default|number_format(0) }}</span>
+                    </div>
+                    <div>
+                        <label>Total Payment:</label>
+                        <span data-name="total-payment">{{ salePaymentHeader.saleInvoiceDownpayment.totalPayment|default|number_format(0) }}</span>
+                    </div>
+                    <div>
+                        <label>Sisa:</label>
+                        <span data-name="remaining">{{ salePaymentHeader.saleInvoiceDownpayment.remaining|default|number_format(0) }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.isInvoiceUnit, {'label': 'Pilih Invoice'}) }}
+                {{ form_row(form.saleInvoiceHeader, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#sale-invoice-header-dialog'} }) }}
+                <div class="form-group" id="sale-invoice-header-info">
+                    <div>
+                        <label>Invoice #:</label>
+                        <span data-name="code-number">{{ salePaymentHeader.saleInvoiceHeader.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Tanggal:</label>
+                        <span data-name="transaction-date">{{ salePaymentHeader.saleInvoiceHeader.transactionDate|default|date('j M Y') }}</span>
+                    </div>
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ salePaymentHeader.saleInvoiceHeader.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Faktur Pajak #:</label>
+                        <span data-name="tax-number">{{ salePaymentHeader.saleInvoiceHeader.taxNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Grand Total:</label>
+                        <span data-name="grand-total">{{ salePaymentHeader.saleInvoiceHeader.grandTotalAfterDownpayment|default|number_format(0) }}</span>
+                    </div>
+                    <div>
+                        <label>Total Payment:</label>
+                        <span data-name="total-payment">{{ salePaymentHeader.saleInvoiceHeader.totalPayment|default|number_format(0) }}</span>
+                    </div>
+                    <div>
+                        <label>Sisa:</label>
+                        <span data-name="remaining">{{ salePaymentHeader.saleInvoiceHeader.remaining|default|number_format(0) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <hr />
+        
+        <div>
+            <button type="button" class="btn btn-default" id="add-account-prototype" data-toggle="modal" data-target="#account-dialog">Add Account</button>
+        </div>
+        
+        <br />
+        
+        <table class="table table-bordered" id="sale-payment-detail-list">
+            <thead>
+                <tr class="bg-info">
+                    <th style="width: 10%">Kode</th>
+                    <th style="width: 15%">Akun</th>
+                    <th>Keterangan</th>
+                    <th style="width: 15%">Jenis Bayar</th>
+                    <th style="width: 15%">Amount</th>
+                    <th style="width: 15%"></th>
+                    <th style="width: 5%"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.details_row(form.salePaymentDetails.vars.prototype)|e }}">
+                {% for salePaymentDetail in form.salePaymentDetails %}
+                    {{ self.details_row(salePaymentDetail) }}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="5">Grand Total</td>
+                    <td class="text-right"><span data-name="total-amount">{{ salePaymentHeader.totalAmount|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="sale-invoice-header-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sales Invoice List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="sale-invoice-header-grid" data-grid="{{ path('common_sale_invoice_header_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sale-invoice-downpayment-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sales Invoice DownpaymentList</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="sale-invoice-downpayment-grid" data-grid="{{ path('common_sale_invoice_downpayment_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+    <div id="account-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Chart of Account List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="account-grid" data-grid="{{ path('common_account_grid', {'form': form.vars.id}) }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        $("[data-name=total-amount]", "#sale-payment-detail-list").text($.numberFormat(data.totalAmount, 2));
+                    }
+                });
+            }
+            
+            var table = $("#sale-payment-detail-list");
+            var tableBody = $("tbody", table);
+            
+            tableBody.on("change", "[data-name=amount]", function() {
+                bind();
+            });
+            tableBody.on("click", ".remove-sale-payment-detail-prototype", function() {
+                $(this).closest("tr").remove();
+                bind();
+            });
+            
+            function setSaleInvoiceDownpaymentVisibility(sel, start) {
+                if (!start) {
+                    $("#{{ form.saleInvoiceDownpayment.vars.id }}").val("");
+                }
+                $("#{{ form.saleInvoiceDownpayment.vars.id }}").parent().hide();
+                $("#sale-invoice-downpayment-info").hide();
+                if (sel.val() === "0") {
+                    $("#{{ form.saleInvoiceDownpayment.vars.id }}").parent().show();
+                    $("#sale-invoice-downpayment-info").show();
+                }
+            }
+            function setSaleInvoiceHeaderVisibility(sel, start) {
+                if (!start) {
+                    $("#{{ form.saleInvoiceHeader.vars.id }}").val("");
+                    $("[data-name=code-number]", "#sale-invoice-header-info").text("");
+                }
+                $("#{{ form.saleInvoiceHeader.vars.id }}").parent().hide();
+                $("#sale-invoice-header-info").hide();
+                if (sel.val() === "1") {
+                    $("#{{ form.saleInvoiceHeader.vars.id }}").parent().show();
+                    $("#sale-invoice-header-info").show();                    
+                }
+            }
+            
+            setSaleInvoiceDownpaymentVisibility($(":checked", "#{{ form.isInvoiceUnit.vars.id }}"), true);
+            setSaleInvoiceHeaderVisibility($(":checked", "#{{ form.isInvoiceUnit.vars.id }}"), true);
+            $("#{{ form.isInvoiceUnit.vars.id }}").on("change", function() {
+                setSaleInvoiceDownpaymentVisibility($(":checked", this), false);
+                setSaleInvoiceHeaderVisibility($(":checked", this), false);
+            });
+            
+            $("#sale-invoice-header-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#sale-invoice-header-dialog").modal("hide");
+                $("#{{ form.saleInvoiceHeader.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=code-number]", "#sale-invoice-header-info").text($(this).attr("data-field-code-number"));
+                $("[data-name=customer-name]", "#sale-invoice-header-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=transaction-date]", "#sale-invoice-header-info").text($.datetimeFormat($(this).attr("data-field-transaction-date"), 'D MMM YYYY'));
+                $("[data-name=tax-number]", "#sale-invoice-header-info").text($(this).attr("data-field-tax-number"));
+                $("[data-name=grand-total]", "#sale-invoice-header-info").text($.numberFormat($(this).attr("data-field-grand-total"), 2));
+                $("[data-name=total-payment]", "#sale-invoice-header-info").text($.numberFormat($(this).attr("data-field-total-payment"), 2));
+                $("[data-name=remaining]", "#sale-invoice-header-info").text($.numberFormat($(this).attr("data-field-remaining"), 2));
+            });
+            
+            $("#sale-invoice-downpayment-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#sale-invoice-downpayment-dialog").modal("hide");
+                $("#{{ form.saleInvoiceDownpayment.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=code-number]", "#sale-invoice-downpayment-info").text($(this).attr("data-field-code-number"));
+                $("[data-name=customer-name]", "#sale-invoice-downpayment-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=transaction-date]", "#sale-invoice-downpayment-info").text($.datetimeFormat($(this).attr("data-field-transaction-date"), 'D MMM YYYY'));
+                $("[data-name=tax-number]", "#sale-invoice-downpayment-info").text($(this).attr("data-field-tax-number"));
+                $("[data-name=grand-total]", "#sale-invoice-downpayment-info").text($.numberFormat($(this).attr("data-field-amount"), 2));
+                $("[data-name=total-payment]", "#sale-invoice-downpayment-info").text($.numberFormat($(this).attr("data-field-total-payment"), 2));
+                $("[data-name=remaining]", "#sale-invoice-downpayment-info").text($.numberFormat($(this).attr("data-field-remaining"), 2));
+            });
+            
+            $("#account-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#account-dialog").modal("hide");
+                var context = $(this);
+                var name = "{{ form.salePaymentDetails.vars.prototype.vars.name }}";
+                var rows = tableBody.children("tr");
+                var index = Math.max({{ salePaymentDetailsCount }}, (rows.length > 0) ? parseInt(rows.last().attr("data-index")) + 1 : 0);
+                tableBody.appendByPrototype(tableBody.attr("data-prototype"), name, index, function(prototype) {
+                    var accountPrototype = prototype.find("#{{ form.salePaymentDetails.vars.prototype.account.vars.id }}");
+                    accountPrototype.val(context.attr("data-field-id"));
+                    var accountCodePrototype = prototype.find("[data-name=account-code-" + name + "]");
+                    accountCodePrototype.text(context.attr("data-field-account-code"));
+                    var accountNamePrototype = prototype.find("[data-name=account-name-" + name + "]");
+                    accountNamePrototype.text(context.attr("data-field-account-name"));
+                });
+            });
+        });
+    </script>
+{% endblock %}

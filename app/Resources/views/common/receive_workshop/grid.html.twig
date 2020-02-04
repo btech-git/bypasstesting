@@ -1,0 +1,72 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleChassisNumber">Rangka #</th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleMachineNumber">Mesin #</th>
+            <th data-group="saleOrder" data-field="vehicleColor">Color</th>
+            <th data-group="vehicleModel" data-field="vosModel">Model</th>
+            <th data-group="receiveWorkshop" data-field="transactionDate">Tanggal</th>
+            <th data-group="saleOrder" data-field="codeNumber">SPK #</th>
+            <th data-group="supplier" data-field="name">Supplier</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleChassisNumber"></th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleMachineNumber"></th>
+            <th data-group="saleOrder" data-field="vehicleColor"></th>
+            <th></th>
+            <th data-group="receiveWorkshop" data-field="transactionDate"></th>
+            <th data-group="saleOrder" data-field="codeNumber"></th>
+            <th data-group="supplier" data-field="name"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for receiveWorkshop in grid.data %}
+            {% set purchaseWorkshopDetailUnitPriceList = [] %}
+            {% for purchaseWorkshopDetail in receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.purchaseWorkshopDetails %}
+                {% set purchaseWorkshopDetailUnitPriceList = purchaseWorkshopDetailUnitPriceList|merge([purchaseWorkshopDetail.unitPrice]) %}
+            {% endfor %}
+            <tr data-field-id="{{ receiveWorkshop.id }}"
+                data-field-code-number="{{ receiveWorkshop.codeNumber|default }}"
+                data-field-supplier-name="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}"
+                data-field-supplier-contact-person="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.contactPerson|default }}"
+                data-field-supplier-phone="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.phone|default }}"
+                data-field-supplier-office-address="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.officeAddress|default }}"
+                data-field-purchase-workshop-header-code-number="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.codeNumber|default }}"
+                data-field-sale-order-code-number="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}"
+                data-field-sale-order-vehicle-brand="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}"
+                data-field-sale-order-vehicle-serial-number="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleSerialNumber|default }}"
+                data-field-sale-order-vehicle-color="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleColor|default }}"
+                data-field-vehicle-model-manufacture-code="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleModel.manufactureCode|default }}"
+                data-field-vehicle-chassis-number="{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}"
+                data-field-vehicle-machine-number="{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}"
+                data-field-purchase-workshop-details-count="{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.purchaseWorkshopDetails.count|default }}"
+                data-field-purchase-workshop-detail-unit-price-list="{{ purchaseWorkshopDetailUnitPriceList|json_encode }}">
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</td>
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.VehicleModel.vosModelName|default }}</td>
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.transactionDate|default ? receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.transactionDate|date('Y-m-d') }}</td>
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

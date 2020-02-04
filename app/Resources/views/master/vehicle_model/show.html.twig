@@ -1,0 +1,42 @@
+{% extends 'master/layout.html.twig' %}
+
+{% block title 'Show Vehicle Model' %}
+
+{% block actions %}
+    {{ include('master/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Manufacture Code</th>
+                <td>{{ vehicleModel.manufactureCode|default }}</td>
+            </tr>
+            <tr>
+                <th>Vld Model Name</th>
+                <td>{{ vehicleModel.vldModelName|default }}</td>
+            </tr>
+            <tr>
+                <th>Vos Model Name</th>
+                <td>{{ vehicleModel.vosModelName|default }}</td>
+            </tr>
+            <tr>
+                <th>Dms Variant Name</th>
+                <td>{{ vehicleModel.dmsVariantName|default }}</td>
+            </tr>
+            <tr>
+                <th>Sundry</th>
+                <td>{{ vehicleModel.sundry|default }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ vehicleModel.description|default }}</td>
+            </tr>
+            <tr>
+                <th>Is Active</th>
+                <td>{{ vehicleModel.isActive|default ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

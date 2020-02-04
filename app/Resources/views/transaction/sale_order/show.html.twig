@@ -1,0 +1,156 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Sale Order' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ saleOrder.transactionDate|default ? saleOrder.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Surat Penawaran #</th>
+                <td>{{ saleOrder.quotationNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ saleOrder.customer.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal PO</th>
+                <td>{{ saleOrder.purchaseOrderDate|default ? saleOrder.purchaseOrderDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>PO #</th>
+                <td>{{ saleOrder.purchaseOrderNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Janji Penyerahan</th>
+                <td>{{ saleOrder.deliveryDate|default ? saleOrder.deliveryDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>STNK Atas Nama</th>
+                <td>{{ saleOrder.invoiceRegistrationName|default }}</td>
+            </tr>
+            <tr>
+                <th>Off The Road?</th>
+                <td>{{ saleOrder.isOffTheRoad|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Serial Number</th>
+                <td>{{ saleOrder.vehicleSerialNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Optional</th>
+                <td>{{ saleOrder.vehicleOptionalInfo|default|nl2br }}</td>
+            </tr>
+            <tr>
+                <th>Kirim ke Karoseri</th>
+                <td>{{ saleOrder.isWorkshopNeeded|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Karoseri</th>
+                <td>{{ saleOrder.vehicleAccessoriesInfo|default|nl2br }}</td>
+            </tr>
+            <tr>
+                <th>Lain-lain</th>
+                <td>{{ saleOrder.vehicleOtherInfo|default|nl2br }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ saleOrder.quantity|default }}</td>
+            </tr>
+            <tr>
+                <th>Harga /unit (Rp.)</th>
+                <td>{{ saleOrder.unitPrice|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Total (Rp.)</th>
+                <td>{{ saleOrder.total|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Cash</th>
+                <td>{{ saleOrder.isCash|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Leasing</th>
+                <td>{{ saleOrder.isLeasing|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Leasing Name</th>
+                <td>{{ saleOrder.financeCompany.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Tenor</th>
+                <td>{{ saleOrder.leasingTerm|default }}</td>
+            </tr>
+            <tr>
+                <th>Angsuran /bulan (Rp.)</th>
+                <td>{{ saleOrder.leasingMonthlyNominal|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>DP (Rp.)</th>
+                <td>{{ saleOrder.downPayment|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Alamat Kirim</th>
+                <td>{{ saleOrder.deliveryAddress|default|nl2br }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ saleOrder.note|default|nl2br }}</td>
+            </tr>
+        </tbody>
+    </table>
+                    
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Tahun Pembuatan</th>
+                <th>Rangka #</th>
+                <th>Mesin #</th>
+                <th>Deskripsi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchaseDeliveryOrder in saleOrder.purchaseDeliveryOrders %}
+                <tr>
+                    <td>{{ purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+                    <td>{{ purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                    <td>{{ purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                    <td>{{ purchaseDeliveryOrder.vehicleDescription|default }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_sale_order_memo', {'id': saleOrder.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print SPK
+    </a>
+    {% if stockValid %}
+        <a target="_blank" class="btn btn-warning" href="{{ path('transaction_sale_order_stock_referring', {'id': saleOrder.id}) }}">
+            <span class="glyphicon glyphicon-plus"></span> Stock Unit
+        </a>
+    {% endif %}
+{% endblock %}

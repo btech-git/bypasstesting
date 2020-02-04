@@ -1,0 +1,74 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Receive Order' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Penerimaan #</th>
+                <td>{{ receiveOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ receiveOrder.transactionDate|default ? receiveOrder.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Kirim</th>
+                <td>{{ receiveOrder.deliveryDate|default ? receiveOrder.deliveryDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Buku Service #</th>
+                <td>{{ receiveOrder.serviceBookNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>DO HMSI #</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.reference|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Tahun Pembuatan</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Deskripsi</th>
+                <td>{{ receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ receiveOrder.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_receive_order_memo', {'id': receiveOrder.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Pengajuan BBN
+    </a>
+{% endblock %}

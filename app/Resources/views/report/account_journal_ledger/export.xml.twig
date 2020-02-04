@@ -1,0 +1,94 @@
+{% extends 'report/export.xml.twig' %}
+
+{% block data %}
+    <ss:Worksheet>
+        <ss:Table ss:StyleID="Data">
+            <ss:Column ss:Span="6" ss:AutoFitWidth="1" />
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">PT. Bypassindo Jaya Indah</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">Laporan Buku Besar {{ account.name|default }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    {% set startDate = grid.searchVals['journalLedgers']['transactionDate'][1]|default %}
+                    {% set endDate = grid.searchVals['journalLedgers']['transactionDate'][2]|default %}
+                    <ss:Data ss:Type="String">{{ startDate ? startDate|date('j F Y') }}  -  {{ endDate ? endDate|date('j F Y') }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:Span="1" />
+            <ss:Row ss:StyleID="Level1|Bold|Center|Bottom">
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Transaksi #</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Memo</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Debit</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Kredit</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Saldo</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:Span="1" />
+            {% for index, account in grid.data %}
+                {% set debitSum = 0.00 %}
+                {% set creditSum = 0.00 %}
+                {% set balanceAggregate = beginningBalanceData[index] %}
+                <ss:Row ss:StyleID="Level1|Bold|Center|Bottom">
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">Beginning Balance</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ beginningBalanceData[index]|default }}</ss:Data>
+                    </ss:Cell>
+                </ss:Row>
+                {% for journalLedger in account.journalLedgers %}
+                    {% set balanceAggregate = balanceAggregate + journalLedger.debit - journalLedger.credit %}
+                    <ss:Row ss:StyleID="Level1">
+                        <ss:Cell>
+                            <ss:Data ss:Type="String">{{ journalLedger.codeNumber|default }}</ss:Data>
+                        </ss:Cell>
+                        <ss:Cell>
+                            <ss:Data ss:Type="String">{{ journalLedger.transactionDate|default ? journalLedger.transactionDate|date('j F Y') }}</ss:Data>
+                        </ss:Cell>
+                        <ss:Cell>
+                            <ss:Data ss:Type="String">{{ journalLedger.transactionSubject|default }}</ss:Data>
+                        </ss:Cell>
+                        <ss:Cell>
+                            <ss:Data ss:Type="String">{{ journalLedger.debit|default }}</ss:Data>
+                        </ss:Cell>
+                        <ss:Cell>
+                            <ss:Data ss:Type="String">{{ journalLedger.credit|default }}</ss:Data>
+                        </ss:Cell>
+                        <ss:Cell>
+                            <ss:Data ss:Type="String">{{ balanceAggregate|default }}</ss:Data>
+                        </ss:Cell>
+                    </ss:Row>
+                    {% set debitSum = debitSum + journalLedger.debit %}
+                    {% set creditSum = creditSum + journalLedger.credit %}
+                {% endfor %}
+                <ss:Row ss:StyleID="Level1|Bold|Top">
+                    <ss:Cell ss:Index="4">
+                        <ss:Data ss:Type="Number">{{ debitSum|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell ss:Index="5">
+                        <ss:Data ss:Type="Number">{{ creditSum|default }}</ss:Data>
+                    </ss:Cell>
+                </ss:Row>
+            {% endfor %}
+        </ss:Table>
+    </ss:Worksheet>
+{% endblock %}

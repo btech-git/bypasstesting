@@ -1,0 +1,18 @@
+{
+    "subTotal": {{ purchaseInvoiceHeader.subTotal|default|json_encode|raw }},
+    "taxNominal": {{ purchaseInvoiceHeader.taxNominal|default|json_encode|raw }},
+    "grandTotal": {{ purchaseInvoiceHeader.grandTotal|default|json_encode|raw }},
+    "purchaseInvoiceDetailUnits": {
+        {%- for index, purchaseInvoiceDetailUnit in purchaseInvoiceHeader.purchaseInvoiceDetailUnits -%}
+            "{{ index }}": {
+                "vehicleChassisNumber": {{ purchaseInvoiceDetailUnit.vehicleChassisNumber|default|json_encode|raw }},
+                "vehicleMachineNumber": {{ purchaseInvoiceDetailUnit.vehicleMachineNumber|default|json_encode|raw }},
+                "quantity": {{ purchaseInvoiceDetailUnit.quantity|default|json_encode|raw }},
+                "unitPrice": {{ purchaseInvoiceDetailUnit.unitPrice|default|json_encode|raw }},
+                "discount": {{ purchaseInvoiceDetailUnit.discount|default|json_encode|raw }},
+                "total": {{ purchaseInvoiceDetailUnit.total|default|json_encode|raw }}
+            }
+            {%- if not loop.last -%},{%- endif -%}
+        {%- endfor -%}
+    }
+}

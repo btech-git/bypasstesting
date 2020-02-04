@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-empty top">
+            &nbsp;
+        </div>
+        <div class="rows-1 header">
+            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}
+        </div>
+        <div class="rows-1 header">
+            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.vosModelName|default }}
+        </div>
+        <div class="rows-1 header">
+            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}
+        </div>
+        <div class="rows-1 header">
+            {{ receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
+        </div>
+        <div class="rows-1 header">
+            {{ receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}
+        </div>
+        <div class="rows-empty middle">
+            &nbsp;
+        </div>
+        <div class="rows-2">
+            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }} <br />
+            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|default }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 20cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 9mm;
+            padding-left: 60mm;
+        }
+        div.memo-content div.rows-1.nominal {
+            height: 11mm;
+            padding-left: 40mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left, div.memo-content div.rows-1.price-info.content-right {
+            height: 7mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left {
+            width: 55mm;
+            padding-left: 2mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.price-info.content-right {
+            width: 125mm;
+            padding-left: 5mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.total-price {
+            height: 10mm;
+            padding-left: 18mm;
+        }
+        div.memo-content div.rows-2 {
+            height: 15.4mm;
+            padding-left: 35mm;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 60mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 9mm;
+        }
+        div.memo-content div.rows-empty.bottom {
+            height: 12mm;
+        }
+        div.table-payment {
+            height: 38mm;
+        }
+    </style>
+{% endblock %}

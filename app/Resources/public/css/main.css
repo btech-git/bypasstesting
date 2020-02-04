@@ -1,0 +1,23 @@
+tbody:-moz-only-whitespace {
+    display: none;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin-top: 0;
+}
+
+.font-weight-normal {
+    font-weight: 400 !important;
+}
+
+.font-weight-bold {
+    font-weight: 700 !important;
+}
+
+.font-italic {
+    font-style: italic !important;
+}
+
+ul.nav > li a:hover, ul.nav > li a:focus {
+    background-color: #ADD8E6;
+}

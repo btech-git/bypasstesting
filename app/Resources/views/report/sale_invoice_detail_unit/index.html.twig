@@ -1,0 +1,32 @@
+{% extends 'report/layout.html.twig' %}
+
+{% block title 'Report Sale Invoice Detail' %}
+
+{% block content %}
+    <div id="sale-invoice-detail-grid" data-grid="{{ path('report_sale_invoice_detail_unit_grid') }}"></div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/report.css') }}" />
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        table.report-data > thead > tr > th:nth-child(1),
+        table.report-data > tbody > tr > td:nth-child(1) { width: 12.5% }
+        table.report-data > thead > tr > th:nth-child(2),
+        table.report-data > tbody > tr > td:nth-child(2) { width: 10% }
+        table.report-data > thead > tr > th:nth-child(3),
+        table.report-data > tbody > tr > td:nth-child(3) { width: 25% }
+        table.report-data > thead > tr > th:nth-child(4),
+        table.report-data > tbody > tr > td:nth-child(4) { width: 12.5% }
+        table.report-data > thead > tr > th:nth-child(5),
+        table.report-data > tbody > tr > td:nth-child(5) { width: 15% }
+        table.report-data > thead > tr > th:nth-child(6),
+        table.report-data > tbody > tr > td:nth-child(6) { width: 12.5% }
+        table.report-data > thead > tr > th:nth-child(7),
+        table.report-data > tbody > tr > td:nth-child(7) { width: 12.5% }
+    </style>
+{% endblock %}

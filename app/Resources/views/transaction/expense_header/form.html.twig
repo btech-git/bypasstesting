@@ -1,0 +1,185 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% import _self as self %}
+
+{% macro details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td class="hide">
+            {{ form_row(object.account, {'label': false}) }}
+        </td>
+        <td>
+            <span data-name="account-code-{{ object.vars.name }}">{{ object.vars.value.account.code|default }}</span>
+        </td>
+        <td>
+            <span data-name="account-name-{{ object.vars.name }}">{{ object.vars.value.account.name|default }}</span>
+        </td>
+        <td>
+            {{ form_row(object.memo, {'label': false}) }}
+        </td>
+        <td>
+            {{ form_row(object.amount, {'label': false, 'attr': {'data-name': 'amount', 'data-bind-target': '[data-name=amount-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+            <span data-name="amount-text-{{ object.vars.name }}">{{ object.vars.value.amount|default|number_format(0) }}</span>
+        </td>
+        <td>
+            <button type="button" class="btn btn-info remove">Delete</button>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal'}) }}
+                {{ form_row(form.account) }}
+                {{ form_row(form.objectiveReason, {'label': 'Pengeluaran Untuk'}) }}
+                {{ form_row(form.chequeNumber, {'label': 'No Cek/BG'}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.transactionType, {'label': 'Jenis Transaksi'}) }}
+                {{ form_row(form.purchaseDeliveryOrder, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#purchase-delivery-order-dialog'}, 'label' : 'Data Kendaraan' }) }}
+                <div class="form-group" id="purchase-delivery-order-info">
+                    <div>
+                        <label>Rangka #:</label>
+                        <span data-name="vehicle-chassis-number">{{ receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Mesin #:</label>
+                        <span data-name="vehicle-machine-number">{{ receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Deskripsi:</label>
+                        <span data-name="vehicle-description">{{ receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <div>{{ form_row(form.note) }}</div>
+            
+        <hr />
+        
+        <div>
+            <button type="button" class="btn btn-default" id="add" data-toggle="modal" data-target="#account-dialog">Add Detail</button>
+        </div>
+        
+        <br />
+        
+        <table class="table table-bordered" id="detail-list">
+            <thead>
+                <tr class="bg-info">
+                    <th class="hide">Account</th>
+                    <th style="width: 10%">Kode</th>
+                    <th style="width: 20%">Akun</th>
+                    <th>Keterangan</th>
+                    <th style="width: 15%">Amount</th>
+                    <th style="width: 0"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.details_row(form.expenseDetails.vars.prototype)|e }}">
+                {% for expenseDetail in form.expenseDetails %}
+                    {{ self.details_row(expenseDetail) }}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="3">Total</td>
+                    <td class="text-right" data-name="total-amount">{{ expenseHeader.totalAmount|default|number_format(0) }}</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <input class="btn btn-primary" type="submit" value="Submit" data-confirm="Do you want to proceed?" />
+    {{ form_end(form) }}
+    
+    <div id="account-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Account List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="account-grid" data-grid="{{ path('common_account_grid') }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+                
+    <div id="purchase-delivery-order-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Vehicle List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="purchase-delivery-order-grid" data-grid="{{ path('common_purchase_delivery_order_grid', {'form': form.vars.id}) }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        var infoTable = $("#detail-list");
+                        var infoTableFoot = $("tfoot", infoTable);
+                        $("[data-name=total-amount]", infoTableFoot).text($.numberFormat(data.totalAmount, 2));
+                    }
+                });
+            }
+            
+            var table = $("table#detail-list");
+            var tableBody = $("tbody", table);
+            
+            tableBody.on("change", ".bind-amount-class", function() {
+                bind();
+            });
+            tableBody.on("click", "button.remove", function() {
+                $(this).closest("tr").remove();
+                bind();
+            });
+            
+            $("#account-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#account-dialog").modal("hide");
+                var context = $(this);
+                var name = "{{ form.expenseDetails.vars.prototype.vars.name }}";
+                var rows = tableBody.children("tr");
+                var index = Math.max({{ expenseDetailsCount }}, (rows.length > 0) ? parseInt(rows.last().attr("data-index")) + 1 : 0);
+                tableBody.appendByPrototype(tableBody.attr("data-prototype"), name, index, function(prototype) {
+                    var accountPrototype = prototype.find("#{{ form.expenseDetails.vars.prototype.account.vars.id }}");
+                    accountPrototype.val(context.attr("data-field-id"));
+                    var accountCodePrototype = prototype.find("[data-name=account-code-" + name + "]");
+                    accountCodePrototype.text(context.attr("data-field-account-code"));
+                    var accountNamePrototype = prototype.find("[data-name=account-name-" + name + "]");
+                    accountNamePrototype.text(context.attr("data-field-account-name"));
+                });
+            });
+            
+            $("#purchase-delivery-order-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#purchase-delivery-order-dialog").modal("hide");
+                $("#{{ form.purchaseDeliveryOrder.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=code-number]", "#purchase-delivery-order-info").text($(this).attr("data-field-code-number"));
+                $("[data-name=sale-order-code-number]", "#purchase-delivery-order-info").text($(this).attr("data-field-sale-order-code-number"));
+                $("[data-name=customer-name]", "#purchase-delivery-order-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=sale-order-vehicle-brand]", "#purchase-delivery-order-info").text($(this).attr("data-field-sale-order-vehicle-brand"));
+                $("[data-name=sale-order-vehicle-color]", "#purchase-delivery-order-info").text($(this).attr("data-field-sale-order-vehicle-color"));
+                $("[data-name=vehicle-production-year]", "#purchase-delivery-order-info").text($(this).attr("data-field-vehicle-production-year"));
+                $("[data-name=vehicle-chassis-number]", "#purchase-delivery-order-info").text($(this).attr("data-field-vehicle-chassis-number"));
+                $("[data-name=vehicle-machine-number]", "#purchase-delivery-order-info").text($(this).attr("data-field-vehicle-machine-number"));
+                $("[data-name=vehicle-description]", "#purchase-delivery-order-info").text($(this).attr("data-field-vehicle-description"));
+            });
+        });
+    </script>
+{% endblock %}

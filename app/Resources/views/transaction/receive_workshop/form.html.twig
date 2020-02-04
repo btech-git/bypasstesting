@@ -1,0 +1,112 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal'}) }}
+                {{ form_row(form.supplierDeliveryNumber, {'label': 'SJ Supplier #'}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.deliveryWorkshop, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#delivery-workshop-dialog'}, 'label': 'SJ Karoseri' }) }}
+                <div class="form-group" id="delivery-workshop-info">
+                    <div>
+                        <label>SJ Karoseri #:</label>
+                        <span data-name="delivery-workshop-code-number">{{ receiveWorkshop.deliveryWorkshop.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Supplier:</label>
+                        <span data-name="supplier-name">{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>SPK #:</label>
+                        <span data-name="sale-order-code-number">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.saleOrder.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.saleOrder.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Merk:</label>
+                        <span data-name="sale-order-vehicle-brand">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.saleOrder.vehicleBrand|default }}</span>
+                    </div>
+                    <div>
+                        <label>Serial Number:</label>
+                        <span data-name="sale-order-vehicle-serial-number">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.saleOrder.vehicleSerialNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Warna:</label>
+                        <span data-name="sale-order-vehicle-color">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.saleOrder.vehicleColor|default }}</span>
+                    </div>
+                    <div>
+                        <label>Tahun Pembuatan:</label>
+                        <span data-name="receive-order-vehicle-production-year">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.vehicleProductionYear|default }}</span>
+                    </div>
+                    <div>
+                        <label>Rangka #:</label>
+                        <span data-name="receive-order-vehicle-chassis-number">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.vehicleChassisNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Mesin #:</label>
+                        <span data-name="receive-order-vehicle-machine-number">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.vehicleMachineNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Deskripsi:</label>
+                        <span data-name="receive-order-vehicle-description">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.vehicleDescription|default }}</span>
+                    </div>
+                    <div>
+                        <label>Manufacture Code:</label>
+                        <span data-name="vehicle-model-manufacture-code">{{ receiveWorkshop.deliveryWorkshop.receiveOrder.saleOrder.vehicleModel.manufactureCode|default }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="delivery-workshop-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">SJ Karoseri List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="delivery-workshop-grid" data-grid="{{ path('common_delivery_workshop_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            $("#delivery-workshop-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#delivery-workshop-dialog").modal("hide");
+                $("#{{ form.deliveryWorkshop.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=delivery-workshop-code-number]", "#delivery-workshop-info").text($(this).attr("data-field-delivery-workshop-code-number"));
+                $("[data-name=supplier-name]", "#delivery-workshop-info").text($(this).attr("data-field-supplier-name"));
+                $("[data-name=sale-order-code-number]", "#delivery-workshop-info").text($(this).attr("data-field-sale-order-code-number"));
+                $("[data-name=customer-name]", "#delivery-workshop-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=sale-order-vehicle-brand]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-brand"));
+                $("[data-name=sale-order-vehicle-serial-number]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-serial-number"));
+                $("[data-name=sale-order-vehicle-color]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-color"));
+                $("[data-name=receive-order-vehicle-production-year]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-production-year"));
+                $("[data-name=receive-order-vehicle-chassis-number]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-chassis-number"));
+                $("[data-name=receive-order-vehicle-machine-number]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-machine-number"));
+                $("[data-name=receive-order-vehicle-description]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-description"));
+                $("[data-name=vehicle-model-manufacture-code]", "#delivery-workshop-info").text($(this).attr("data-field-vehicle-model-manufacture-code"));
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo">
+        <div class="header">
+            <h1 class="title">PT. Bypassindo Jaya Indah</h1>
+            <h2 class="title">DELIVERY INSPECTION</h2>
+        </div>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table full">
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Inspection #</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Tanggal</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.transactionDate|default ? deliveryInspectionHeader.transactionDate|date('d M Y') }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">SPK #</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Customer</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Rangka #</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Mesin #</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Warna</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Model</div>
+                            <div class="cell value">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.vosModelName|default }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <hr />
+            <div class="item">
+                {% set lastId = '' %}
+                {% for inspectionItem in inspectionItems %}
+                    {% set inspectionItemCategory = inspectionItem.inspectionItemCategory %}
+                    {% if lastId != inspectionItemCategory.id %}
+                        {% if lastId != '' %}
+                            <div>&nbsp;</div>
+                        {% endif %}
+                        <div class="label">{{ inspectionItemCategory.name }}</div>
+                    {% endif %}
+                    <div class="value">
+                        <div class="cell check">
+                            <span class="box">&nbsp;</span>
+                        </div>
+                        <div class="cell text">
+                            {{ inspectionItem.name }}
+                        </div>
+                    </div>
+                    {% if lastId != inspectionItemCategory.id %}
+                        {% set lastId = inspectionItemCategory.id %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        <div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .col:nth-child(1) { width: 50% }
+        .col:nth-child(2) { width: 50% }
+        
+        .col:nth-child(1) .label { width: 35% }
+        .col:nth-child(1) .value { width: 65% }
+        .col:nth-child(2) .label { width: 35% }
+        .col:nth-child(2) .value { width: 65% }
+        
+        .item .label, .item .value, .item .check, .item .text, .item .box {
+            display: inline-block;
+        }
+        .item .label, .item .value, .item .check {
+            vertical-align: top;
+        }
+        .item .text {
+            vertical-align: middle;
+        }
+        .item .label {
+            width: 100%;
+            padding: 5pt 0;
+        }
+        .item .value {
+            width: 32.5%;
+            padding: 2.5pt 0;
+        }
+        .item .text {
+            padding: 0 2.5pt;
+        }
+        .item .box {
+            border: 1pt solid;
+            width: 12.5pt;
+            height: 12.5pt;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Journal Voucher Detail' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Debit</th>
+                <td>{{ journalVoucherDetail.debit|default|number_format(2) }}</td>
+            </tr>
+            <tr>
+                <th>Credit</th>
+                <td>{{ journalVoucherDetail.credit|default|number_format(2) }}</td>
+            </tr>
+            <tr>
+                <th>Memo</th>
+                <td>{{ journalVoucherDetail.memo|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

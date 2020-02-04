@@ -1,0 +1,88 @@
+{% extends 'report/export.xml.twig' %}
+
+{% block data %}
+    <ss:Worksheet>
+        <ss:Table ss:StyleID="Data">
+            <ss:Column ss:Span="6" ss:AutoFitWidth="1" />
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">PT. Bypassindo Jaya Indah</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">Laporan Penjualan Downpayment</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    {% set startDate = grid.searchVals['saleInvoiceDetailGeneral.saleInvoiceHeader']['transactionDate'][1]|default %}
+                    {% set endDate = grid.searchVals['saleInvoiceDetailGeneral.saleInvoiceHeader']['transactionDate'][2]|default %}
+                    <ss:Data ss:Type="String">{{ startDate ? startDate|date('j F Y') }}  -  {{ endDate ? endDate|date('j F Y') }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:Span="1" />
+            <ss:Row ss:StyleID="Level1|Bold|Center|Bottom">
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">DP #</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Faktur Pajak #</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">SPK #</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Customer</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Salesman</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Kas/Bank</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Jumlah</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            {% set grandTotalSum = 0.00 %}
+            {% for saleInvoiceDownpayment in grid.data %}
+                <ss:Row ss:StyleID="Level1">
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.transactionDate|default ? saleInvoiceDownpayment.transactionDate|date('j F Y') }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.codeNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.taxNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.saleOrder.codeNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.customer.name|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.saleOrder.staffFirst.name|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.account.name|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDownpayment.amount|default }}</ss:Data>
+                    </ss:Cell>
+                </ss:Row>
+                {% set grandTotalSum = grandTotalSum + saleInvoiceDownpayment.amount %}
+            {% endfor %}
+            <ss:Row ss:StyleID="Level1|Bold|Top">
+                <ss:Cell ss:Index="8">
+                    <ss:Data ss:Type="String">{{ grandTotalSum|default }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+        </ss:Table>
+    </ss:Worksheet>
+{% endblock %}

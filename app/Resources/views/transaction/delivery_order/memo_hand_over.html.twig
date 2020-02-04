@@ -1,0 +1,171 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-empty top">
+            &nbsp;
+        </div>
+        <div class="rows-1 content-left">
+            &nbsp;
+        </div>
+        <div class="rows-1 content-right">
+            {{ deliveryOrder.transactionDate|default ? deliveryOrder.transactionDate|date('j F Y') }}
+        </div>
+        <div class="rows-empty middle">
+            &nbsp;
+        </div>
+        <div class="rows-2 content-left">
+            {{ deliveryOrder.codeNumber|default }}
+        </div>
+        <br />
+        <div class="rows-3 content-left">
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }} <br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|nl2br }} <br /><br />
+            {{ deliveryOrder.transactionDate|default ? deliveryOrder.transactionDate|date('j F Y') }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.vosModelName|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.dmsVariantName|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}<br />
+            &nbsp;<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}<br />
+        </div>
+        <div class="rows-empty bottom">
+            &nbsp;
+        </div>
+        <div class="rows-4 content-left">
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 70%">{{ deliveryOrder.isSpareTire|default ? 'V' : '' }}</td>
+                    <td>{{ deliveryOrder.isServiceBook|default ? 'V' : '' }}</td>
+                </tr>
+                <tr>
+                    <td>{{ deliveryOrder.isJackHandle|default ? 'V' : '' }}</td>
+                    <td>{{ deliveryOrder.isOwnerManual|default ? 'V' : '' }}</td>
+                </tr>
+                <tr>
+                    <td>{{ deliveryOrder.isToolSet|default ? 'V' : '' }}</td>
+                    <td>{{ deliveryOrder.isTwoVehicleKey|default ? 'V' : '' }}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>{{ deliveryOrder.isLighter|default ? 'V' : '' }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 20cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 7mm;
+            padding-left: 60mm;
+        }
+        div.memo-content div.rows-1.nominal {
+            height: 11mm;
+            padding-left: 40mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left, div.memo-content div.rows-1.price-info.content-right {
+            height: 7mm;
+        }
+        div.memo-content div.rows-1.content-left {
+            width: 75mm;
+            padding-left: 2mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.content-right {
+            width: 85mm;
+            padding-left: 85mm;
+            text-align: right;
+        }
+        div.memo-content div.rows-1.total-price {
+            height: 10mm;
+            padding-left: 18mm;
+        }
+        div.memo-content div.rows-2.content-left {
+            height: 7mm;
+            padding-left: 20mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-3.content-left {
+            width: 155mm;
+            padding-left: 45mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-4.content-left {
+            width: 90%;
+            padding-left: 7mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 20mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 11mm;
+        }
+        div.memo-content div.rows-empty.bottom {
+            height: 9mm;
+        }
+        div.table-payment {
+            height: 38mm;
+        }
+    </style>
+{% endblock %}

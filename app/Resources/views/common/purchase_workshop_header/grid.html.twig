@@ -1,0 +1,60 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="purchaseWorkshopHeader" data-field="codeNumber">PO Karoseri #</th>
+            <th data-group="purchaseWorkshopHeader" data-field="transactionDate">Tanggal</th>
+            <th data-group="saleOrder" data-field="codeNumber">SPK #</th>
+            <th data-group="supplier" data-field="name">Supplier</th>
+            <th data-group="saleOrder" data-field="vehicleBrand">Vehicle Brand</th>
+            <th data-group="saleOrder" data-field="vehicleColor">Vehicle Color</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="purchaseWorkshopHeader" data-field="codeNumber"></th>
+            <th data-group="purchaseWorkshopHeader" data-field="transactionDate"></th>
+            <th data-group="saleOrder" data-field="codeNumber"></th>
+            <th data-group="supplier" data-field="name"></th>
+            <th data-group="saleOrder" data-field="vehicleBrand"></th>
+            <th data-group="saleOrder" data-field="vehicleColor"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchaseWorkshopHeader in grid.data %}
+            <tr data-field-id="{{ purchaseWorkshopHeader.id }}"
+                data-field-code-number="{{ purchaseWorkshopHeader.codeNumber|default }}"
+                data-field-supplier-name="{{ purchaseWorkshopHeader.supplier.name|default }}"
+                data-field-supplier-contact-person="{{ purchaseWorkshopHeader.supplier.contactPerson|default }}"
+                data-field-supplier-phone="{{ purchaseWorkshopHeader.supplier.phone|default }}"
+                data-field-supplier-office-address="{{ purchaseWorkshopHeader.supplier.officeAddress|default }}"
+                data-field-sale-order-code-number="{{ purchaseWorkshopHeader.saleOrder.codeNumber|default }}"
+                data-field-sale-order-vehicle-brand="{{ purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}"
+                data-field-sale-order-vehicle-serial-number="{{ purchaseWorkshopHeader.saleOrder.vehicleSerialNumber|default }}"
+                data-field-sale-order-vehicle-color="{{ purchaseWorkshopHeader.saleOrder.vehicleColor|default }}"
+                data-field-vehicle-model-manufacture-code="{{ purchaseWorkshopHeader.saleOrder.vehicleModel.manufactureCode|default }}">
+                <td class="text-left">{{ purchaseWorkshopHeader.codeNumber|default }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.transactionDate|default ? purchaseWorkshopHeader.transactionDate|date('Y-m-d') }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.saleOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.supplier.name|default }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

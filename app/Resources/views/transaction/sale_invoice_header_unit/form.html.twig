@@ -1,0 +1,285 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% import _self as self %}
+
+{% macro details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td class="hide">
+            {{ form_row(object.receiveOrder, {'label': false}) }}
+        </td>
+        <td>
+            <span data-name="vehicle-chassis-number-{{ object.vars.name }}">{{ object.vars.value.vehicleChassisNumber|default }}</span>
+        </td>
+        <td>
+            <span data-name="vehicle-machine-number-{{ object.vars.name }}">{{ object.vars.value.vehicleMachineNumber|default }}</span>
+        </td>
+        <td class="text-right">
+            <span data-name="payment-type-{{ object.vars.name }}">{{ object.vars.value.receiveOrder.purchaseDeliveryOrder.saleOrder.financeCompany.name|default }}</span>
+        </td>
+        <td class="text-right">
+            <span data-name="unit-price-{{ object.vars.name }}">{{ object.vars.value.unitPrice|default|number_format(0) }}</span>
+        </td>
+        <td>
+            <button type="button" class="btn btn-info remove">Delete</button>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro downpayment_details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td class="hide">
+            {{ form_row(object.saleInvoiceDownpayment, {'label': false}) }}
+        </td>
+        <td>
+            <span data-name="code-number-{{ object.vars.name }}">{{ object.vars.value.saleInvoiceDownpayment.codeNumber|default }}</span>
+        </td>
+        <td class="text-right">
+            <span data-name="transaction-date-{{ object.vars.name }}">{{ object.vars.value.saleInvoiceDownpayment.transactionDate|default ? object.vars.value.saleInvoiceDownpayment.transactionDate|date('j M Y') }}</span>
+        </td>
+        <td class="text-right">
+            <span data-name="amount-{{ object.vars.name }}">{{ object.vars.value.amount|default|number_format(0) }}</span>
+        </td>
+        <td>
+            <button type="button" class="btn btn-info remove">Delete</button>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal Piutang'}) }}
+                {{ form_row(form.taxNumber, {'label': 'Faktur Pajak #'}) }}
+                {{ form_row(form.taxDate, {'label': 'Tanggal F. Pajak'}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.customer, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#customer-dialog'} }) }}
+                <div class="form-group" id="customer-info">
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ saleInvoiceHeader.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="customer-contact-person">{{ saleInvoiceHeader.customer.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Office Address:</label>
+                        <span data-name="customer-office-address">{{ saleInvoiceHeader.customer.officeAddress|default }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <hr />
+        
+        <div>
+            <button type="button" class="btn btn-default" id="add-sale-invoice-detail-unit-prototype" data-toggle="modal" data-target="#receive-order-dialog">Add Detail</button>
+            <button type="button" class="btn btn-default" id="add-sale-invoice-detail-unit-downpayment-prototype" data-toggle="modal" data-target="#sale-invoice-downpayment-dialog">Add Downpayment</button>
+        </div>
+        
+        <br />
+        
+        <table class="table table-bordered" id="sale-invoice-detail-unit-list">
+            <thead>
+                <tr class="bg-info">
+                    <th class="hide"></th>
+                    <th style="width: 20%">Rangka #</th>
+                    <th style="width: 20%">Mesin #</th>
+                    <th>Jenis Pembayaran</th>
+                    <th style="width: 20%">Price</th>
+                    <th style="width: 0"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.details_row(form.saleInvoiceDetailUnits.vars.prototype)|e }}">
+                {% for saleInvoiceDetailUnit in form.saleInvoiceDetailUnits %}
+                    {{ self.details_row(saleInvoiceDetailUnit) }}
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <table class="table table-bordered" id="sale-invoice-detail-unit-downpayment-list">
+            <thead>
+                <tr class="bg-info">
+                    <th class="hide"></th>
+                    <th>Downpayment #</th>
+                    <th>Tanggal</th>
+                    <th>Amount</th>
+                    <th style="width: 0"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.downpayment_details_row(form.saleInvoiceDetailUnitDownpayments.vars.prototype)|e }}">
+                {% for saleInvoiceDetailUnitDownpayment in form.saleInvoiceDetailUnitDownpayments %}
+                    {{ self.downpayment_details_row(saleInvoiceDetailUnitDownpayment) }}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="2">Sub Total</td>
+                    <td class="text-right"><span data-name="grand-total-before-downpayment">{{ saleInvoiceHeader.grandTotalBeforeDownpayment|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">Total DP</td>
+                    <td class="text-right"><span data-name="total-downpayment">{{ saleInvoiceHeader.totalDownpayment|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">Grand Total</td>
+                    <td class="text-right"><span data-name="grand-total-after-downpayment">{{ saleInvoiceHeader.grandTotalAfterDownpayment|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="customer-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Customer List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="customer-grid" data-grid="{{ path('common_customer_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+    
+    <div id="receive-order-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Receive Order List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="receive-order-grid" data-grid="{{ path('common_receive_order_grid', {'form': form.vars.id, 'options': {'customer_id': saleInvoiceHeader.customer.id|default(0)} }) }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+                
+    <div id="sale-invoice-downpayment-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sale Invoice Downpayment List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="sale-invoice-downpayment-grid" data-grid="{{ path('common_sale_invoice_downpayment_grid', {'form': form.vars.id, 'options': {'customer_id': saleInvoiceHeader.customer.id|default(0)} }) }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        $("[data-name=grand-total-before-downpayment]", downpaymentTableFooter).text($.numberFormat(data.grandTotalBeforeDownpayment, 2));
+                        $("[data-name=total-downpayment]", downpaymentTableFooter).text($.numberFormat(data.totalDownpayment, 2));
+                        $("[data-name=grand-total-after-downpayment]", downpaymentTableFooter).text($.numberFormat(data.grandTotalAfterDownpayment, 2));
+                    }
+                });
+            }
+            
+            var detailTable = $("#sale-invoice-detail-unit-list");
+            var detailTableBody = $("tbody", detailTable);
+            var downpaymentTable = $("#sale-invoice-detail-unit-downpayment-list");
+            var downpaymentTableBody = $("tbody", downpaymentTable);
+            var downpaymentTableFooter = $("tfoot", downpaymentTable);
+            
+            $("#{{ form.customer.vars.id }}").on("change", function() {
+                detailTableBody.empty();
+                bind();
+                var url = "{{ path('common_receive_order_grid', {'form': form.vars.id, 'options': {'customer_id': '__customer_id'} })|raw }}";
+                url = url.replace("__customer_id", parseInt($(this).val()));
+                $("#receive-order-grid").load(url, {id: "receive-order-grid"});
+                var url = "{{ path('common_sale_invoice_downpayment_grid', {'form': form.vars.id, 'options': {'customer_id': '__customer_id'} })|raw }}";
+                url = url.replace("__customer_id", parseInt($(this).val()));
+                $("#sale-invoice-downpayment-grid").load(url, {id: "sale-invoice-downpayment-grid"});
+            });
+            
+            detailTableBody.on("click", "button.remove", function() {
+                $(this).closest("tr").remove();
+                bind();
+            });
+            
+            downpaymentTableBody.on("click", "button.remove", function() {
+                $(this).closest("tr").remove();
+                bind();
+            });
+            
+            $("#customer-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#customer-dialog").modal("hide");
+                $("#{{ form.customer.vars.id }}").val($(this).attr("data-field-id")).trigger("change");
+                $("[data-name=customer-name]", "#customer-info").text($(this).attr("data-field-name"));
+                $("[data-name=customer-contact-person]", "#customer-info").text($(this).attr("data-field-contact-person"));
+                $("[data-name=customer-office-address]", "#customer-info").text($(this).attr("data-field-office-address"));
+            });
+            
+            $("#receive-order-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#receive-order-dialog").modal("hide");
+                var context = $(this);
+                var name = "{{ form.saleInvoiceDetailUnits.vars.prototype.vars.name }}";
+                var rows = detailTableBody.children("tr");
+                var index = Math.max({{ saleInvoiceDetailUnitsCount }}, (rows.length > 0) ? parseInt(rows.last().attr("data-index")) + 1 : 0);
+                if (rows.length < 10) {
+                    detailTableBody.appendByPrototype(detailTableBody.attr("data-prototype"), name, index, function(prototype) {
+                        var receiveOrderPrototype = prototype.find("#{{ form.saleInvoiceDetailUnits.vars.prototype.receiveOrder.vars.id }}");
+                        receiveOrderPrototype.val(context.attr("data-field-id"));
+                        var vehicleChassisNumberPrototype = prototype.find("[data-name=vehicle-chassis-number-" + name + "]");
+                        vehicleChassisNumberPrototype.text(context.attr("data-field-vehicle-chassis-number"));
+                        var vehicleMachineNumberPrototype = prototype.find("[data-name=vehicle-machine-number-" + name + "]");
+                        vehicleMachineNumberPrototype.text(context.attr("data-field-vehicle-machine-number"));
+                        var unitPricePrototype = prototype.find("[data-name=unit-price-" + name + "]");
+                        unitPricePrototype.text($.numberFormat(context.attr("data-field-sale-order-unit-price"), 2));
+                        var paymentTypePrototype = prototype.find("[data-name=payment-type-" + name + "]");
+                        paymentTypePrototype.text(context.attr("data-field-sale-order-payment-type"));
+                    });
+                    bind();
+                }
+            });
+            
+            $("#sale-invoice-downpayment-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#sale-invoice-downpayment-dialog").modal("hide");
+                var context = $(this);
+                var name = "{{ form.saleInvoiceDetailUnitDownpayments.vars.prototype.vars.name }}";
+                var rows = downpaymentTableBody.children("tr");
+                var index = Math.max({{ saleInvoiceDetailUnitDownpaymentsCount }}, (rows.length > 0) ? parseInt(rows.last().attr("data-index")) + 1 : 0);
+                downpaymentTableBody.appendByPrototype(downpaymentTableBody.attr("data-prototype"), name, index, function(prototype) {
+                    var saleInvoiceDownpaymentPrototype = prototype.find("#{{ form.saleInvoiceDetailUnitDownpayments.vars.prototype.saleInvoiceDownpayment.vars.id }}");
+                    saleInvoiceDownpaymentPrototype.val(context.attr("data-field-id"));
+                    var codeNumberPrototype = prototype.find("[data-name=code-number-" + name + "]");
+                    codeNumberPrototype.text(context.attr("data-field-code-number"));
+                    var transactionDatePrototype = prototype.find("[data-name=transaction-date-" + name + "]");
+                    transactionDatePrototype.text(context.attr("data-field-transaction-date"));
+                    var amountPrototype = prototype.find("[data-name=amount-" + name + "]");
+                    amountPrototype.text($.numberFormat(context.attr("data-field-amount"), 2));
+                });
+                bind();
+            });
+        });
+    </script>
+{% endblock %}

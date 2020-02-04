@@ -1,0 +1,57 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="deliveryOrder" data-field="codeNumber">Pengiriman #</th>
+            <th data-group="deliveryOrder" data-field="transactionDate">Tanggal</th>
+            <th data-group="deliveryOrder" data-field="destinationAddress">Alamat</th>
+            <th data-group="vehicleModel" data-field="vosModel">Model</th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleChassisNumber">Rangka #</th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleMachineNumber">Mesin #</th>
+            <th></th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="deliveryOrder" data-field="codeNumber"></th>
+            <th data-group="deliveryOrder" data-field="transactionDate"></th>
+            <th data-group="deliveryOrder" data-field="destinationAddress"></th>
+            <th></th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleChassisNumber"></th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleMachineNumber"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for deliveryOrder in grid.data %}
+            <tr data-field-id="{{ deliveryOrder.id }}">
+                <td class="text-left">{{ deliveryOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ deliveryOrder.transactionDate|default ? deliveryOrder.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ deliveryOrder.destinationAddress|default }}</td>
+                <td class="text-left">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.VehicleModel.vosModelName|default }}</td>
+                <td class="text-left">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                <td class="text-left">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                <td class="text-left">
+                    {{ include('transaction/actions.html.twig', {
+                        'contents': {
+                            '{index}': null,
+                            '{new}': null,
+                            '{show}': include('action.html.twig', {'url': path('transaction_delivery_order_show', {'id': deliveryOrder.id}), 'button': 'btn btn-info btn-sm', 'icon': 'glyphicon glyphicon-info-sign'}),
+                            '{edit}': include('action.html.twig', {'url': path('transaction_delivery_order_edit', {'id': deliveryOrder.id}), 'button': 'btn btn-warning btn-sm', 'icon': 'glyphicon glyphicon-edit'}),
+                            '{delete}': include('action.html.twig', {'url': path('transaction_delivery_order_delete', {'id': deliveryOrder.id}), 'button': 'btn btn-danger btn-sm', 'icon': 'glyphicon glyphicon-remove'}),
+                        }
+                    }) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

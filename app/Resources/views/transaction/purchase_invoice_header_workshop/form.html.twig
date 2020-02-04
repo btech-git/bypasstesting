@@ -1,0 +1,200 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% import _self as self %}
+
+{% macro details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td class="text-left">
+            <span data-name="item-name-{{ object.vars.name }}">{{ object.vars.value.itemName|default }}</span>
+        </td>
+        <td class="text-right">
+            {{ form_row(object.unitPrice, {'label': false, 'attr': {'data-name': 'unit-price', 'data-bind-target': '[data-name=unit-price-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+        </td>
+        <td class="text-right">
+            <span data-name="unit-price-text-{{ object.vars.name }}">{{ object.vars.value.unitPrice|default|number_format(0) }}</span>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal Hutang'}) }}
+                {{ form_row(form.taxInvoiceNumber, {'label': 'Faktur Pajak Supplier'}) }}
+                {{ form_row(form.taxInvoiceDate, {'label': 'Tanggal Faktur Pajak'}) }}
+                {{ form_row(form.supplierInvoiceNumber, {'label': 'Supplier Invoice #'}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.receiveWorkshop, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#receive-workshop-dialog'} }) }}
+                <div class="form-group" id="receive-workshop-info">
+                    <div>
+                        <label>PO #:</label>
+                        <span data-name="code-number">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Supplier:</label>
+                        <span data-name="supplier-name">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>SPK #:</label>
+                        <span data-name="sale-order-code-number">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Model:</label>
+                        <span data-name="sale-order-vehicle-brand">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}</span>
+                    </div>
+                    <div>
+                        <label>Warna:</label>
+                        <span data-name="sale-order-vehicle-color">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</span>
+                    </div>
+                    <div>
+                        <label>Rangka #:</label>
+                        <span data-name="vehicle-chassis-number">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Mesin #:</label>
+                        <span data-name="vehicle-machine-number">{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+            
+        <hr />
+        
+        <br />
+        
+        <table class="table table-bordered" id="purchase-invoice-detail-workshop-info-list">
+            <thead>
+                <tr class="bg-info">
+                    <th>Nama Barang</th>
+                    <th style="width: 15%">Price</th>
+                    <th style="width: 15%"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.details_row(form.purchaseInvoiceDetailWorkshops.vars.prototype)|e }}">
+                {% for purchaseInvoiceDetailWorkshop in form.purchaseInvoiceDetailWorkshops %}
+                    {{ self.details_row(purchaseInvoiceDetailWorkshop) }}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="2">Sub Total</td>
+                    <td class="text-right"><span data-name="sub-total">{{ purchaseInvoiceHeader.subTotal|default|number_format(0) }}</span></td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">
+                        <span style="display: inline-block">PPn 10%</span>
+                        <span style="display: inline-block">{{ form_row(form.isTax, {'label': false, 'attr': {'data-name': 'is-tax'} }) }}</span>
+                    </td>
+                    <td class="text-right">
+                        {{ form_row(form.taxNominal, {'label': false}) }}
+                        {{ form_row(form.taxNominalReplacement, {'label': false, 'attr': {'data-name': 'tax-nominal-replacement', 'data-bind-target': '[data-name=tax-nominal-replacement-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                        <span data-name="tax-nominal-replacement-text">{{ form.vars.value.taxNominalReplacement|default|number_format(0) }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="2">Grand Total</td>
+                    <td class="text-right" data-name="grand-total">{{ purchaseInvoiceHeader.grandTotalReplacement|default|number_format(0) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+                 
+        <div id="receive-workshop-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">PO Karoseri List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="receive-workshop-grid" data-grid="{{ path('common_receive_workshop_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind(updateTextNominal) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        var table = $("#purchase-invoice-detail-workshop-info-list");
+                        var tableBody = $("tbody", table);
+                        var tableFoot = $("tfoot", table);
+                        $.each(data.purchaseInvoiceDetailWorkshops, function(index, purchaseInvoiceDetailWorkshop) {
+                            $("[data-name=item-name-" + index + "]", tableBody).text(purchaseInvoiceDetailWorkshop.itemName);
+                            $("[data-name=quantity-" + index + "]", tableBody).text($.numberFormat(purchaseInvoiceDetailWorkshop.quantity, 2));
+                            $("[data-name=total-" + index + "]", tableBody).text($.numberFormat(purchaseInvoiceDetailWorkshop.total, 2));
+                        });
+                        $("[data-name=sub-total]", tableFoot).text($.numberFormat(data.subTotal, 2));
+                        $("#{{ form.taxNominal.vars.id }}", "#purchase-invoice-detail-workshop-info-list").val(data.taxNominal);
+                        if (updateTextNominal) {
+                            $("[data-name=tax-nominal-replacement]", "#purchase-invoice-detail-workshop-info-list").val(data.taxNominal);
+                            $("[data-name=tax-nominal-replacement-text]", "#purchase-invoice-detail-workshop-info-list").text($.numberFormat(data.taxNominal, 2));
+                        }
+                        $("[data-name=grand-total]", tableFoot).text($.numberFormat(data.grandTotal, 2));
+                    }
+                });
+            }
+            
+            var table = $("#purchase-invoice-detail-workshop-info-list");
+            var tableBody = $("tbody", table);
+            var tableFoot = $("tfoot", table);
+            
+            tableBody.on("change", "[data-name=unit-price]", function() {
+                bind(true);
+            });
+            tableFoot.on("change", "[data-name=is-tax]", function() {
+                bind(true);
+            });
+            tableFoot.on("change", "[data-name=tax-nominal-replacement]", function() {
+                bind(false);
+            });
+            
+            $("#receive-workshop-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#receive-workshop-dialog").modal("hide");
+                $("#{{ form.receiveWorkshop.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=code-number]", "#receive-workshop-info").text($(this).attr("data-field-code-number"));
+                $("[data-name=sale-order-code-number]", "#receive-workshop-info").text($(this).attr("data-field-sale-order-code-number"));
+                $("[data-name=supplier-name]", "#receive-workshop-info").text($(this).attr("data-field-supplier-name"));
+                $("[data-name=sale-order-vehicle-brand]", "#receive-workshop-info").text($(this).attr("data-field-sale-order-vehicle-brand"));
+                $("[data-name=sale-order-vehicle-serial-number]", "#receive-workshop-info").text($(this).attr("data-field-sale-order-vehicle-serial-number"));
+                $("[data-name=sale-order-vehicle-color]", "#receive-workshop-info").text($(this).attr("data-field-sale-order-vehicle-color"));
+                $("[data-name=vehicle-chassis-number]", "#receive-workshop-info").text($(this).attr("data-field-vehicle-chassis-number"));
+                $("[data-name=vehicle-machine-number]", "#receive-workshop-info").text($(this).attr("data-field-vehicle-machine-number"));
+                tableBody.empty();
+                var context = $(this);
+                var name = "{{ form.purchaseInvoiceDetailWorkshops.vars.prototype.vars.name }}";
+                var purchaseWorkshopDetailsCount = parseInt(context.attr("data-field-purchase-workshop-details-count"));
+                var purchaseWorkshopDetailUnitPriceList = $.parseJSON(context.attr("data-field-purchase-workshop-detail-unit-price-list"));
+                for (var i = 0; i < purchaseWorkshopDetailsCount; i++) {
+                    tableBody.appendByPrototype(tableBody.attr("data-prototype"), name, i, function(prototype) {
+                        var unitPricePrototype = prototype.find("#{{ form.purchaseInvoiceDetailWorkshops.vars.prototype.unitPrice.vars.id }}");
+                        unitPricePrototype.attr("value", purchaseWorkshopDetailUnitPriceList[i]);
+                        var unitPriceTextPrototype = prototype.find("[data-name=unit-price-text-" + name + "]");
+                        unitPriceTextPrototype.text($.numberFormat(purchaseWorkshopDetailUnitPriceList[i], 2));
+                    });
+                }
+                bind(true);
+            });
+        });
+    </script>
+{% endblock %}

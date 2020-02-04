@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo">
+        <div class="header">
+            <h1 class="title">PT. Bypassindo Jaya Indah</h1>
+            <h2 class="title">Pengiriman Karoseri</h2>
+        </div>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table full">
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">SJ #</div>
+                            <div class="cell value">{{ deliveryWorkshop.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Tanggal</div>
+                            <div class="cell value">{{ deliveryWorkshop.transactionDate|default ? deliveryWorkshop.transactionDate|date('d M Y') }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">PO Karoseri #</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Supplier #</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Contact Person #</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.contactPerson|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Contact Person #</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.officeAddress|default }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">SPK #</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Customer</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.customer.name|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Merk</div>
+                            <div class="cell value">{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <table class="detail">
+            <thead>
+                <tr>
+                    <th class="center">Tahun</th>
+                    <th class="center">Warna</th>
+                    <th class="center">Model</th>
+                    <th class="center">Rangka #</th>
+                    <th class="center">Mesin #</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="center">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+                    <td class="center">{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</td>
+                    <td class="center">{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleModel.vosModelName|default }}</td>
+                    <td class="left">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                    <td class="left">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                </tr>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Catatan:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ deliveryWorkshop.note|default }}</div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <div class="signature">
+            <div class="table full">
+                <div class="cell sig">
+                    <div>Penerima,</div>
+                </div>
+                <div class="cell sig">
+                    <div>Hormat Kami,</div>
+                    <div class="blank"></div>
+                    <div class="blank"></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .col:nth-child(1) { width: 50% }
+        .col:nth-child(2) { width: 50% }
+        
+        .col:nth-child(1) .label { width: 35% }
+        .col:nth-child(1) .value { width: 65% }
+        .col:nth-child(2) .label { width: 35% }
+        .col:nth-child(2) .value { width: 65% }
+        
+        .sig:nth-child(1) { width: 50% }
+        .sig:nth-child(2) { width: 50% }
+    </style>
+{% endblock %}

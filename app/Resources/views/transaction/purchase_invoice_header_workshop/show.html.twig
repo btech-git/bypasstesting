@@ -1,0 +1,103 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Purchase Invoice Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Invoice #</th>
+                <td>{{ purchaseInvoiceHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ purchaseInvoiceHeader.transactionDate|default ? purchaseInvoiceHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Supplier</th>
+                <td>{{ purchaseInvoiceHeader.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Supplier Invoice #</th>
+                <td>{{ purchaseInvoiceHeader.supplierInvoiceNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Faktur Pajak Supplier</th>
+                <td>{{ purchaseInvoiceHeader.formattedTaxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Faktur Pajak</th>
+                <td>{{ purchaseInvoiceHeader.taxInvoiceDate|default ? purchaseInvoiceHeader.taxInvoiceDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>PO #</th>
+                <td>{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal PO</th>
+                <td>{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.transactionDate|default ? purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ purchaseInvoiceHeader.receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ purchaseInvoiceHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Nama Barang</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchaseInvoiceDetailWorkshop in purchaseInvoiceHeader.purchaseInvoiceDetailWorkshops %}
+                <tr>
+                    <td class="text-left">{{ purchaseInvoiceDetailWorkshop.itemName|default }}</td>
+                    <td class="text-center">{{ purchaseInvoiceDetailWorkshop.quantity|default|number_format(0) }}</td>
+                    <td class="text-right">{{ purchaseInvoiceDetailWorkshop.unitPrice|default|number_format(0) }}</td>
+                    <td class="text-right">{{ purchaseInvoiceDetailWorkshop.total|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="3">Sub Total</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.subTotal|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="3">PPn</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.taxNominalReplacement|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="3">Grand Total</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.grandTotalReplacement|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="3">Total Payment</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.totalPayment|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="3">Remaining</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.remaining|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

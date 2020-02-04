@@ -1,0 +1,63 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="saleOrder" data-field="codeNumber">SPK #</th>
+            <th data-group="saleOrder" data-field="transactionDate">Tanggal</th>
+            <th data-group="saleOrder" data-field="vehicleBrand">Merk</th>
+            <th data-group="saleOrder" data-field="vehicleSerialNumber">Serial Number</th>
+            <th data-group="saleOrder" data-field="vehicleColor">Warna</th>
+            <th data-group="saleOrder" data-field="quantity">Quantity</th>
+            <th data-group="saleOrder" data-field="unitPrice">Unit Price</th>
+            <th data-group="saleOrder" data-field="total">Total</th>
+            <th></th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="saleOrder" data-field="codeNumber"></th>
+            <th data-group="saleOrder" data-field="transactionDate"></th>
+            <th data-group="saleOrder" data-field="vehicleBrand"></th>
+            <th data-group="saleOrder" data-field="vehicleSerialNumber"></th>
+            <th data-group="saleOrder" data-field="vehicleColor"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleOrder in grid.data %}
+            <tr data-field-id="{{ saleOrder.id }}">
+                <td class="text-left">{{ saleOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ saleOrder.transactionDate|default ? saleOrder.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ saleOrder.vehicleBrand|default }}</td>
+                <td class="text-left">{{ saleOrder.vehicleSerialNumber|default }}</td>
+                <td class="text-left">{{ saleOrder.vehicleColor|default }}</td>
+                <td class="text-left">{{ saleOrder.quantity|default }}</td>
+                <td class="text-right">{{ saleOrder.unitPrice|default|number_format(0) }}</td>
+                <td class="text-right">{{ saleOrder.total|default|number_format(0) }}</td>
+                <td class="text-left">
+                    {{ include('transaction/actions.html.twig', {
+                        'contents': {
+                            '{index}': null,
+                            '{new}': null,
+                            '{show}': include('action.html.twig', {'url': path('transaction_sale_order_show', {'id': saleOrder.id}), 'button': 'btn btn-info btn-sm', 'icon': 'glyphicon glyphicon-info-sign'}),
+                            '{edit}': include('action.html.twig', {'url': path('transaction_sale_order_edit', {'id': saleOrder.id}), 'button': 'btn btn-warning btn-sm', 'icon': 'glyphicon glyphicon-edit'}),
+                            '{delete}': include('action.html.twig', {'url': path('transaction_sale_order_delete', {'id': saleOrder.id}), 'button': 'btn btn-danger btn-sm', 'icon': 'glyphicon glyphicon-remove'}),
+                        }
+                    }) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

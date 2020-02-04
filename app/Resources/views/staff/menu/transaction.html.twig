@@ -1,0 +1,217 @@
+{% extends 'staff/layout.html.twig' %}
+
+{% block title 'Transaction Menu' %}
+
+{% block stylesheets %}
+    <style>
+        table thead tr th:nth-child(2), table tbody tr td:nth-child(2) { width: 30% }
+        table thead tr th:nth-child(3), table tbody tr td:nth-child(3) { width: 30% }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% set menu = app.session.get('menu') %}
+    
+    {# {% if is_granted('ROLE_SALES_STAFF') %} #}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Penjualan</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Proposal Penjualan Unit</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_discount_application_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_discount_application_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Surat Pemesanan Kendaraan (SPK)</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_order_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>
+                        {{ include('action.html.twig', {'url': path('transaction_sale_order_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}
+                        {% if is_granted('ROLE_SALES_MANAGER') %}
+                            {{ include('action.html.twig', {'url': path('transaction_sale_order_approval'), 'label': 'Approval', 'button': 'btn btn-default', 'icon': 'glyphicon glyphicon-list'}) }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>PO Karoseri</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_purchase_workshop_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>
+                        {{ include('action.html.twig', {'url': path('transaction_purchase_workshop_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}
+                        {% if is_granted('ROLE_ACCOUNTING_HEAD') %}
+                            {{ include('action.html.twig', {'url': path('transaction_purchase_workshop_header_approval'), 'label': 'Approval', 'button': 'btn btn-default', 'icon': 'glyphicon glyphicon-list'}) }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pengiriman Karoseri</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_delivery_workshop_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_delivery_workshop_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penerimaan dari Karoseri</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_receive_workshop_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_receive_workshop_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Pengiriman Unit</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_delivery_order_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_delivery_order_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {#{% endif %}
+             
+    {% if is_granted('ROLE_FINANCE_STAFF') %}#}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Pembelian Unit</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>DO HMSI</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_purchase_delivery_order_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_purchase_delivery_order_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Surat Jalan HMSI (Penerimaan Unit)</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_receive_order_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_receive_order_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {#{% endif %}
+           
+    {% if is_granted('ROLE_INVENTORY_STAFF') %}#}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Bengkel / Service</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pre Delivery Inspection</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_delivery_inspection_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_delivery_inspection_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {#{% endif %}
+            
+    {% if is_granted(['ROLE_FINANCE_STAFF', 'ROLE_CASHIER_STAFF', 'ROLE_PURCHASE_STAFF']) %}#}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Finance</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {#{% if is_granted(['ROLE_FINANCE_STAFF', 'ROLE_CASHIER_STAFF']) %}#}
+                    <tr>
+                        <td>Invoice DP Penjualan</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_downpayment_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_downpayment_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Invoice Penjualan Unit</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_header_unit_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_header_unit_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Invoice Penjualan Umum</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_header_general_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_header_general_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                    </tr>
+                {#{% endif %}
+                {% if is_granted(['ROLE_FINANCE_STAFF', 'ROLE_CASHIER_STAFF', 'ROLE_PURCHASE_STAFF']) %} #}
+                    <tr>
+                        <td>Invoice Pembelian Unit</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_purchase_invoice_header_unit_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_purchase_invoice_header_unit_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Invoice Pembelian Karoseri</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_purchase_invoice_header_workshop_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_purchase_invoice_header_workshop_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Invoice Pembelian Umum</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_purchase_invoice_header_general_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                        <td>{{ include('action.html.twig', {'url': path('transaction_purchase_invoice_header_general_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                    </tr>
+                {#{% endif %}#}
+            </tbody>
+        </table>
+    {#{% endif %}
+    
+    {% if is_granted('ROLE_ACCOUNTING_STAFF') %}#}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Accounting</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pelunasan Penjualan</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_payment_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_payment_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Pelunasan Pembelian</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_purchase_payment_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_purchase_payment_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penerimaan Kas / Bank</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_deposit_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_deposit_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Pengeluaran Kas / Bank</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_expense_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_expense_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Jurnal Umum</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_journal_voucher_header_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_journal_voucher_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {#{% endif %}
+    
+    {% if is_granted('ROLE_SALES_STAFF') %}#}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Spare Part</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Invoice Penjualan Sparepart</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_sparepart_header_import'), 'label': 'Import', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-import'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('transaction_sale_invoice_sparepart_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {#{% endif %}#}
+{% endblock %}

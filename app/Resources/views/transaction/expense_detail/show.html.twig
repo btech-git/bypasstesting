@@ -1,0 +1,26 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Expense Detail' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Description</th>
+                <td>{{ expenseDetail.description|default }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ expenseDetail.amount|default|number_format(2) }}</td>
+            </tr>
+            <tr>
+                <th>Memo</th>
+                <td>{{ expenseDetail.memo|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'master/layout.html.twig' %}
+
+{% block title 'Show Supplier' %}
+
+{% block actions %}
+    {{ include('master/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Office Address</th>
+                <td>{{ supplier.officeAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>Office City</th>
+                <td>{{ supplier.officeCity|default }}</td>
+            </tr>
+            <tr>
+                <th>Office Province</th>
+                <td>{{ supplier.officeProvince|default }}</td>
+            </tr>
+            <tr>
+                <th>Office Zip Code</th>
+                <td>{{ supplier.officeZipCode|default }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ supplier.phone|default }}</td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>{{ supplier.fax|default }}</td>
+            </tr>
+            <tr>
+                <th>Mobile Phone</th>
+                <td>{{ supplier.mobilePhone|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ supplier.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Position</th>
+                <td>{{ supplier.position|default }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ supplier.email|default }}</td>
+            </tr>
+            <tr>
+                <th>Tax Number</th>
+                <td>{{ supplier.taxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Web Page</th>
+                <td>{{ supplier.webPage|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ supplier.note|default }}</td>
+            </tr>
+            <tr>
+                <th>Is Active</th>
+                <td>{{ supplier.isActive|default ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

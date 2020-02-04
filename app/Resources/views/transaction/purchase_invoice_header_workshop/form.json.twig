@@ -1,0 +1,15 @@
+{
+    "subTotal": {{ purchaseInvoiceHeader.subTotal|default|json_encode|raw }},
+    "taxNominal": {{ purchaseInvoiceHeader.taxNominal|default|json_encode|raw }},
+    "grandTotal": {{ purchaseInvoiceHeader.grandTotal|default|json_encode|raw }},
+    "purchaseInvoiceDetailWorkshops": {
+        {%- for index, purchaseInvoiceDetailWorkshop in purchaseInvoiceHeader.purchaseInvoiceDetailWorkshops -%}
+            "{{ index }}": {
+                "itemName": {{ purchaseInvoiceDetailWorkshop.itemName|default|json_encode|raw }},
+                "quantity": {{ purchaseInvoiceDetailWorkshop.quantity|default|json_encode|raw }},
+                "total": {{ purchaseInvoiceDetailWorkshop.total|default|json_encode|raw }}
+            }
+            {%- if not loop.last -%},{%- endif -%}
+        {%- endfor -%}
+    }
+}

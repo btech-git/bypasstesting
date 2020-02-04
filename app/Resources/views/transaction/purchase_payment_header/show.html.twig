@@ -1,0 +1,85 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Purchase Payment Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Pembayaran #</th>
+                <td>{{ purchasePaymentHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ purchasePaymentHeader.transactionDate|default ? purchasePaymentHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Invoice #</th>
+                <td>{{ purchasePaymentHeader.purchaseInvoiceHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Invoice</th>
+                <td>{{ purchasePaymentHeader.purchaseInvoiceHeader.transactionDate|default ? purchasePaymentHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Supplier</th>
+                <td>{{ purchasePaymentHeader.purchaseInvoiceHeader.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Supplier Invoice #</th>
+                <td>{{ purchasePaymentHeader.purchaseInvoiceHeader.supplierInvoiceNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Supplier Faktur Pajak #</th>
+                <td>{{ purchasePaymentHeader.purchaseInvoiceHeader.taxInvoiceNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Grand Total</th>
+                <td>{{ purchasePaymentHeader.purchaseInvoiceHeader.grandTotal|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ purchasePaymentHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                        
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Kode</th>
+                <th>Akun</th>
+                <th>Memo</th>
+                <th>Jenis Bayar</th>
+                <th>Jumlah</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchasePaymentDetail in purchasePaymentHeader.purchasePaymentDetails %}
+                <tr>
+                    <td class="text-left">{{ purchasePaymentDetail.account.code|default }}</td>
+                    <td class="text-left">{{ purchasePaymentDetail.account.name|default }}</td>
+                    <td class="text-left">{{ purchasePaymentDetail.memo|default }}</td>
+                    <td class="text-left">{{ purchasePaymentDetail.paymentMethod.name|default }}</td>
+                    <td class="text-right">{{ purchasePaymentDetail.amount|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="4">Grand Total</td>
+                <td class="text-right">{{ purchasePaymentHeader.totalAmount|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+  
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_purchase_payment_header_memo', {'id': purchasePaymentHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Voucher
+    </a>  
+{% endblock %}

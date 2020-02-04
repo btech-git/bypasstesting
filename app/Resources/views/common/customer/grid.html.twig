@@ -1,0 +1,63 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="customer" data-field="name">Perusahaan</th>
+            <th data-group="customer" data-field="contactPerson">Contact Person</th>
+            <th data-group="customer" data-field="phone">Phone</th>
+            <th data-group="customer" data-field="businessField">Business Field</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="customer" data-field="name"></th>
+            <th data-group="customer" data-field="contactPerson"></th>
+            <th data-group="customer" data-field="phone"></th>
+            <th data-group="customer" data-field="businessField"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in grid.data %}
+            <tr data-field-id="{{ customer.id }}"
+                data-field-name="{{ customer.name|default }}"
+                data-field-contact-person="{{ customer.contactPerson|default }}"
+                data-field-phone="{{ customer.phone|default }}"
+                data-field-business-field="{{ customer.businessField|default }}"
+                data-field-category-two-hino-population="{{ customer.categoryTwoHinoPopulation|default }}"
+                data-field-category-two-mitsubishi-population="{{ customer.categoryTwoMitsubishiPopulation|default }}"
+                data-field-category-two-toyota-population="{{ customer.categoryTwoToyotaPopulation|default }}"
+                data-field-category-two-isuzu-population="{{ customer.categoryTwoIsuzuPopulation|default }}"
+                data-field-category-two-other-population="{{ customer.categoryTwoOtherPopulation|default }}"
+                data-field-category-three-hino-population="{{ customer.categoryThreeHinoPopulation|default }}"
+                data-field-category-three-mitsubishi-population="{{ customer.categoryThreeMitsubishiPopulation|default }}"
+                data-field-category-three-nissan-population="{{ customer.categoryThreeNissanPopulation|default }}"
+                data-field-category-three-isuzu-population="{{ customer.categoryThreeIsuzuPopulation|default }}"
+                data-field-category-three-benz-population="{{ customer.categoryThreeBenzPopulation|default }}"
+                data-field-tax-number="{{ customer.taxNumber|default }}"
+                data-field-office-address="{{ customer.officeAddress|default }}"
+                data-field-office-city="{{ customer.officeCity|default }}"
+                data-field-office-province="{{ customer.officeProvince|default }}"
+                data-field-office-zip-code="{{ customer.officeZipCode|default }}">
+                <td class="text-left">{{ customer.name|default }}</td>
+                <td class="text-left">{{ customer.contactPerson|default }}</td>
+                <td class="text-left">{{ customer.phone|default }}</td>
+                <td class="text-left">{{ customer.businessField|default }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

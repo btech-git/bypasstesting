@@ -1,0 +1,19 @@
+{% extends 'staff/layout.html.twig' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block actions %}
+    {{ include('action.html.twig', {'url': path('staff_profile_show', { 'id': user.id }), 'label': 'Show Profile', 'button': 'btn btn-info', 'icon': 'glyphicon glyphicon-info-sign'}) }}
+    {{ include('action.html.twig', {'url': path('staff_profile_password', { 'id': user.id }), 'label': 'Change Password', 'button': 'btn btn-warning', 'icon': 'glyphicon glyphicon-lock'}) }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div class="form-group">
+            <label>Username</label>
+            <div>{{ user.username }}</div>
+        </div>
+        {{ form_rest(form) }}
+        <input class="btn btn-warning" type="submit" value="Update" data-confirm="Do you want to proceed?" />
+    {{ form_end(form) }}
+{% endblock %}

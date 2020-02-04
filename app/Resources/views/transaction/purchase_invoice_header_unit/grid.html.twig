@@ -1,0 +1,57 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="purchaseInvoiceHeader" data-field="transactionDate">Tanggal</th>
+            <th data-group="supplier" data-field="name">Supplier</th>
+            <th data-group="purchaseInvoiceHeader" data-field="supplierInvoiceNumber">Supplier Invoice #</th>
+            <th data-group="purchaseInvoiceHeader" data-field="grandTotal">Grand Total</th>
+            <th data-group="purchaseInvoiceHeader" data-field="totalPayment">Total Payment</th>
+            <th data-group="purchaseInvoiceHeader" data-field="remaining">Remaining</th>
+            <th></th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="purchaseInvoiceHeader" data-field="transactionDate"></th>
+            <th data-group="supplier" data-field="name"></th>
+            <th data-group="purchaseInvoiceHeader" data-field="supplierInvoiceNumber"></th>
+            <th data-group="purchaseInvoiceHeader" data-field="grandTotal"></th>
+            <th data-group="purchaseInvoiceHeader" data-field="totalPayment"></th>
+            <th data-group="purchaseInvoiceHeader" data-field="remaining"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchaseInvoiceHeader in grid.data %}
+            <tr data-field-id="{{ purchaseInvoiceHeader.id }}">
+                <td class="text-left">{{ purchaseInvoiceHeader.transactionDate|default ? purchaseInvoiceHeader.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ purchaseInvoiceHeader.supplier.name|default }}</td>
+                <td class="text-left">{{ purchaseInvoiceHeader.supplierInvoiceNumber|default }}</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.grandTotalReplacement|default|number_format(0) }}</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.totalPayment|default|number_format(0) }}</td>
+                <td class="text-right">{{ purchaseInvoiceHeader.remaining|default|number_format(0) }}</td>
+                <td class="text-left">
+                    {{ include('transaction/actions.html.twig', {
+                        'contents': {
+                            '{index}': null,
+                            '{new}': null,
+                            '{show}': include('action.html.twig', {'url': path('transaction_purchase_invoice_header_unit_show', {'id': purchaseInvoiceHeader.id}), 'button': 'btn btn-info btn-sm', 'icon': 'glyphicon glyphicon-info-sign'}),
+                            '{edit}': include('action.html.twig', {'url': path('transaction_purchase_invoice_header_unit_edit', {'id': purchaseInvoiceHeader.id}), 'button': 'btn btn-warning btn-sm', 'icon': 'glyphicon glyphicon-edit'}),
+                            '{delete}': include('action.html.twig', {'url': path('transaction_purchase_invoice_header_unit_delete', {'id': purchaseInvoiceHeader.id}), 'button': 'btn btn-danger btn-sm', 'icon': 'glyphicon glyphicon-remove'}),
+                        }
+                    }) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

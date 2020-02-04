@@ -1,0 +1,203 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.codeNumberOrdinal, {'label' : 'SPK #' }) }}
+                {{ form_row(form.transactionDate, {'label' : 'Tanggal SPK' }) }}
+                {{ form_row(form.quotationNumber, {'label' : 'Surat Penawaran #' }) }}
+                {{ form_row(form.purchaseOrderDate, {'label' : 'Tanggal PO' }) }}
+                {{ form_row(form.purchaseOrderNumber, {'label' : 'PO Customer #' }) }}
+                {{ form_row(form.deliveryDate, {'label' : 'Janji Penyerahan' }) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.customer, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#customer-dialog'} }) }}
+                <div class="form-group" id="customer-info">
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ saleOrder.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="customer-contact-person">{{ saleOrder.customer.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Phone:</label>
+                        <span data-name="customer-phone">{{ saleOrder.customer.phone|default }}</span>
+                    </div>
+                    <div>
+                        <label>Alamat Kantor:</label>
+                        <span data-name="customer-office-address">{{ saleOrder.customer.officeAddress|default }}</span>
+                    </div>
+                </div>
+                {{ form_row(form.isCash, {'label': 'Tunai', 'attr': {'data-choice-group': 'payment-type'} }) }}
+                {{ form_row(form.isLeasing, {'label': 'Leasing', 'attr': {'data-choice-group': 'payment-type'} }) }}
+                {{ form_row(form.financeCompany, {'label': 'Leasing' }) }}
+                {{ form_row(form.leasingTerm, {'label': 'Tenor'}) }}
+                <div class="form-group">
+                    {{ form_row(form.leasingMonthlyNominal, {'label': 'Angsuran /bulan (Rp.)', 'attr': {'data-bind-target': '[data-name=leasing-monthly-nominal-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="leasing-monthly-nominal-text">{{ saleOrder.leasingMonthlyNominal|default|number_format(0) }}</span>
+                </div>
+                <div class="form-group">
+                    {{ form_row(form.downPayment, {'label': 'DP (Rp.)', 'attr': {'data-bind-target': '[data-name=downpayment-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="downpayment-text">{{ saleOrder.downPayment|default|number_format(0) }}</span>
+                </div>
+            </div>
+        </div>
+                  
+        <hr />
+            
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.invoiceRegistrationName, {'label' : 'STNK atas nama' }) }}
+                {{ form_row(form.isOffTheRoad, {'label': 'Off The Road'}) }}
+                {{ form_row(form.vehicleModel, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#vehicle-model-dialog'} }) }}
+                <div class="form-group" id="vehicle-model-info">
+                    <div>
+                        <label>Manufacture Code:</label>
+                        <span data-name="vehicle-model-manufacture-code">{{ saleOrder.vehicleModel.manufactureCode|default }}</span>
+                    </div>
+                    <div>
+                        <label>VOS Model:</label>
+                        <span data-name="vehicle-model-vos-model-name">{{ saleOrder.vehicleModel.vosModelName|default }}</span>
+                    </div>
+                    <div>
+                        <label>DMS Variant:</label>
+                        <span data-name="vehicle-model-dms-variant-name">{{ saleOrder.vehicleModel.dmsVariantName|default }}</span>
+                    </div>
+                </div>
+                {{ form_row(form.vehicleBrand, {'label' : 'Merk' }) }}
+                {{ form_row(form.vehicleSerialNumber, {'label': 'Tahun Pembuatan'}) }}
+                {{ form_row(form.vehicleColor, {'label' : 'Warna' }) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.vehicleOptionalInfo, {'label' : 'Optional' }) }}
+                {{ form_row(form.isWorkshopNeeded, {'label': 'Kirim ke Karoseri'}) }}
+                {{ form_row(form.vehicleAccessoriesInfo, {'label' : 'Karoseri' }) }}
+                {{ form_row(form.vehicleOtherInfo, {'label' : 'Lain-lain' }) }}
+                {{ form_row(form.quantity) }}
+                <div class="form-group">
+                    {{ form_row(form.unitPrice, {'label': 'Harga /unit (Rp.)', 'attr': {'data-bind-target': '[data-name=unit-price-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="unit-price-text">{{ saleOrder.unitPrice|default|number_format(0) }}</span>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-6 text-left">
+                        <label>Total (Rp.)</label>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        <span id="total">{{ saleOrder.total|default|number_format(0) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+                      
+        <hr/>
+
+        <div>{{ form_row(form.deliveryAddress, {'label' : 'Alamat Kirim' }) }}</div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="customer-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Customer List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="customer-grid" data-grid="{{ path('common_customer_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div id="vehicle-model-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Vehicle Model List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="vehicle-model-grid" data-grid="{{ path('common_vehicle_model_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind() {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        $("#total").text($.numberFormat(data.total, 2));
+                    }
+                });
+            }
+            function showLeasing() {
+                $("#{{ form.financeCompany.vars.id }}").parent().show();
+                $("#{{ form.leasingTerm.vars.id }}").parent().show();
+                $("#{{ form.leasingMonthlyNominal.vars.id }}").parent().show();
+                $("[data-name=leasing-monthly-nominal-text]").show();
+            }
+            function hideLeasing() {
+                $("#{{ form.financeCompany.vars.id }}").parent().hide();
+                $("#{{ form.leasingTerm.vars.id }}").parent().hide();
+                $("#{{ form.leasingMonthlyNominal.vars.id }}").parent().hide();
+                $("[data-name=leasing-monthly-nominal-text]").hide();
+            }
+            
+            if (!$("#{{ form.isLeasing.vars.id }}").is(":checked")) {
+                hideLeasing();
+            }
+            
+            $("#{{ form.quantity.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.unitPrice.vars.id }}").on("change", function() {
+                bind();
+            });
+            $("#{{ form.isCash.vars.id }}").on("change", function() {
+                hideLeasing();
+            });
+            $("#{{ form.isLeasing.vars.id }}").on("change", function() {
+                if ($(this).is(":checked")) {
+                    showLeasing();
+                } else {
+                    hideLeasing();
+                }
+            });
+            $("#customer-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#customer-dialog").modal("hide");
+                $("#{{ form.customer.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=customer-name]", "#customer-info").text($(this).attr("data-field-name"));
+                $("[data-name=customer-contact-person]", "#customer-info").text($(this).attr("data-field-contact-person"));
+                $("[data-name=customer-phone]", "#customer-info").text($(this).attr("data-field-phone"));
+                $("[data-name=customer-office-address]", "#customer-info").text($(this).attr("data-field-office-address"));
+            });
+            $("#vehicle-model-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#vehicle-model-dialog").modal("hide");
+                $("#{{ form.vehicleModel.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=vehicle-model-manufacture-code]", "#vehicle-model-info").text($(this).attr("data-field-manufacture-code"));
+                $("[data-name=vehicle-model-vos-model-name]", "#vehicle-model-info").text($(this).attr("data-field-vos-model-name"));
+                $("[data-name=vehicle-model-dms-variant-name]", "#vehicle-model-info").text($(this).attr("data-field-dms-variant-name"));
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="saleDiscountApplication" data-field="codeNumber">Proposal #</th>
+            <th data-group="saleDiscountApplication" data-field="transactionDate">Tanggal</th>
+            <th data-group="saleDiscountApplication" data-field="customer">Customer</th>
+            <th data-group="saleDiscountApplication" data-field="model">VOS Model</th>
+            <th data-group="saleDiscountApplication" data-field="salesmanPrice">Salesman Price</th>
+            <th data-group="saleDiscountApplication" data-field="approvedPrice">Approved Price</th>
+            <th data-group="saleDiscountApplication" data-field="grandTotalPrice">Grand Total</th>
+            <th></th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="saleDiscountApplication" data-field="codeNumber"></th>
+            <th data-group="saleDiscountApplication" data-field="transactionDate"></th>
+            <th></th>
+            <th></th>
+            <th data-group="saleDiscountApplication" data-field="salesmanPrice"></th>
+            <th data-group="saleDiscountApplication" data-field="approvedPrice"></th>
+            <th data-group="saleDiscountApplication" data-field="grandTotalPrice"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleDiscountApplication in grid.data %}
+            <tr data-field-id="{{ saleDiscountApplication.id }}">
+                <td class="text-left">{{ saleDiscountApplication.codeNumber|default }}</td>
+                <td class="text-left">{{ saleDiscountApplication.transactionDate|default ? saleDiscountApplication.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ saleDiscountApplication.customer.name|default }}</td>
+                <td class="text-left">{{ saleDiscountApplication.vehicleModel.vosModelName|default }}</td>
+                <td class="text-right">{{ saleDiscountApplication.salesmanPrice|default|number_format(0) }}</td>
+                <td class="text-right">{{ saleDiscountApplication.approvedPrice|default|number_format(0) }}</td>
+                <td class="text-right">{{ saleDiscountApplication.grandTotalPrice|default|number_format(0) }}</td>
+                <td class="text-left">
+                    {{ include('transaction/actions.html.twig', {
+                        'contents': {
+                            '{index}': null,
+                            '{new}': null,
+                            '{show}': include('action.html.twig', {'url': path('transaction_sale_discount_application_show', {'id': saleDiscountApplication.id}), 'button': 'btn btn-info btn-sm', 'icon': 'glyphicon glyphicon-info-sign'}),
+                            '{edit}': include('action.html.twig', {'url': path('transaction_sale_discount_application_edit', {'id': saleDiscountApplication.id}), 'button': 'btn btn-warning btn-sm', 'icon': 'glyphicon glyphicon-edit'}),
+                            '{delete}': include('action.html.twig', {'url': path('transaction_sale_discount_application_delete', {'id': saleDiscountApplication.id}), 'button': 'btn btn-danger btn-sm', 'icon': 'glyphicon glyphicon-remove'}),
+                        }
+                    }) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

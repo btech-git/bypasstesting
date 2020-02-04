@@ -1,0 +1,58 @@
+{% extends 'staff/layout.html.twig' %}
+
+{% block title 'Master Menu' %}
+
+{% block stylesheets %}
+    <style>
+        table thead tr th:nth-child(2), table tbody tr td:nth-child(2) { width: 30% }
+        table thead tr th:nth-child(3), table tbody tr td:nth-child(3) { width: 30% }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% set menu = app.session.get('menu') %}
+    
+    {#{% if is_granted('ROLE_HUMAN_RESOURCE') %}#}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="3" class="bg-info lead">
+                        <strong>Main</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Customer</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_customer_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_customer_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Supplier</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_supplier_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_supplier_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Chart of Accounts</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_account_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_account_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Finance Company</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_finance_company_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_finance_company_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Model Kendaraan</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_vehicle_model_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_vehicle_model_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Jenis Pembayaran</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_payment_method_new'), 'label': 'Add', 'button': 'btn btn-success', 'icon': 'glyphicon glyphicon-plus'}) }}</td>
+                    <td>{{ include('action.html.twig', {'url': path('master_payment_method_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {#{% endif %}#}
+{% endblock %}

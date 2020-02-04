@@ -1,0 +1,7 @@
+{% block extends %}
+{{ "{% extends '" ~ route_prefix ~ "/form.html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{ "{% block title '" ~ 'Edit ' ~ entity_singularized|humanize|title ~ "' %}" }}
+{% endblock body %}

@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-empty top">
+            &nbsp;
+        </div>
+        <div class="rows-1 content-right">
+            {{ purchaseDeliveryOrder.transactionDate|default ? purchaseDeliveryOrder.transactionDate|date('j F Y') }}
+        </div>
+        <div class="rows-empty middle">
+            &nbsp;
+        </div>
+        <div class="rows-1 info">
+            {{ purchaseDeliveryOrder.saleOrder.customer.name|default }} <br /><br />
+        </div>
+        <div class="rows-2">
+            {{ purchaseDeliveryOrder.saleOrder.customer.officeAddress|nl2br }}
+        </div>
+        <div class="rows-empty bottom">
+            &nbsp;
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.saleOrder.vehicleModel.vosModelName|default }}
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.vehicleProductionYear|default }}
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.vehicleMachineNumber|default }}
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.vehicleChassisNumber|default }}
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.saleOrder.vehicleColor|default }}
+        </div>
+        <div class="rows-3">
+            {{ purchaseDeliveryOrder.note|default }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 20cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 7mm;
+            padding-left: 60mm;
+        }
+        div.memo-content div.rows-1.nominal {
+            height: 11mm;
+            padding-left: 40mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left, div.memo-content div.rows-1.price-info.content-right {
+            height: 7mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left {
+            width: 55mm;
+            padding-left: 2mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.content-right {
+            width: 130mm;
+            padding-right: 5mm;
+            text-align: right;
+        }
+        div.memo-content div.rows-1.info {
+            height: 8mm;
+            padding-left: 35mm;
+        }
+        div.memo-content div.rows-2 {
+            height: 11mm;
+            padding-left: 35mm;
+        }
+        div.memo-content div.rows-3 {
+            height: 7mm;
+            padding-left: 35mm;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 50mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 45mm;
+        }
+        div.memo-content div.rows-empty.bottom {
+            height: 18mm;
+        }
+        div.table-payment {
+            height: 38mm;
+        }
+    </style>
+{% endblock %}

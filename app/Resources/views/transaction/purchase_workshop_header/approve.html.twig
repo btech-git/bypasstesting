@@ -1,0 +1,55 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Approve Purchase Workshop' %}
+
+{% block actions %}{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>PO Karoseri #</th>
+                <td>{{ purchaseWorkshopHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ purchaseWorkshopHeader.transactionDate|default ? purchaseWorkshopHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Supplier</th>
+                <td>{{ purchaseWorkshopHeader.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ purchaseWorkshopHeader.supplier.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Serial Number</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.vehicleSerialNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Quantity Pesanan</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.quantity|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="alert alert-danger">Are you sure you want to approve this item?</div>
+    {{ form_start(form) }}
+        <div class="well text-center">
+            <input class="btn btn-success" type="submit" value="Approve" />
+            <a class="btn btn-default" href="{{ path('transaction_purchase_workshop_header_approval') }}">Cancel</a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

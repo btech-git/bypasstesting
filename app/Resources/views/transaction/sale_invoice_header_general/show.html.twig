@@ -1,0 +1,81 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Sale Invoice Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Invoice #</th>
+                <td>{{ saleInvoiceHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Piutang</th>
+                <td>{{ saleInvoiceHeader.transactionDate|default ? saleInvoiceHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Faktur Pajak #</th>
+                <td>{{ saleInvoiceHeader.formattedTaxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ saleInvoiceHeader.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ saleInvoiceHeader.note|default }}</td>
+            </tr>
+            <tr>
+                <th>Grand Total</th>
+                <td>{{ saleInvoiceHeader.grandTotal|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Total Payment</th>
+                <td>{{ saleInvoiceHeader.totalPayment|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <th>Remaining</th>
+                <td>{{ saleInvoiceHeader.remaining|default|number_format(0) }}</td>
+            </tr>
+        </tbody>
+    </table>
+                         
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Nama Barang</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Disc (Rp.)</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for saleInvoiceDetailGeneral in saleInvoiceHeader.saleInvoiceDetailGenerals %}
+                <tr>
+                    <td class="text-left">{{ saleInvoiceDetailGeneral.itemName|default }}</td>
+                    <td class="text-center">{{ saleInvoiceDetailGeneral.quantity|default|number_format(0) }}</td>
+                    <td class="text-right">{{ saleInvoiceDetailGeneral.unitPrice|default|number_format(0) }}</td>
+                    <td class="text-right">{{ saleInvoiceDetailGeneral.discount|default|number_format(0) }}</td>
+                    <td class="text-right">{{ saleInvoiceDetailGeneral.total|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="4">Grand Total</td>
+                <td class="text-right">{{ saleInvoiceHeader.grandTotalBeforeDownpayment|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+  
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_sale_invoice_header_general_memo', {'id': saleInvoiceHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Invoice
+    </a>
+{% endblock %}

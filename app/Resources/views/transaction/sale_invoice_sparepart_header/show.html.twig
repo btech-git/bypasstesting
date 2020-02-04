@@ -1,0 +1,81 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Sale Invoice Sparepart' %}
+
+{% block actions %}
+    {{ include('action.html.twig', {'url': path('transaction_sale_invoice_sparepart_header_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Invoice #</th>
+                <td>{{ saleInvoiceSparepartHeader.invoiceNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ saleInvoiceSparepartHeader.transactionDate|default ? saleInvoiceSparepartHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Faktur Pajak #</th>
+                <td>{{ saleInvoiceSparepartHeader.taxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ saleInvoiceSparepartHeader.customerName|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ saleInvoiceSparepartHeader.workOrderNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Model</th>
+                <td>{{ saleInvoiceSparepartHeader.vehicleModel|default }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ saleInvoiceSparepartHeader.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ saleInvoiceSparepartHeader.vehicleEngineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Grand Total</th>
+                <td>{{ saleInvoiceSparepartHeader.grandTotalAfterTax|default|number_format(0) }}</td>
+            </tr>
+        </tbody>
+    </table>
+                         
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Nama Barang</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Disc (Rp.)</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for saleInvoiceSparepartDetail in saleInvoiceSparepartHeader.saleInvoiceSparepartDetails %}
+                <tr>
+                    <td class="text-left">{{ saleInvoiceSparepartDetail.itemName|default }}</td>
+                    <td class="text-center">{{ saleInvoiceSparepartDetail.quantity|default|number_format(0) }}</td>
+                    <td class="text-right">{{ saleInvoiceSparepartDetail.itemPrice|default|number_format(0) }}</td>
+                    <td class="text-right">{{ saleInvoiceSparepartDetail.materialDiscount|default|number_format(0) }}</td>
+                    <td class="text-right">{{ saleInvoiceSparepartDetail.saleAmount|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="4">Grand Total</td>
+                <td class="text-right">{{ saleInvoiceSparepartHeader.grandTotalAfterTax|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

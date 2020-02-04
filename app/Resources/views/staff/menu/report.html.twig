@@ -1,0 +1,80 @@
+{% extends 'staff/layout.html.twig' %}
+
+{% block title 'Report Menu' %}
+
+{% block stylesheets %}
+    <style>
+        table thead tr th:nth-child(2), table tbody tr td:nth-child(2) { width: 30% }
+        table thead tr th:nth-child(3), table tbody tr td:nth-child(3) { width: 30% }
+    </style>
+{% endblock %}
+
+{% block content %}
+    {% set menu = app.session.get('menu') %}
+    
+    {# {% if is_granted(['ROLE_ACCOUNTING_HEAD', 'ROLE_OPERATIONAL_HEAD', 'ROLE_SALES_MANAGER']) %} #}
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2" class="bg-info lead">
+                        <strong>Laporan</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pembelian Umum</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_purchase_invoice_detail_general_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Pembelian Karoseri</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_purchase_invoice_detail_workshop_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Pembelian Unit</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_purchase_invoice_detail_unit_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Pembelian Unit per Model</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_vehicle_model_purchase_invoice_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penjualan Umum</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_sale_invoice_detail_general_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penjualan Unit</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_sale_invoice_detail_unit_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penjualan Unit per Model</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_vehicle_model_sale_invoice_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penjualan Unit per Salesman</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_salesman_sale_invoice_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Penjualan Sparepart</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_sale_invoice_sparepart_detail_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>DP Penjualan</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_sale_invoice_downpayment_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Buku Besar</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_account_journal_ledger_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Neraca</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_balance_sheet_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+                <tr>
+                    <td>Profit/Loss</td>
+                    <td>{{ include('action.html.twig', {'url': path('report_profit_loss_index'), 'label': 'Report', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {# {% endif %} #}
+{% endblock %}

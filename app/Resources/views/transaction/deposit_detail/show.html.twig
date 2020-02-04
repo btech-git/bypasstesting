@@ -1,0 +1,26 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Deposit Detail' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Description</th>
+                <td>{{ depositDetail.description|default }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ depositDetail.amount|default|number_format(2) }}</td>
+            </tr>
+            <tr>
+                <th>Memo</th>
+                <td>{{ depositDetail.memo|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

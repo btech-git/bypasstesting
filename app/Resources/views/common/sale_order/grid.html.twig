@@ -1,0 +1,64 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="saleOrder" data-field="codeNumber">SPK #</th>
+            <th data-group="saleOrder" data-field="transactionDate">Tanggal</th>
+            <th data-group="customer" data-field="name">Customer</th>
+            <th data-group="saleOrder" data-field="vehicleBrand">Vehicle Brand</th>
+            <th data-group="saleOrder" data-field="vehicleSerialNumber">Serial Number</th>
+            <th data-group="saleOrder" data-field="vehicleColor">Warna</th>
+            <th data-group="saleOrder" data-field="quantity">Quantity</th>
+            <th data-group="vehicleModel" data-field="manufactureCode">Manufacture Code</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="saleOrder" data-field="codeNumber"></th>
+            <th data-group="saleOrder" data-field="transactionDate"></th>
+            <th data-group="customer" data-field="name"></th>
+            <th data-group="saleOrder" data-field="vehicleBrand"></th>
+            <th data-group="saleOrder" data-field="vehicleSerialNumber"></th>
+            <th data-group="saleOrder" data-field="vehicleColor"></th>
+            <th data-group="saleOrder" data-field="quantity"></th>
+            <th data-group="vehicleModel" data-field="manufactureCode"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleOrder in grid.data %}
+            <tr data-field-id="{{ saleOrder.id }}"
+                data-field-code-number="{{ saleOrder.codeNumber|default }}"
+                data-field-customer-name="{{ saleOrder.customer.name|default }}"
+                data-field-vehicle-brand="{{ saleOrder.vehicleBrand|default }}"
+                data-field-vehicle-serial-number="{{ saleOrder.vehicleSerialNumber|default }}"
+                data-field-vehicle-color="{{ saleOrder.vehicleColor|default }}"
+                data-field-quantity="{{ saleOrder.quantity|default }}"
+                data-field-downpayment="{{ saleOrder.downpayment|default }}"
+                data-field-vehicle-model-manufacture-code="{{ saleOrder.vehicleModel.manufactureCode|default }}">
+                <td class="text-left">{{ saleOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ saleOrder.transactionDate|default ? saleOrder.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ saleOrder.customer.name|default }}</td>
+                <td class="text-left">{{ saleOrder.vehicleBrand|default }}</td>
+                <td class="text-left">{{ saleOrder.vehicleSerialNumber|default }}</td>
+                <td class="text-left">{{ saleOrder.vehicleColor|default }}</td>
+                <td class="text-left">{{ saleOrder.quantity|default }}</td>
+                <td class="text-left">{{ saleOrder.vehicleModel.manufactureCode|default }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

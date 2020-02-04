@@ -1,0 +1,17 @@
+{
+    "subTotal": {{ purchaseInvoiceHeader.subTotal|default|json_encode|raw }},
+    "taxNominal": {{ purchaseInvoiceHeader.taxNominal|default|json_encode|raw }},
+    "grandTotal": {{ purchaseInvoiceHeader.grandTotal|default|json_encode|raw }},
+    "purchaseInvoiceDetailGenerals": {
+        {%- for index, purchaseInvoiceDetailGeneral in purchaseInvoiceHeader.purchaseInvoiceDetailGenerals -%}
+            "{{ index }}": {
+                "itemName": {{ purchaseInvoiceDetailGeneral.itemName|default|json_encode|raw }},
+                "quantity": {{ purchaseInvoiceDetailGeneral.quantity|default|json_encode|raw }},
+                "unitPrice": {{ purchaseInvoiceDetailGeneral.unitPrice|default|json_encode|raw }},
+                "discount": {{ purchaseInvoiceDetailGeneral.discount|default|json_encode|raw }},
+                "total": {{ purchaseInvoiceDetailGeneral.total|default|json_encode|raw }}
+            }
+            {%- if not loop.last -%},{%- endif -%}
+        {%- endfor -%}
+    }
+}

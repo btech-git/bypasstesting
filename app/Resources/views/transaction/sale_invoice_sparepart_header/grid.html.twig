@@ -1,0 +1,49 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="saleInvoiceSparepartHeader" data-field="codeNumber">Invoice #</th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="transactionDate">Tanggal</th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="name">Customer</th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="amount">SPK #</th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="totalPayment">F. Pajak</th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="remaining">Total</th>
+            <th></th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="saleInvoiceSparepartHeader" data-field="invoiceNumber"></th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="transactionDate"></th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="customerName"></th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="workOrderNumber"></th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="taxNumber"></th>
+            <th data-group="saleInvoiceSparepartHeader" data-field="grandTotalAfterTax"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleInvoiceSparepartHeader in grid.data %}
+            <tr data-field-id="{{ saleInvoiceSparepartHeader.id }}">
+                <td class="text-left">{{ saleInvoiceSparepartHeader.invoiceNumber|default }}</td>
+                <td class="text-left">{{ saleInvoiceSparepartHeader.transactionDate|default ? saleInvoiceSparepartHeader.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ saleInvoiceSparepartHeader.customerName|default }}</td>
+                <td class="text-right">{{ saleInvoiceSparepartHeader.workOrderNumber|default }}</td>
+                <td class="text-right">{{ saleInvoiceSparepartHeader.taxNumber|default }}</td>
+                <td class="text-right">{{ saleInvoiceSparepartHeader.grandTotalAfterTax|default|number_format(0) }}</td>
+                <td class="text-center">
+                    {{ include('action.html.twig', {'url': path('transaction_sale_invoice_sparepart_header_show', {'id': saleInvoiceSparepartHeader.id}), 'button': 'btn btn-info btn-sm', 'icon': 'glyphicon glyphicon-info-sign'}) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

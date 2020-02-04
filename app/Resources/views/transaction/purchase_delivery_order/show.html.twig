@@ -1,0 +1,87 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Purchase Delivery Order' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>DO #</th>
+                <td>{{ purchaseDeliveryOrder.codeNumber }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ purchaseDeliveryOrder.transactionDate|default ? purchaseDeliveryOrder.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>DO HMSI #</th>
+                <td>{{ purchaseDeliveryOrder.reference|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ purchaseDeliveryOrder.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Serial Number</th>
+                <td>{{ purchaseDeliveryOrder.saleOrder.vehicleSerialNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Jenis Kendaraan</th>
+                <td>{{ purchaseDeliveryOrder.vehicleModel.manufactureCode|default }}</td>
+            </tr>
+            <tr>
+                <th>VOS Model:</th>
+                <td>{{ purchaseDeliveryOrder.vehicleModel.vosModelName|default }}</td>
+            </tr>
+            <tr>
+                <th>DMS Variant:</th>
+                <td>{{ purchaseDeliveryOrder.vehicleModel.dmsVariantName|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ purchaseDeliveryOrder.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                
+    <hr />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr class="bg-info">
+                <th>Tahun Pembuatan</th>
+                <th>Rangka #</th>
+                <th>Mesin #</th>
+                <th>Deskripsi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+                <td>{{ purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                <td>{{ purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                <td>{{ purchaseDeliveryOrder.vehicleDescription|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_purchase_delivery_order_memo', {'id': purchaseDeliveryOrder.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Pengajuan Faktur
+    </a>
+{% endblock %}

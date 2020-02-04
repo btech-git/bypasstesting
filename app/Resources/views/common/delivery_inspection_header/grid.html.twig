@@ -1,0 +1,66 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleChassisNumber">Rangka #</th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleMachineNumber">Mesin #</th>
+            <th data-group="saleOrder" data-field="vehicleColor">Warna</th>
+            <th data-group="vehicleModel" data-field="vosModel">Model</th>
+            <th data-group="deliveryInspectionHeader" data-field="codeNumber">P.D.I #</th>
+            <th data-group="deliveryInspectionHeader" data-field="transactionDate">Tanggal</th>
+            <th data-group="customer" data-field="name">Customer</th>
+            <th data-group="saleOrder" data-field="codeNumber">SPK #</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleChassisNumber"></th>
+            <th data-group="purchaseDeliveryOrder" data-field="vehicleMachineNumber"></th>
+            <th data-group="saleOrder" data-field="vehicleColor"></th>
+            <th data-group="vehicleModel" data-field="vosModel"></th>
+            <th data-group="deliveryInspectionHeader" data-field="codeNumber"></th>
+            <th data-group="deliveryInspectionHeader" data-field="transactionDate"></th>
+            <th data-group="customer" data-field="name"></th>
+            <th data-group="saleOrder" data-field="codeNumber"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for deliveryInspectionHeader in grid.data %}
+            <tr data-field-id="{{ deliveryInspectionHeader.id }}"
+                data-field-receive-order-vehicle-production-year="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}"
+                data-field-receive-order-vehicle-chassis-number="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}"
+                data-field-receive-order-vehicle-machine-number="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}"
+                data-field-receive-order-vehicle-description="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}"
+                data-field-customer-name="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}"
+                data-field-sale-order-code-number="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}"
+                data-field-sale-order-vehicle-brand="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}"
+                data-field-sale-order-vehicle-serial-number="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleSerialNumber|default }}"
+                data-field-sale-order-vehicle-color="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}"
+                data-field-vehicle-model-manufacture-code="{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.manufactureCode|default }}">
+                <td class="text-left">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.VehicleModel.vosModelName|default }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.codeNumber|default }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.transactionDate|default ? deliveryInspectionHeader.transactionDate|date('Y-m-d') }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+                <td class="text-left">{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

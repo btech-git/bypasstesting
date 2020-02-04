@@ -1,0 +1,12 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Manage Purchase Delivery Order' %}
+
+{% block content %}
+    <div id="purchase-delivery-order-grid" data-grid="{{ path('transaction_purchase_delivery_order_grid_outstanding') }}"></div>
+    
+    <br />
+    
+    <div>
+        {{ include('action.html.twig', {'url': path('transaction_purchase_delivery_order_index'), 'label': 'Manage', 'button': 'btn btn-primary', 'icon': 'glyphicon glyphicon-list'}) }}
+{% endblock %}

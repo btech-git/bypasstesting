@@ -1,0 +1,60 @@
+{% extends 'master/layout.html.twig' %}
+
+{% block title 'Show Finance Company' %}
+
+{% block actions %}
+    {{ include('master/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ financeCompany.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Cabang</th>
+                <td>{{ financeCompany.branchName|default }}</td>
+            </tr>
+            <tr>
+                <th>Alamat</th>
+                <td>{{ financeCompany.address|default }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ financeCompany.phone|default }}</td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>{{ financeCompany.fax|default }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ financeCompany.email|default }}</td>
+            </tr><tr>
+                <th>Contact Person</th>
+                <td>{{ financeCompany.contactPerson|default }}</td>
+            </tr><tr>
+                <th>HP</th>
+                <td>{{ financeCompany.contactPersonMobilePhone|default }}</td>
+            </tr>
+            <tr>
+                <th>Direktur</th>
+                <td>{{ financeCompany.directorName|default }}</td>
+            </tr>
+            <tr>
+                <th>HP</th>
+                <td>{{ financeCompany.directorMobilePhone|default }}</td>
+            </tr>
+            <tr>
+                <th>Bank</th>
+                <td>{{ financeCompany.isBank|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Is Active</th>
+                <td>{{ financeCompany.isActive|default ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Delivery Workshop' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>SJ Karoseri #</th>
+                <td>{{ deliveryWorkshop.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ deliveryWorkshop.transactionDate|default ? deliveryWorkshop.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>PO Karoseri #</th>
+                <td>{{ deliveryWorkshop.purchaseWorkshopHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Supplier</th>
+                <td>{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.phone|default }}</td>
+            </tr>
+            <tr>
+                <th>Alamat</th>
+                <td>{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.officeAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Serial Number</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleSerialNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Tahun Pembuatan</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Deskripsi</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</td>
+            </tr>
+            <tr>
+                <th>Manufacture Code</th>
+                <td>{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.manufactureCode|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ deliveryWorkshop.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+            
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_delivery_workshop_memo', {'id': deliveryWorkshop.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Surat Jalan
+    </a>
+{% endblock %}

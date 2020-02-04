@@ -1,0 +1,16 @@
+{% block extends %}
+{{ "{% extends '" ~ entity|lower|replace({'\\': '/', (entity_singularized|lower): 'layout'}) ~ ".html.twig' %}" }}
+{% endblock extends %}
+
+{% block body %}
+{{ "{% block actions %}" }}
+    {{ "{{ include('" ~ entity|lower|replace({'\\': '/', (entity_singularized|lower): 'actions'}) ~ ".html.twig') }}" }}
+{{ "{% endblock %}" }}
+
+{{ "{% block content %}" }}
+    {{ '{{ form_start(form) }}' }}
+        {{ '{{ form_widget(form) }}' }}
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    {{ '{{ form_end(form) }}' }}
+{{ "{% endblock %}" }}
+{% endblock body %}

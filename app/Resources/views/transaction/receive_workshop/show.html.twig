@@ -1,0 +1,78 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Receive Workshop' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Penerimaan Karoseri #</th>
+                <td>{{ receiveWorkshop.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ receiveWorkshop.transactionDate|default ? receiveWorkshop.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>SJ Supplier #</th>
+                <td>{{ receiveWorkshop.supplierDeliveryNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>SJ Karoseri #</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Supplier</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Serial Number</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleSerialNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Tahun Pembuatan</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Deskripsi</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</td>
+            </tr>
+            <tr>
+                <th>Manufacture Code</th>
+                <td>{{ receiveWorkshop.deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.manufactureCode|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ receiveWorkshop.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

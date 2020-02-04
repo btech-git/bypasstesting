@@ -1,0 +1,8 @@
+{% extends 'admin/staff/form.html.twig' %}
+
+{% block title 'Add Staff' %}
+
+{% block content_username_password %}
+    {{ form_row(form.username) }}
+    {{ form_row(form.plainPassword) }}
+{% endblock %}

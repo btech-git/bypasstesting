@@ -1,0 +1,103 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Purchase Workshop Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>PO Karoseri #</th>
+                <td>{{ purchaseWorkshopHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ purchaseWorkshopHeader.transactionDate|default ? purchaseWorkshopHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Supplier</th>
+                <td>{{ purchaseWorkshopHeader.supplier.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Contact Person</th>
+                <td>{{ purchaseWorkshopHeader.supplier.contactPerson|default }}</td>
+            </tr>
+            <tr>
+                <th>Alamat</th>
+                <td>{{ purchaseWorkshopHeader.supplier.officeAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Serial Number</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.vehicleSerialNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Quantity Pesanan</th>
+                <td>{{ purchaseWorkshopHeader.saleOrder.quantity|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ purchaseWorkshopHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+            
+   <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchaseWorkshopDetail in purchaseWorkshopHeader.purchaseWorkshopDetails %}
+                <tr>
+                    <td>{{ purchaseWorkshopDetail.itemName|default }}</td>
+                    <td class="text-center">{{ purchaseWorkshopDetail.quantity|default|number_format(0) }}</td>
+                    <td class="text-right">{{ purchaseWorkshopDetail.unitPrice|default|number_format(0) }}</td>
+                    <td class="text-right">{{ purchaseWorkshopDetail.total|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="3">Sub Total</td>
+                <td class="text-right">{{ purchaseWorkshopHeader.subTotal|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="3">PPn 10%</td>
+                <td class="text-right">{{ purchaseWorkshopHeader.taxNominalReplacement|default|number_format(0) }}</td>
+            </tr>
+            <tr>
+                <td class="text-right" colspan="3">Grand Total</td>
+                <td class="text-right">{{ purchaseWorkshopHeader.grandTotalReplacement|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_purchase_workshop_header_memo', {'id': purchaseWorkshopHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print PO
+    </a>
+{% endblock %}

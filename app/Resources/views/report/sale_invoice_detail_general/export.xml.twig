@@ -1,0 +1,107 @@
+{% extends 'report/export.xml.twig' %}
+
+{% block data %}
+    <ss:Worksheet>
+        <ss:Table ss:StyleID="Data">
+            <ss:Column ss:Span="6" ss:AutoFitWidth="1" />
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">PT. Bypassindo Jaya Indah</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">Laporan Penjualan Umum</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    {% set startDate = grid.searchVals['saleInvoiceDetailGeneral.saleInvoiceHeader']['transactionDate'][1]|default %}
+                    {% set endDate = grid.searchVals['saleInvoiceDetailGeneral.saleInvoiceHeader']['transactionDate'][2]|default %}
+                    <ss:Data ss:Type="String">{{ startDate ? startDate|date('j F Y') }}  -  {{ endDate ? endDate|date('j F Y') }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:Span="1" />
+            <ss:Row ss:StyleID="Level1|Bold|Center|Bottom">
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Invoice #</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal JT</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Item</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Quantity</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Harga</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Discount</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">DPP</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">PPN</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">F. Pajak</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal FP</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            {% set grandTotalSum = 0.00 %}
+            {% for saleInvoiceDetailGeneral in grid.data %}
+                {% set total = saleInvoiceDetailGeneral.total %}
+                <ss:Row ss:StyleID="Level1">
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.saleInvoiceHeader.transactionDate|default ? saleInvoiceDetailGeneral.saleInvoiceHeader.transactionDate|date('j F Y') }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.saleInvoiceHeader.codeNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.saleInvoiceHeader.dueDate|default ? saleInvoiceDetailGeneral.saleInvoiceHeader.dueDate|date('j F Y') }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.itemName|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.quantity|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.unitPrice|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.discount|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ total|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ (total * 0.1)|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.saleInvoiceHeader.taxInvoiceNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ saleInvoiceDetailGeneral.saleInvoiceHeader.taxInvoiceDate|default ? saleInvoiceDetailGeneral.saleInvoiceHeader.taxInvoiceDate|date('j F Y') }}</ss:Data>
+                    </ss:Cell>
+                </ss:Row>
+                {% set grandTotalSum = grandTotalSum + total %}
+            {% endfor %}
+            <ss:Row ss:StyleID="Level1|Bold|Top">
+                <ss:Cell ss:Index="7">
+                    <ss:Data ss:Type="Number">{{ grandTotalSum|default }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+        </ss:Table>
+    </ss:Worksheet>
+{% endblock %}

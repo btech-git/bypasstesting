@@ -1,0 +1,116 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Delivery Inspection Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>PDI #</th>
+                <td>{{ deliveryInspectionHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ deliveryInspectionHeader.transactionDate|default ? deliveryInspectionHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Vehicle Complete</th>
+                <td>{{ deliveryInspectionHeader.isVehicleComplete|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Body Builder Executed</th>
+                <td>{{ deliveryInspectionHeader.isBodyBuilderExecuted|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Tahun Pembuatan</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Deskripsi</th>
+                <td>{{ deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ deliveryInspectionHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h1 class="panel-title">Inspection Items</h1>
+        </div>
+        <div class="panel-body">
+            {% set lastId = '' %}
+            {% for deliveryInspectionDetail in deliveryInspectionDetails %}
+                {% set inspectionItem = deliveryInspectionDetail.inspectionItem %}
+                {% set inspectionItemCategory = inspectionItem.inspectionItemCategory %}
+                {% if lastId != inspectionItemCategory.id %}
+                    {% if lastId != '' %}
+                        <div>&nbsp;</div>
+                    {% endif %}
+                    <div class="item-label">
+                        <strong>{{ inspectionItemCategory.name }}</strong>
+                    </div>
+                {% endif %}
+                <div class="item-value">
+                    {{ inspectionItem.name }}
+                </div>
+                {% if lastId != inspectionItemCategory.id %}
+                    {% set lastId = inspectionItemCategory.id %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_delivery_inspection_header_memo', {'id': deliveryInspectionHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print
+    </a>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .item-label, .item-value {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .item-label {
+            width: 100%;
+            padding: 5px 0;
+            font-size: 1.25em;
+            text-decoration: underline;
+        }
+        .item-value {
+            width: 32.5%;
+            padding: 2.5px 0;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="vehicleModel" data-field="manufactureCode">Manufacture Code</th>
+            <th data-group="vehicleModel" data-field="vosModelName">Vos Model Name</th>
+            <th data-group="vehicleModel" data-field="dmsVariantName">Dms Variant Name</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="vehicleModel" data-field="manufactureCode"></th>
+            <th data-group="vehicleModel" data-field="vosModelName"></th>
+            <th data-group="vehicleModel" data-field="dmsVariantName"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vehicleModel in grid.data %}
+            <tr data-field-id="{{ vehicleModel.id }}"
+                data-field-manufacture-code="{{ vehicleModel.manufactureCode|default }}"
+                data-field-vos-model-name="{{ vehicleModel.vosModelName|default }}"
+                data-field-dms-variant-name="{{ vehicleModel.dmsVariantName|default }}">
+                <td class="text-left">{{ vehicleModel.manufactureCode|default }}</td>
+                <td class="text-left">{{ vehicleModel.vosModelName|default }}</td>
+                <td class="text-left">{{ vehicleModel.dmsVariantName|default }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

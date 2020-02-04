@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo">
+        <div class="header">
+            <h1 class="title">PT. Bypassindo Jaya Indah</h1>
+            <h2 class="title">VOUCHER PENGELUARAN KAS/BANK</h2>
+        </div>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table full">
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Voucher #</div>
+                            <div class="cell value">{{ expenseHeader.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Tanggal</div>
+                            <div class="cell value">{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Akun</div>
+                            <div class="cell value">{{ expenseHeader.account.name|default }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <table class="detail">
+            <thead>
+                <tr class="bg-info">
+                <th style="width: 15%">Kode</th>
+                <th style="width: 25%">Akun</th>
+                <th>Keterangan</th>
+                <th style="width: 20%">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expenseDetail in expenseHeader.expenseDetails %}
+                    <tr>
+                        <td class="left">{{ expenseDetail.account.code|default }}</td>
+                        <td class="left">{{ expenseDetail.account.name|default }}</td>
+                        <td class="left">{{ expenseDetail.memo|default }}</td>
+                        <td class="right">{{ expenseDetail.amount|default|number_format(0) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="label right">Grand Total</td>
+                    <td class="right">{{ expenseHeader.totalAmount|default|number_format(0) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Terbilang:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ expenseHeader.totalAmount|default|number_format(0, '.', '')|say|capitalize }} rupiah.</div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Catatan:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ expenseHeader.note|default }}</div>
+            </div>
+        </div>
+        
+        <br />
+        
+        <div class="signature">
+            <div class="table full">
+                <div class="cell sig">
+                    <div>Penerima,</div>
+                </div>
+                <div class="cell sig">
+                    <div>Hormat Kami,</div>
+                    <div class="blank"></div>
+                    <div class="blank"></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .col:nth-child(1) { width: 50% }
+        .col:nth-child(2) { width: 50% }
+        
+        .col:nth-child(1) .label { width: 35% }
+        .col:nth-child(1) .value { width: 65% }
+        .col:nth-child(2) .label { width: 35% }
+        .col:nth-child(2) .value { width: 65% }
+        
+        .sig:nth-child(1) { width: 50% }
+        .sig:nth-child(2) { width: 50% }
+    </style>
+{% endblock %}

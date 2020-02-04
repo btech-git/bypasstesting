@@ -1,0 +1,63 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Deposit Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Penerimaan #</th>
+                <td>{{ depositHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ depositHeader.transactionDate|default ? depositHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Akun</th>
+                <td>{{ depositHeader.account.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ depositHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                              
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th style="width: 15%">Kode</th>
+                <th style="width: 25%">Akun</th>
+                <th>Keterangan</th>
+                <th style="width: 20%">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for depositDetail in depositHeader.depositDetails %}
+                <tr>
+                    <td class="text-left">{{ depositDetail.account.code|default }}</td>
+                    <td class="text-left">{{ depositDetail.account.name|default }}</td>
+                    <td class="text-left">{{ depositDetail.memo|default }}</td>
+                    <td class="text-right">{{ depositDetail.amount|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="3">Total</td>
+                <td class="text-right">{{ depositHeader.totalAmount|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_deposit_header_memo', {'id': depositHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Voucher
+    </a>
+{% endblock %}

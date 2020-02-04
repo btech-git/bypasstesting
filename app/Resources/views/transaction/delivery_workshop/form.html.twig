@@ -1,0 +1,152 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, { 'label': 'Tanggal' }) }}
+                {{ form_row(form.purchaseWorkshopHeader, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#purchase-workshop-header-dialog'}, 'label': 'PO Karoseri' }) }}
+                <div class="form-group" id="purchase-workshop-header-info">
+                    <div>
+                        <label>PO #:</label>
+                        <span data-name="code-number">{{ deliveryWorkshop.purchaseWorkshopHeader.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>SPK #:</label>
+                        <span data-name="sale-order-code-number">{{ deliveryWorkshop.purchaseWorkshopHeader.saleOrder.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Supplier:</label>
+                        <span data-name="supplier-name">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="supplier-contact-person">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Phone:</label>
+                        <span data-name="supplier-phone">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.phone|default }}</span>
+                    </div>
+                    <div>
+                        <label>Alamat:</label>
+                        <span data-name="supplier-office-address">{{ deliveryWorkshop.purchaseWorkshopHeader.supplier.officeAddress|default }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.receiveOrder, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#receive-order-dialog'}, 'label': 'SPK' }) }}
+                <div class="form-group" id="receive-order-info">
+                    <div>
+                        <label>SPK #:</label>
+                        <span data-name="sale-order-code-number">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Merk:</label>
+                        <span data-name="sale-order-vehicle-brand">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</span>
+                    </div>
+                    <div>
+                        <label>Serial Number:</label>
+                        <span data-name="sale-order-vehicle-serial-number">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleSerialNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Warna:</label>
+                        <span data-name="sale-order-vehicle-color">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</span>
+                    </div>
+                    <div>
+                        <label>Tahun Pembuatan:</label>
+                        <span data-name="receive-order-vehicle-production-year">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</span>
+                    </div>
+                    <div>
+                        <label>Rangka #:</label>
+                        <span data-name="receive-order-vehicle-chassis-number">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Mesin #:</label>
+                        <span data-name="receive-order-vehicle-machine-number">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Deskripsi:</label>
+                        <span data-name="receive-order-vehicle-description">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</span>
+                    </div>
+                    <div>
+                        <label>Manufacture Code:</label>
+                        <span data-name="vehicle-model-manufacture-code">{{ deliveryWorkshop.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.manufactureCode|default }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="purchase-workshop-header-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Purchase Workshop List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="purchase-workshop-header-grid" data-grid="{{ path('common_purchase_workshop_header_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
+        <div id="receive-order-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Receive Order List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="receive-order-grid" data-grid="{{ path('common_receive_order_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            $("#purchase-workshop-header-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#purchase-workshop-header-dialog").modal("hide");
+                $("#{{ form.purchaseWorkshopHeader.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=code-number]", "#purchase-workshop-header-info").text($(this).attr("data-field-code-number"));
+                $("[data-name=sale-order-code-number]", "#purchase-workshop-header-info").text($(this).attr("data-field-sale-order-code-number"));
+                $("[data-name=supplier-name]", "#purchase-workshop-header-info").text($(this).attr("data-field-supplier-name"));
+                $("[data-name=supplier-contact-person]", "#purchase-workshop-header-info").text($(this).attr("data-field-supplier-contact-person"));
+                $("[data-name=supplier-phone]", "#purchase-workshop-header-info").text($(this).attr("data-field-supplier-phone"));
+                $("[data-name=supplier-office-address]", "#purchase-workshop-header-info").text($(this).attr("data-field-supplier-office-address"));
+            });
+            $("#receive-order-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#receive-order-dialog").modal("hide");
+                $("#{{ form.receiveOrder.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=sale-order-code-number]", "#receive-order-info").text($(this).attr("data-field-sale-order-code-number"));
+                $("[data-name=customer-name]", "#receive-order-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=sale-order-vehicle-brand]", "#receive-order-info").text($(this).attr("data-field-sale-order-vehicle-brand"));
+                $("[data-name=sale-order-vehicle-serial-number]", "#receive-order-info").text($(this).attr("data-field-sale-order-vehicle-serial-number"));
+                $("[data-name=sale-order-vehicle-color]", "#receive-order-info").text($(this).attr("data-field-sale-order-vehicle-color"));
+                $("[data-name=receive-order-vehicle-production-year]", "#receive-order-info").text($(this).attr("data-field-vehicle-production-year"));
+                $("[data-name=receive-order-vehicle-chassis-number]", "#receive-order-info").text($(this).attr("data-field-vehicle-chassis-number"));
+                $("[data-name=receive-order-vehicle-machine-number]", "#receive-order-info").text($(this).attr("data-field-vehicle-machine-number"));
+                $("[data-name=receive-order-vehicle-description]", "#receive-order-info").text($(this).attr("data-field-vehicle-description"));
+                $("[data-name=vehicle-model-manufacture-code]", "#receive-order-info").text($(this).attr("data-field-vehicle-model-manufacture-code"));
+            });
+        });
+    </script>
+{% endblock %}

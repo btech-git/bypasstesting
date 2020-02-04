@@ -1,0 +1,62 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Journal Voucher Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Voucher #</th>
+                <td>{{ journalVoucherHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ journalVoucherHeader.transactionDate|default ? journalVoucherHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ journalVoucherHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                              
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th style="width: 15%">Kode</th>
+                <th style="width: 25%">Akun</th>
+                <th>Memo</th>
+                <th style="width: 15%">Debit</th>
+                <th style="width: 15%">Credit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for journalVoucherDetail in journalVoucherHeader.journalVoucherDetails %}
+                <tr>
+                    <td class="text-left">{{ journalVoucherDetail.account.code|default }}</td>
+                    <td class="text-left">{{ journalVoucherDetail.account.name|default }}</td>
+                    <td class="text-left">{{ journalVoucherDetail.memo|default }}</td>
+                    <td class="text-right">{{ journalVoucherDetail.debit|default|number_format(0) }}</td>
+                    <td class="text-right">{{ journalVoucherDetail.credit|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="3">Total</td>
+                <td class="text-right">{{ journalVoucherHeader.totalDebit|default|number_format(0) }}</td>
+                <td class="text-right">{{ journalVoucherHeader.totalCredit|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_journal_voucher_header_memo', {'id': journalVoucherHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Voucher
+    </a>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-empty top">
+            &nbsp;
+        </div>
+        <div class="rows-1">
+            {{ journalVoucherHeader.codeNumber|default }}
+        </div>
+        <div class="rows-1">
+            {{ journalVoucherHeader.transactionDate|default ? journalVoucherHeader.transactionDate|date('j F Y') }}
+        </div>
+        <div class="rows-empty middle">
+            &nbsp;
+        </div>
+        {% for journalVoucherDetail in journalVoucherHeader.journalVoucherDetails %}
+        <div>
+            <div class="rows-2 price-info content-left">
+                {{ journalVoucherDetail.account.name|default }}
+            </div>
+            <div class="rows-2 price-info content-right">
+                {{ journalVoucherDetail.debit|default|number_format(0) }}
+            </div>
+            <div class="rows-2 price-info content-right">
+                {{ journalVoucherDetail.credit|default|number_format(0) }}
+            </div>
+        </div>
+        {% endfor %}
+        <div class="rows-3">
+            {{ journalVoucherHeader.note|default }}
+        </div>
+        <div class="rows-2 nominal">
+            {{ journalVoucherHeader.totalDebit|default|say|capitalize }} rupiah.
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 30cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1 {
+            height: 6mm;
+            padding-left: 145mm;
+        }
+        div.memo-content div.rows-2 {
+            height: 12mm;
+        }
+        div.memo-content div.rows-2.price-info.content-left {
+            width: 10cm;
+            padding-left: 25mm;
+        }
+        div.memo-content div.rows-2.price-info.content-right {
+            width: 4cm;
+            padding-left: 2cm;
+        }
+        div.memo-content div.rows-2.nominal {
+            width: 15cm;
+            padding-left: 25mm;
+        }
+        div.memo-content div.rows-3 {
+            width: 15cm;
+            height: 18mm;
+            padding-left: 25mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 4mm;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 0mm;
+        }
+    </style>
+{% endblock %}

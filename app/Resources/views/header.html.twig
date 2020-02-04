@@ -1,0 +1,48 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{{ path('homepage') }}">PT. Bypassindo Jaya Indah</a>
+    </div>
+    <div class="navbar-text">|</div>
+    <div class="navbar-collapse">
+        <ul class="nav navbar-nav pull-left">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Dashboard</a></li>
+                    {# {% if is_granted('ROLE_HUMAN_RESOURCE') %} #}
+                        <li class="divider"></li>
+                        <li><a href="{{ path('admin_staff_index') }}">Staff</a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ path('staff_menu_master') }}">Master</a></li>
+                    {# {% endif %}
+                    {% if is_granted(['ROLE_SALES_STAFF', 'ROLE_CASHIER_STAFF', 'ROLE_INVENTORY_STAFF', 'ROLE_FINANCE_STAFF', 'ROLE_ACCOUNTING_STAFF', 'ROLE_PURCHASE_STAFF']) %} #}
+                        <li class="divider"></li>
+                        <li><a href="{{ path('staff_menu_transaction') }}">Transaction</a></li>
+                    {# {% endif %}
+                    {% if is_granted(['ROLE_ACCOUNTING_HEAD', 'ROLE_OPERATIONAL_HEAD', 'ROLE_SALES_MANAGER']) %} #}
+                        <li class="divider"></li>
+                        <li><a href="{{ path('staff_menu_report') }}">Report</a></li>
+                    {# {% endif %} #}
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav pull-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span>
+                    {{ app.user.username|default }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="{{ path('staff_profile_show', { 'id': app.user.id }) }}">View Profile</a></li>
+                    <li><a href="{{ path('staff_profile_edit', { 'id': app.user.id }) }}">Edit Profile</a></li>
+                    <li><a href="{{ path('staff_profile_password', { 'id': app.user.id }) }}">Change Password</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ logout_path('staff_secured_area') }}">Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

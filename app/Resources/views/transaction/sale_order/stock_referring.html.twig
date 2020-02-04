@@ -1,0 +1,95 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Sale Order Stock Referring' %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>SPK #</label>
+                    <div>{{ saleOrder.codeNumber|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Customer</label>
+                    <div>{{ saleOrder.customer.name|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Contact Person</label>
+                    <div>{{ saleOrder.customer.contactPerson|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <div>{{ saleOrder.quantity|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Remaining</label>
+                    <div>{{ saleOrder.remaining|default }}</div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Manufacture Code</label>
+                    <div>{{ saleOrder.vehicleModel.manufactureCode|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>VOS Model</label>
+                    <div>{{ saleOrder.vehicleModel.vosModelName|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>DMS Variant</label>
+                    <div>{{ saleOrder.vehicleModel.dmsVariantName|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Tahun Pembuatan </label>
+                    <div>{{ saleOrder.vehicleSerialNumber|default }}</div>
+                </div>
+                <div class="form-group">
+                    <label>Warna</label>
+                    <div>{{ saleOrder.vehicleColor|default }}</div>
+                </div>
+            </div>
+        </div>
+                
+        <hr />
+        
+        <div class="alert alert-success font-weight-bold">
+            <ul>
+                <li>Untuk Pencarian, Tekan Ctrl+F</li>
+            </ul>
+        </div>
+        
+        <table class="table table-bordered">
+            <thead>
+                <tr class="bg-info">
+                    <th style="width: 0"></th>
+                    <th>DO #</th>
+                    <th>Tanggal DO</th>
+                    <th>VOS Model</th>
+                    <th>Tahun</th>
+                    <th>Rangka #</th>
+                    <th>Mesin #</th>
+                    <th>Deskripsi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, detailForm in form.details %}
+                    {% set purchaseDeliveryOrder = form.details.vars.choices[index].data %}
+                    <tr>
+                        <td>{{ form_widget(detailForm, {'label': false}) }}</td>
+                        <td>{{ purchaseDeliveryOrder.codeNumber|default }}</td>
+                        <td>{{ purchaseDeliveryOrder.transactionDate|default ? saleOrder.transactionDate|date('j M Y') }}</td>
+                        <td>{{ purchaseDeliveryOrder.vehicleModel.vosModelName|default }}</td>
+                        <td>{{ purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+                        <td>{{ purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                        <td>{{ purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                        <td>{{ purchaseDeliveryOrder.vehicleDescription|default }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    {{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'report/export.xml.twig' %}
+
+{% block data %}
+    <ss:Worksheet>
+        <ss:Table ss:StyleID="Data">
+            <ss:Column ss:Span="6" ss:AutoFitWidth="1" />
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">PT. Bypassindo Jaya Indah</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    <ss:Data ss:Type="String">Laporan Pembelian Karoseri</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:AutoFitHeight="1" ss:StyleID="Title">
+                <ss:Cell ss:MergeAcross="10">
+                    {% set startDate = grid.searchVals['purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader']['transactionDate'][1]|default %}
+                    {% set endDate = grid.searchVals['purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader']['transactionDate'][2]|default %}
+                    <ss:Data ss:Type="String">{{ startDate ? startDate|date('j F Y') }}  -  {{ endDate ? endDate|date('j F Y') }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            <ss:Row ss:Span="1" />
+            <ss:Row ss:StyleID="Level1|Bold|Center|Bottom">
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Supplier</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">PO #</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal JT</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tipe</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Rangka</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Mesin</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Harga</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">DPP</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">PPN</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">F. Pajak</ss:Data>
+                </ss:Cell>
+                <ss:Cell>
+                    <ss:Data ss:Type="String">Tanggal FP</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+            {% set grandTotalSum = 0.00 %}
+            {% for purchaseInvoiceDetailWorkshop in grid.data %}
+                {% set total = (purchaseInvoiceDetailWorkshop.unitPrice * 1.1) %}
+                <ss:Row ss:StyleID="Level1">
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.supplier.name|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.codeNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.dueDate|default ? purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.dueDate|date('j F Y') }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseDeliveryOrder.vehicleModel.vosModelName|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseDeliveryOrder.vehicleChassisNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseDeliveryOrder.vehicleMachineNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="Number">{{ total|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="Number">{{ purchaseInvoiceDetailWorkshop.unitPrice|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="Number">{{ (purchaseInvoiceDetailWorkshop.unitPrice * 0.1)|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.taxInvoiceNumber|default }}</ss:Data>
+                    </ss:Cell>
+                    <ss:Cell>
+                        <ss:Data ss:Type="String">{{ purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.taxInvoiceDate|default ? purchaseInvoiceDetailWorkshop.purchaseInvoiceHeader.taxInvoiceDate|date('j F Y') }}</ss:Data>
+                    </ss:Cell>
+                </ss:Row>
+                {% set grandTotalSum = grandTotalSum + total %}
+            {% endfor %}
+            <ss:Row ss:StyleID="Level1|Bold|Top">
+                <ss:Cell ss:Index="7">
+                    <ss:Data ss:Type="Number">{{ grandTotalSum|default }}</ss:Data>
+                </ss:Cell>
+            </ss:Row>
+        </ss:Table>
+    </ss:Worksheet>
+{% endblock %}

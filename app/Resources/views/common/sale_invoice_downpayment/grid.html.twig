@@ -1,0 +1,61 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="saleInvoiceDownpayment" data-field="codeNumber">Invoice DP #</th>
+            <th data-group="saleInvoiceDownpayment" data-field="transactionDate">Tanggal</th>
+            <th data-group="saleOrder" data-field="codeNumber">SPK #</th>
+            <th data-group="customer" data-field="name">Customer</th>
+            <th data-group="saleInvoiceDownpayment" data-field="amount">Jumlah</th>
+            <th data-group="saleInvoiceDownpayment" data-field="totalPayment">Pelunasan</th>
+            <th data-group="saleInvoiceDownpayment" data-field="remaining">Sisa</th>
+        </tr>
+        <tr data-action="search">
+            <th data-group="saleInvoiceDownpayment" data-field="codeNumber"></th>
+            <th data-group="saleInvoiceDownpayment" data-field="transactionDate"></th>
+            <th data-group="saleOrder" data-field="codeNumber"></th>
+            <th data-group="customer" data-field="name"></th>
+            <th data-group="saleInvoiceDownpayment" data-field="amount"></th>
+            <th data-group="saleInvoiceHeader" data-field="totalPayment"></th>
+            <th data-group="saleInvoiceHeader" data-field="remaining"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for saleInvoiceDownpayment in grid.data %}
+            <tr data-field-id="{{ saleInvoiceDownpayment.id }}"
+                data-field-code-number="{{ saleInvoiceDownpayment.codeNumber|default }}"
+                data-field-transaction-date="{{ saleInvoiceDownpayment.transactionDate|default ? saleInvoiceDownpayment.transactionDate|date('Y-m-d') }}"
+                data-field-sale-order-code-number="{{ saleInvoiceDownpayment.saleOrder.codeNumber|default }}"
+                data-field-customer-name="{{ saleInvoiceDownpayment.customer.name|default }}"
+                data-field-tax-number="{{ saleInvoiceDownpayment.taxNumber|default }}"
+                data-field-amount="{{ saleInvoiceDownpayment.amount|default }}"
+                data-field-total-payment="{{ saleInvoiceDownpayment.totalPayment|default }}"
+                data-field-remaining="{{ saleInvoiceDownpayment.remaining|default }}">
+                <td class="text-left">{{ saleInvoiceDownpayment.codeNumber|default }}</td>
+                <td class="text-left">{{ saleInvoiceDownpayment.transactionDate|default ? saleInvoiceDownpayment.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ saleInvoiceDownpayment.saleOrder.codeNumber|default }}</td>
+                <td class="text-left">{{ saleInvoiceDownpayment.customer.name|default }}</td>
+                <td class="text-right">{{ saleInvoiceDownpayment.amount|default|number_format(2) }}</td>
+                <td class="text-right">{{ saleInvoiceDownpayment.tptalPayment|default|number_format(2) }}</td>
+                <td class="text-right">{{ saleInvoiceDownpayment.remaining|default|number_format(2) }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}
+
+<script>
+    jQuery(function($) {
+        $("#{{ grid.id }}-top").css("display", "none");
+    });
+</script>

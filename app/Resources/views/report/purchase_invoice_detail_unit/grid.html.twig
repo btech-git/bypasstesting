@@ -1,0 +1,83 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+<div class="hidden-print">
+    {{ grid_top(grid) }}
+    <div class="text-center">
+        <button type="button" class="btn btn-info btn-sm" id="export">Export</button>
+    </div>
+    <hr />
+</div>
+
+<div class="report">
+    <div class="report-header">
+        <div class="report-title">PT. Bypassindo Jaya Indah</div>
+        <div class="report-title">Laporan Pembelian Unit Hino</div>
+        <div>
+            {% set startDate = grid.searchVals['purchaseInvoiceHeader']['transactionDate'][1]|default %}
+            {% set endDate = grid.searchVals['purchaseInvoiceHeader']['transactionDate'][2]|default %}
+            {{ startDate ? startDate|date('j F Y') }} &nbsp;&ndash;&nbsp; {{ endDate ? endDate|date('j F Y') }}
+        </div>
+    </div>
+
+    <br />
+
+    {% set totalSum = 0.00 %}
+    <table class="report-data">
+        <thead class="border-top-solid-bold border-bottom-solid-bold">
+            <tr>
+                <th class="text-center">Tanggal DO</th>
+                <th class="text-center">DO #</th>
+                <th class="text-center">Tanggal JT</th>
+                <th class="text-center">Tipe</th>
+                <th class="text-center">Rangka</th>
+                <th class="text-center">Mesin</th>
+                <th class="text-center">Harga</th>
+                <th class="text-center">DPP</th>
+                <th class="text-center">PPN</th>
+                <th class="text-center">No FP</th>
+                <th class="text-center">Tanggal FP</th>
+            </tr>
+        </thead>
+        <tbody class="border-top-solid-bold border-bottom-solid-bold">
+            {% for purchaseInvoiceDetailUnit in grid.data %}
+                {% set total = (purchaseInvoiceDetailUnit.unitPrice * 1.1) %}
+                <tr data-field-id="{{ purchaseInvoiceDetailUnit.id }}">
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseDeliveryOrder.transactionDate|default ? purchaseInvoiceDetailUnit.purchaseInvoiceHeader.transactionDate|date('j F Y') }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseDeliveryOrder.codeNumber|default }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseDeliveryOrder.dueDate|default ? purchaseInvoiceDetailUnit.purchaseInvoiceHeader.dueDate|date('j F Y') }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseDeliveryOrder.vehicleModel.vosModelName|default }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+                    <td class="text-right">{{ total|default|number_format(0) }}</td>
+                    <td class="text-right">{{ purchaseInvoiceDetailUnit.unitPrice|default|number_format(0) }}</td>
+                    <td class="text-right">{{ (purchaseInvoiceDetailUnit.unitPrice * 0.1)|default|number_format(0) }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseInvoiceHeader.taxInvoiceNumber|default }}</td>
+                    <td class="text-left">{{ purchaseInvoiceDetailUnit.purchaseInvoiceHeader.taxInvoiceDate|default ? purchaseInvoiceDetailUnit.purchaseInvoiceHeader.taxInvoiceDate|date('j F Y') }}</td>
+                </tr>
+                {% set totalSum = totalSum + total %}
+            {% endfor %}
+        </tbody>
+        <tfoot class="border-top-solid-bold border-bottom-solid-bold">
+            <tr>
+                <td class="text-right" colspan="6"></td>
+                <td class="text-right">{{ totalSum|default|number_format(0) }}</td>
+                <td class="text-right" colspan="4"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="hidden-print">
+    <br />
+    {{ grid_bottom(grid) }}
+</div>
+
+<script>
+    jQuery(function($) {
+        $("#export").click(function() {
+            var url = "{{ path('report_purchase_invoice_detail_unit_export') }}";
+            var data = {{ grid.params|json_encode|raw }};
+            $.redirect(url, data);
+        });
+    });
+</script>

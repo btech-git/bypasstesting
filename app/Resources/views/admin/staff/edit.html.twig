@@ -1,0 +1,14 @@
+{% extends 'admin/staff/form.html.twig' %}
+
+{% block title 'Edit Staff' %}
+
+{% block content_username_password %}
+    <div class="form-group">
+        <label>Username</label>
+        <div>{{ staff.username }}</div>
+    </div>
+{% endblock %}
+
+{% block content_is_active %}
+    {{ form_row(form.isActive) }}
+{% endblock %}

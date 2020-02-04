@@ -1,0 +1,71 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Expense Header' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Pengeluaran #</th>
+                <td>{{ expenseHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Akun</th>
+                <td>{{ expenseHeader.account.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Pengeluaran untuk</th>
+                <td>{{ expenseHeader.objectiveReason|default }}</td>
+            </tr>
+            <tr>
+                <th>No. Cek/BG</th>
+                <td>{{ expenseHeader.chequeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ expenseHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                              
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th style="width: 15%">Kode</th>
+                <th style="width: 25%">Akun</th>
+                <th>Keterangan</th>
+                <th style="width: 20%">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expenseDetail in expenseHeader.expenseDetails %}
+                <tr>
+                    <td class="text-left">{{ expenseDetail.account.code|default }}</td>
+                    <td class="text-left">{{ expenseDetail.account.name|default }}</td>
+                    <td class="text-left">{{ expenseDetail.memo|default }}</td>
+                    <td class="text-right">{{ expenseDetail.amount|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="3">Total</td>
+                <td class="text-right">{{ expenseHeader.totalAmount|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+                
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_expense_header_memo', {'id': expenseHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Voucher
+    </a>
+{% endblock %}

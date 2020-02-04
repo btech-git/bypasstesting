@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-1 header">
+            {{ depositHeader.codeNumber|default }}
+        </div>
+        <div class="rows-1 header">
+            {{ depositHeader.transactionDate|default ? depositHeader.transactionDate|date('j F Y') }}
+        </div>
+        <div class="rows-empty">
+            &nbsp;
+        </div>
+        <div>
+            <div class="rows-1 top-info content-left">
+                {{ depositHeader.objectiveReason|default }}
+            </div>
+            <div class="rows-1 top-info content-right">
+                {{ depositHeader.totalAmount|default|number_format(0) }}
+            </div>
+        </div>
+        <div class="rows-2">
+            {{ depositHeader.totalAmount|default|number_format(0, '.', '')|say|capitalize }} rupiah.
+        </div>
+        <div>
+            <div class="rows-1 bottom-info content-left">
+                {{ depositHeader.account.name|default }}
+            </div>
+            <div class="rows-1 bottom-info content-middle">
+                {{ depositHeader.chequeNumber|default }}
+            </div>
+            <div class="rows-1 bottom-info content-right">
+                {{ depositHeader.totalAmount|default|number_format(0) }}
+            </div>
+        </div>
+        <div class="rows-empty">
+            &nbsp;
+        </div>
+        <div class="rows-3">
+            {{ depositHeader.note|default }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 20cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-middle, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 7mm;
+            padding-left: 135mm;
+        }
+        div.memo-content div.rows-1.top-info, div.memo-content div.rows-1.bottom-info {
+            height: 6mm;
+        }
+        div.memo-content div.rows-1.top-info.content-left {
+            width: 9cm;
+            padding-left: 3cm;
+        }
+        div.memo-content div.rows-1.top-info.content-right {
+            width: 6cm;
+            padding-left: 13mm;
+        }
+        div.memo-content div.rows-1.bottom-info.content-left {
+            width: 45mm;
+            padding-left: 5mm;
+        }
+        div.memo-content div.rows-1.bottom-info.content-middle {
+            width: 4cm;
+            padding-left: 25mm;
+        }
+        div.memo-content div.rows-1.bottom-info.content-right {
+            width: 55mm;
+            padding-left: 15mm;
+        }
+        div.memo-content div.rows-2 {
+            width: 16cm;
+            height: 13mm;
+            padding-left: 3cm;
+        }
+        div.memo-content div.rows-3 {
+            width: 16cm;
+            height: 2cm;
+            padding-left: 3cm;
+        }
+        div.memo-content div.rows-empty {
+            height: 7mm;
+        }
+    </style>
+{% endblock %}

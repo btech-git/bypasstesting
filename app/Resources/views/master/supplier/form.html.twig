@@ -1,0 +1,31 @@
+{% extends 'master/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('master/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form) }}
+        {{ form_row(form.isPersonal, {'label' : 'Perorangan', 'attr': {'data-choice-group': 'category-type'} }) }}
+        {{ form_row(form.isCompany, {'label' : 'Perusahaan', 'attr': {'data-choice-group': 'category-type'} }) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.businessField) }}
+        {{ form_row(form.businessType) }}
+        {{ form_row(form.contactPerson) }}
+        {{ form_row(form.position) }}
+        {{ form_row(form.mobilePhone, {'label' : 'HP #' }) }}
+        {{ form_row(form.officeAddress, {'label' : 'Alamat Kantor' }) }}
+        {{ form_row(form.officeCity, {'label' : 'Kota' }) }}
+        {{ form_row(form.officeProvince, {'label' : 'Propinsi' }) }}
+        {{ form_row(form.officeZipCode, {'label' : 'Kode Pos' }) }}
+        {{ form_row(form.phone) }}
+        {{ form_row(form.fax) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.taxNumber, {'label' : 'NPWP (XX . XXX . XXX . X - XXX . XXX)' }) }}
+        {{ form_row(form.webPage) }}
+        {{ form_row(form.creditPaymentTerm, {'label' : 'Lama Kredit (hari)' }) }}
+        {{ form_row(form.note) }}
+        {{ form_row(form.isActive) }}
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    {{ form_end(form) }}
+{% endblock %}

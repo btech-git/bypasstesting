@@ -1,0 +1,13 @@
+{
+    "subTotal": {{ purchaseWorkshopHeader.subTotal|default|json_encode|raw }},
+    "taxNominal": {{ purchaseWorkshopHeader.taxNominal|default|json_encode|raw }},
+    "grandTotal": {{ purchaseWorkshopHeader.grandTotal|default|json_encode|raw }},
+    "purchaseWorkshopDetails": {
+        {%- for index, purchaseWorkshopDetail in purchaseWorkshopHeader.purchaseWorkshopDetails -%}
+            "{{ index }}": {
+                "total": {{ purchaseWorkshopDetail.total|default|json_encode|raw }}
+            }
+            {%- if not loop.last -%},{%- endif -%}
+        {%- endfor -%}
+    }
+}

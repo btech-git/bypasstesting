@@ -1,0 +1,66 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr data-action="sort" class="alert alert-info">
+            <th data-group="supplier" data-field="name">Name</th>
+            <th data-group="supplier" data-field="officeAddress">Office Address</th>
+            <th data-group="supplier" data-field="officeCity">Office City</th>
+            <th data-group="supplier" data-field="officeProvince">Office Province</th>
+            <th data-group="supplier" data-field="officeZipCode">Office Zip Code</th>
+            <th data-group="supplier" data-field="phone">Phone</th>
+            <th data-group="supplier" data-field="fax">Fax</th>
+            <th data-group="supplier" data-field="mobilePhone">Mobile Phone</th>
+            <th data-group="supplier" data-field="contactPerson">Contact Person</th>
+            <th data-group="supplier" data-field="position">Position</th>
+            <th data-group="supplier" data-field="email">Email</th>
+            <th data-group="supplier" data-field="taxNumber">Tax Number</th>
+            <th data-group="supplier" data-field="webPage">Web Page</th>
+            <th data-group="supplier" data-field="note">Note</th>
+            <th data-group="supplier" data-field="isActive">Is Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for supplier in grid.data %}
+            <tr data-field-id="{{ supplier.id }}">
+                <td class="text-left">{{ supplier.name|default }}</td>
+                <td class="text-left">{{ supplier.officeAddress|default }}</td>
+                <td class="text-left">{{ supplier.officeCity|default }}</td>
+                <td class="text-left">{{ supplier.officeProvince|default }}</td>
+                <td class="text-left">{{ supplier.officeZipCode|default }}</td>
+                <td class="text-left">{{ supplier.phone|default }}</td>
+                <td class="text-left">{{ supplier.fax|default }}</td>
+                <td class="text-left">{{ supplier.mobilePhone|default }}</td>
+                <td class="text-left">{{ supplier.contactPerson|default }}</td>
+                <td class="text-left">{{ supplier.position|default }}</td>
+                <td class="text-left">{{ supplier.email|default }}</td>
+                <td class="text-left">{{ supplier.taxNumber|default }}</td>
+                <td class="text-left">{{ supplier.webPage|default }}</td>
+                <td class="text-left">{{ supplier.note|default }}</td>
+                <td class="text-left">{{ supplier.isActive|default ? 'Yes' : 'No' }}</td>
+                <td class="text-left">
+                    {{ include('master/actions.html.twig', {
+                        'contents': {
+                            '{index}': null,
+                            '{new}': null,
+                            '{show}': include('action.html.twig', {'url': path('master_supplier_show', {'id': supplier.id}), 'button': 'btn btn-info btn-sm', 'icon': 'glyphicon glyphicon-info-sign'}),
+                            '{edit}': include('action.html.twig', {'url': path('master_supplier_edit', {'id': supplier.id}), 'button': 'btn btn-warning btn-sm', 'icon': 'glyphicon glyphicon-edit'}),
+                            '{delete}': include('action.html.twig', {'url': path('master_supplier_delete', {'id': supplier.id}), 'button': 'btn btn-danger btn-sm', 'icon': 'glyphicon glyphicon-remove'}),
+                        }
+                    }) }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="16" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

@@ -1,0 +1,97 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% import _self as self %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal'}) }}
+                {{ form_row(form.taxNumber, {'label': 'Faktur Pajak #'}) }}
+                {{ form_row(form.paymentMethod, {'label': 'Jenis Pembayaran'}) }}
+                <div class="form-group">
+                    {{ form_row(form.amount, {'label': 'Jumlah DP (Rp.)', 'attr': {'data-bind-target': '[data-name=amount-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                    <span data-name="amount-text">{{ saleInvoiceDownpayment.amount|default|number_format(0) }}</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.saleOrder, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#sale-order-dialog'}, 'label': 'SPK' }) }}
+                <div class="form-group" id="sale-order-info">
+                    <div>
+                        <label>SPK #:</label>
+                        <span data-name="code-number">{{ saleInvoiceDownpayment.saleOrder.codeNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Customer:</label>
+                        <span data-name="customer-name">{{ saleInvoiceDownpayment.saleOrder.customer.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Brand:</label>
+                        <span data-name="sale-order-vehicle-brand">{{ saleInvoiceDownpayment.saleOrder.vehicleBrand|default }}</span>
+                    </div>
+                    <div>
+                        <label>Serial Number:</label>
+                        <span data-name="sale-order-vehicle-serial-number">{{ saleInvoiceDownpayment.saleOrder.vehicleSerialNumber|default }}</span>
+                    </div>
+                    <div>
+                        <label>Color:</label>
+                        <span data-name="sale-order-vehicle-color">{{ saleInvoiceDownpayment.saleOrder.vehicleColor|default }}</span>
+                    </div>
+                    <div>
+                        <label>Manufacture Code:</label>
+                        <span data-name="vehicle-model-manufacture-code">{{ saleInvoiceDownpayment.saleOrder.vehicleModel.manufactureCode|default }}</span>
+                    </div>
+                    <div>
+                        <label>Jumlah Downpayment:</label>
+                        <span data-name="sale-order-downpayment">{{ saleInvoiceDownpayment.saleOrder.downPayment|default|number_format(0) }}</span>
+                    </div>
+                </div>
+                {{ form_row(form.account, {'label': 'Pelunasan ke Akun'}) }}
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+        
+        <hr />
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+    
+        <div id="sale-order-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Sale Order List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="sale-order-grid" data-grid="{{ path('common_sale_order_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            $("#sale-order-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#sale-order-dialog").modal("hide");
+                $("#{{ form.saleOrder.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=code-number]", "#sale-order-info").text($(this).attr("data-field-code-number"));
+                $("[data-name=customer-name]", "#sale-order-info").text($(this).attr("data-field-customer-name"));
+                $("[data-name=sale-order-vehicle-brand]", "#sale-order-info").text($(this).attr("data-field-vehicle-brand"));
+                $("[data-name=sale-order-vehicle-serial-number]", "#sale-order-info").text($(this).attr("data-field-vehicle-serial-number"));
+                $("[data-name=sale-order-vehicle-color]", "#sale-order-info").text($(this).attr("data-field-vehicle-color"));
+                $("[data-name=vehicle-model-manufacture-code]", "#sale-order-info").text($(this).attr("data-field-vehicle-model-manufacture-code"));
+                $("[data-name=sale-order-downpayment]", "#sale-order-info").text($(this).attr("data-field-downpayment"));
+            });
+        });
+    </script>
+{% endblock %}

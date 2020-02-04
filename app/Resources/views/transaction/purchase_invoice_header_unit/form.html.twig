@@ -1,0 +1,230 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% import _self as self %}
+
+{% macro details_row(object) %}
+    <tr data-index="{{ object.vars.name }}">
+        <td class="hide">
+            {{ form_row(object.purchaseDeliveryOrder, {'label': false}) }}
+        </td>
+        <td>
+            <span data-name="vehicle-chassis-number-{{ object.vars.name }}">{{ object.vars.value.vehicleChassisNumber|default }}</span>
+        </td>
+        <td>
+            <span data-name="vehicle-machine-number-{{ object.vars.name }}">{{ object.vars.value.vebicleMachineNumber|default }}</span>
+        </td>
+        <td>
+            {{ form_row(object.unitPrice, {'label': false, 'attr': {'data-name': 'price', 'data-bind-target': '[data-name=unit-price-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+            <span data-name="unit-price-text-{{ object.vars.name }}">{{ object.vars.value.unitPrice|default|number_format(0) }}</span>
+        </td>
+        <td class="text-right">
+            {{ form_row(object.discount, {'label': false, 'attr': {'data-name': 'discount', 'data-bind-target': '[data-name=discount-text-' ~ object.vars.name ~ ']', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+            <span data-name="discount-text-{{ object.vars.name }}">{{ object.vars.value.discount|default|number_format(0) }}</span>
+        </td>
+        <td class="text-right">
+            <span data-name="total-{{ object.vars.name }}">{{ object.vars.value.total|default|number_format(0) }}</span>
+        </td>
+        <td>
+            <button type="button" class="btn btn-info remove-purchase-invoice-detail-unit-prototype">Delete</button>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% block content %}
+    {{ form_start(form) }}
+        <div>{{ form_errors(form) }}</div>
+        <div class="row">
+            <div class="col-sm-6">
+                {{ form_row(form.transactionDate, {'label': 'Tanggal Hutang'}) }}
+                {{ form_row(form.taxInvoiceNumber, {'label': 'Faktur Pajak Supplier'}) }}
+                {{ form_row(form.taxInvoiceDate, {'label': 'Tanggal F. Pajak'}) }}
+            </div>
+            <div class="col-sm-6">
+                {{ form_row(form.supplier, {'attr': {'readonly': true, 'data-toggle': 'modal', 'data-target': '#supplier-dialog'} }) }}
+                <div class="form-group" id="supplier-info">
+                    <div>
+                        <label>Supplier:</label>
+                        <span data-name="supplier-name">{{ purchaseInvoiceHeader.supplier.name|default }}</span>
+                    </div>
+                    <div>
+                        <label>Contact Person:</label>
+                        <span data-name="supplier-contact-person">{{ purchaseInvoiceHeader.supplier.contactPerson|default }}</span>
+                    </div>
+                    <div>
+                        <label>Office Address:</label>
+                        <span data-name="supplier-office-address">{{ purchaseInvoiceHeader.supplier.officeAddress|default }}</span>
+                    </div>
+                </div>
+                {{ form_row(form.supplierInvoiceNumber, {'label': 'Supplier Invoice #'}) }}
+            </div>
+        </div>
+        
+        <div>{{ form_row(form.note) }}</div>
+            
+        <hr />
+        
+        <div>
+            <button type="button" class="btn btn-default" id="add-purchase-invoice-detail-unit-prototype" data-toggle="modal" data-target="#purchase-delivery-order-dialog">Add Detail</button>
+        </div>
+        
+        <br />
+        
+        <table class="table table-bordered" id="purchase-invoice-detail-unit-list">
+            <thead>
+                <tr class="bg-info">
+                    <th>Rangka #</th>
+                    <th>Mesin #</th>
+                    <th style="width: 15%">Price</th>
+                    <th style="width: 10%">Disc (Rp.)</th>
+                    <th style="width: 15%">Total</th>
+                    <th style="width: 0"></th>
+                </tr>
+            </thead>
+            <tbody data-prototype="{{ self.details_row(form.purchaseInvoiceDetailUnits.vars.prototype)|e }}">
+                {% for purchaseInvoiceDetailUnit in form.purchaseInvoiceDetailUnits %}
+                    {{ self.details_row(purchaseInvoiceDetailUnit) }}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="4">Sub Total</td>
+                    <td class="text-right"><span data-name="sub-total">{{ purchaseInvoiceHeader.subTotal|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="4">
+                        <span style="display: inline-block">PPn 10%</span>
+                        <span style="display: inline-block">{{ form_row(form.isTax, {'label': false, 'attr': {'data-name': 'is-tax'} }) }}</span>
+                    </td>
+                    <td class="text-right">
+                        {{ form_row(form.taxNominal, {'label': false}) }}
+                        {{ form_row(form.taxNominalReplacement, {'label': false, 'attr': {'data-name': 'tax-nominal-replacement', 'data-bind-target': '[data-name=tax-nominal-replacement-text]', 'data-bind-format': 'number', 'data-option-precision': 2} }) }}
+                        <span data-name="tax-nominal-replacement-text">{{ form.vars.value.taxNominalReplacement|default|number_format(0) }}</span>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="text-right" colspan="4">Grand Total</td>
+                    <td class="text-right"><span data-name="grand-total">{{ purchaseInvoiceHeader.grandTotalReplacement|default|number_format(0) }}</span></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <input class="btn btn-primary navbar-inverse" type="submit" value="Save" data-confirm="Do you want to proceed?" />
+               
+        <div id="supplier-dialog" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" style="width: 90%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Supplier List</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="supplier-grid" data-grid="{{ path('common_supplier_grid', {'form': form.vars.id}) }}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+    
+    <div id="purchase-delivery-order-dialog" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width: 90%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">DO Pusat List</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="purchase-delivery-order-grid" data-grid="{{ path('common_purchase_delivery_order_grid', {'form': form.vars.id}) }}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        jQuery(function($) {
+            function bind(updateTextNominal) {
+                $.ajax({
+                    method: "POST",
+                    url: "{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'_format': 'json'})) }}",
+                    data: $("form").serialize(),
+                    dataType: "JSON",
+                    success: function(data) {
+                        $.each(data.purchaseInvoiceDetailUnits, function(index, purchaseInvoiceDetailUnit) {
+                            $("[data-name=total-" + index + "]", "#purchase-invoice-detail-unit-list").text($.numberFormat(purchaseInvoiceDetailUnit.total, 2));
+                        });
+                        $("[data-name=sub-total]", "#purchase-invoice-detail-unit-list").text($.numberFormat(data.subTotal, 2));
+                        $("#{{ form.taxNominal.vars.id }}", "#purchase-invoice-detail-unit-list").val(data.taxNominal);
+                        if (updateTextNominal) {
+                            $("[data-name=tax-nominal-replacement]", "#purchase-invoice-detail-unit-list").val(data.taxNominal);
+                            $("[data-name=tax-nominal-replacement-text]", "#purchase-invoice-detail-unit-list").text($.numberFormat(data.taxNominal, 2));
+                        }
+                        $("[data-name=grand-total]", "#purchase-invoice-detail-unit-list").text($.numberFormat(data.grandTotal, 2));
+                    }
+                });
+            }
+            
+            var table = $("#purchase-invoice-detail-unit-list");
+            var tableBody = $("tbody", table);
+            var tableFoot = $("tfoot", table);
+            
+            tableBody.on("change", "[data-name=quantity]", function() {
+                bind(true);
+            });
+            tableBody.on("change", "[data-name=price]", function() {
+                bind(true);
+            });
+            tableBody.on("change", "[data-name=discount]", function() {
+                bind(true);
+            });
+            tableFoot.on("change", "[data-name=is-tax]", function() {
+                bind(true);
+            });
+            tableFoot.on("change", "[data-name=tax-nominal-replacement]", function() {
+                bind(false);
+            });
+            tableBody.on("click", ".remove-purchase-invoice-detail-unit-prototype", function() {
+                $(this).closest("tr").remove();
+                bind(true);
+            });
+            
+            $("#supplier-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#supplier-dialog").modal("hide");
+                $("#{{ form.supplier.vars.id }}").val($(this).attr("data-field-id"));
+                $("[data-name=supplier-name]", "#supplier-info").text($(this).attr("data-field-name"));
+                $("[data-name=supplier-contact-person]", "#supplier-info").text($(this).attr("data-field-contact-person"));
+                $("[data-name=supplier-office-address]", "#supplier-info").text($(this).attr("data-field-office-address"));
+            });
+            
+            $("#purchase-delivery-order-grid").on("click", "table[data-role=table] tbody tr", function() {
+                $("#purchase-delivery-order-dialog").modal("hide");
+                var context = $(this);
+                var name = "{{ form.purchaseInvoiceDetailUnits.vars.prototype.vars.name }}";
+                var rows = tableBody.children("tr");
+                var index = Math.max({{ purchaseInvoiceDetailUnitsCount }}, (rows.length > 0) ? parseInt(rows.last().attr("data-index")) + 1 : 0);
+                tableBody.appendByPrototype(tableBody.attr("data-prototype"), name, index, function(prototype) {
+                    var purchaseDeliveryOrderPrototype = prototype.find("#{{ form.purchaseInvoiceDetailUnits.vars.prototype.purchaseDeliveryOrder.vars.id }}");
+                    purchaseDeliveryOrderPrototype.val(context.attr("data-field-id"));
+                    var vehicleChassisNumberPrototype = prototype.find("[data-name=vehicle-chassis-number-" + name + "]");
+                    vehicleChassisNumberPrototype.text(context.attr("data-field-vehicle-chassis-number"));
+                    var vehicleMachineNumberPrototype = prototype.find("[data-name=vehicle-machine-number-" + name + "]");
+                    vehicleMachineNumberPrototype.text(context.attr("data-field-vehicle-machine-number"));
+                    //var quantityPrototype = prototype.find("[data-name=quantity-" + name + "]");
+                    //quantityPrototype.text(context.attr("data-field-sale-order-quantity"));
+                    //unitPricePrototype.attr("value", context.attr("data-field-sale-order-unit-price"));
+                    //var unitPriceTextPrototype = prototype.find("[data-name=unit-price-text-" + name + "]");
+                    //unitPriceTextPrototype.text($.numberFormat(context.attr("data-field-sale-order-unit-price"), 2));
+                });
+                bind(true);
+            });
+        });
+    </script>
+{% endblock %}

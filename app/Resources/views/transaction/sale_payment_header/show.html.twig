@@ -1,0 +1,77 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Sale Payment' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Pelunasan #</th>
+                <td>{{ salePaymentHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ salePaymentHeader.transactionDate|default ? salePaymentHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Invoice #</th>
+                <td>{{ salePaymentHeader.saleInvoiceHeader.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Tanggal Invoice</th>
+                <td>{{ salePaymentHeader.saleInvoiceHeader.transactionDate|default ? salePaymentHeader.saleInvoiceHeader.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ salePaymentHeader.saleInvoiceHeader.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Faktur Pajak #</th>
+                <td>{{ salePaymentHeader.saleInvoiceHeader.taxNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ salePaymentHeader.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+                
+    <hr />
+           
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr class="bg-info">
+                <th>Kode</th>
+                <th>Akun</th>
+                <th>Memo</th>
+                <th>Jenis Bayar</th>
+                <th>Jumlah</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for salePaymentDetail in salePaymentHeader.salePaymentDetails %}
+                <tr>
+                    <td class="text-left">{{ salePaymentDetail.account.code|default }}</td>
+                    <td class="text-left">{{ salePaymentDetail.account.name|default }}</td>
+                    <td class="text-left">{{ salePaymentDetail.memo|default }}</td>
+                    <td class="text-left">{{ salePaymentDetail.paymentMethod.name|default }}</td>
+                    <td class="text-right">{{ salePaymentDetail.amount|default|number_format(0) }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-right" colspan="4">Grand Total</td>
+                <td class="text-right">{{ salePaymentHeader.totalAmount|default|number_format(0) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+  
+    <a target="_blank" class="btn btn-info" href="{{ path('transaction_sale_payment_header_memo', {'id': salePaymentHeader.id}) }}">
+        <span class="glyphicon glyphicon-print"></span> Print Voucher
+    </a>
+{% endblock %}

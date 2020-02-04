@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo-content">
+        <div class="rows-1 header">
+            {{ saleInvoiceHeader.codeNumber|default }}
+        </div>
+        <div class="rows-1 header">
+            {{ saleInvoiceHeader.transactionDate|default ? saleInvoiceHeader.transactionDate|date('d M Y') }}
+        </div>
+        <div class="rows-empty top">
+            &nbsp;
+        </div>
+        <div class="rows-2">
+            {{ saleInvoiceHeader.customer.name|default }}
+        </div>
+        <div class="rows-1 nominal">
+            {{ saleInvoiceHeader.grandTotalBeforeDownpayment|default|number_format(0, '.', '')|say|capitalize }} rupiah.
+        </div>
+        <div class="rows-empty middle">
+            &nbsp;
+        </div>
+        <div class="table-payment">
+            {% for saleInvoiceDetailGeneral in saleInvoiceHeader.saleInvoiceDetailGenerals %}
+                <div class="rows-1 price-info content-left">
+                    {{ saleInvoiceDetailGeneral.itemName|default }}
+                </div>
+                <div class="rows-1 price-info content-right">
+                    {{ saleInvoiceDetailGeneral.total|default|number_format(0) }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="rows-empty bottom">
+            &nbsp;
+        </div>
+        <div class="rows-1 total-price">
+            {{ saleInvoiceHeader.grandTotalBeforeDownpayment|default|number_format(0) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        div.memo-content {
+            font-family: Arial;
+            font-size: 4mm;
+        }
+        div.memo-content div {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        div.memo-content > div {
+            width: 30cm;
+        }
+        div.memo-content div.content-left, div.memo-content div.content-right {
+            vertical-align: top;
+            display: inline-block;
+        }
+        div.memo-content div.rows-1.header {
+            height: 10mm;
+            padding-left: 153mm;
+        }
+        div.memo-content div.rows-1.nominal {
+            height: 11mm;
+            padding-left: 40mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left, div.memo-content div.rows-1.price-info.content-right {
+            height: 7mm;
+        }
+        div.memo-content div.rows-1.price-info.content-left {
+            width: 155mm;
+            padding-left: 2mm;
+            text-align: left;
+        }
+        div.memo-content div.rows-1.price-info.content-right {
+            width: 75mm;
+            padding-left: 5mm;
+            text-align: right;
+        }
+        div.memo-content div.rows-1.total-price {
+            height: 10mm;
+            padding-left: 18mm;
+        }
+        div.memo-content div.rows-2 {
+            height: 15.4mm;
+            padding-left: 38mm;
+        }
+        div.memo-content div.rows-empty.top {
+            height: 6mm;
+        }
+        div.memo-content div.rows-empty.middle {
+            height: 9mm;
+        }
+        div.memo-content div.rows-empty.bottom {
+            height: 12mm;
+        }
+        div.table-payment {
+            height: 38mm;
+        }
+    </style>
+{% endblock %}

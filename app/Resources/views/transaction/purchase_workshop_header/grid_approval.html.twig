@@ -1,0 +1,44 @@
+{% set grid_layout = 'datagrid.html.twig' %}
+
+{{ grid_top(grid) }}
+
+<table data-role="table" class="table table-bordered table-striped table-condensed table-hover">
+    <thead>
+        <tr class="alert alert-info">
+            <th>PO Karoseri #</th>
+            <th>Tanggal</th>
+            <th>Supplier</th>
+            <th>Grand Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchaseWorkshopHeader in grid.data %}
+            <tr data-field-id="{{ purchaseWorkshopHeader.id }}">
+                <td class="text-left">{{ purchaseWorkshopHeader.codeNumber|default }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.transactionDate|default ? purchaseWorkshopHeader.transactionDate|date('j M Y') }}</td>
+                <td class="text-left">{{ purchaseWorkshopHeader.supplier.name|default }}</td>
+                <td class="text-right">{{ purchaseWorkshopHeader.grandTotal|default|number_format(2) }}</td>
+                <td class="text-left">
+                    <a class="btn btn-success" href="{{ path('transaction_purchase_workshop_header_approve', {'id': purchaseWorkshopHeader.id}) }}">
+                        <span class="glyphicon glyphicon-check"></span>
+                    </a>
+                    <a class="btn btn-danger" href="{{ path('transaction_purchase_workshop_header_reject', {'id': purchaseWorkshopHeader.id}) }}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                    <a class="btn btn-info" href="{{ path('transaction_purchase_workshop_header_show', {'id': purchaseWorkshopHeader.id}) }}">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" class="alert alert-warning">
+                    <strong>There are no items to display.</strong>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ grid_bottom(grid) }}

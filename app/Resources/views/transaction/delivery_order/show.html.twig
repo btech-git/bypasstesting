@@ -1,0 +1,136 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Show Delivery Order' %}
+
+{% block actions %}
+    {{ include('transaction/actions.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {% for type, flashes in app.session.flashBag.all %}
+        {% for flash in flashes %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>{{ flash.title }}</strong> {{ flash.message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <th>Tanggal</th>
+                <td>{{ deliveryOrder.transactionDate|default ? deliveryOrder.transactionDate|date('j F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Destination Address</th>
+                <td>{{ deliveryOrder.destinationAddress|default }}</td>
+            </tr>
+            <tr>
+                <th>Destination Phone</th>
+                <td>{{ deliveryOrder.destinationPhone|default }}</td>
+            </tr>
+            <tr>
+                <th>SPK #</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.codeNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Customer</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }}</td>
+            </tr>
+            <tr>
+                <th>Merk</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}</td>
+            </tr>
+            <tr>
+                <th>Warna</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+            </tr>
+            <tr>
+                <th>Tahun Pembuatan</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}</td>
+            </tr>
+            <tr>
+                <th>Rangka #</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Mesin #</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
+            </tr>
+            <tr>
+                <th>Deskripsi</th>
+                <td>{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleDescription|default }}</td>
+            </tr>
+            <tr>
+                <th>Satu Buku Jaringan</th>
+                <td>{{ deliveryOrder.isNetworkBook|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Ban Serep</th>
+                <td>{{ deliveryOrder.isSpareTire|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Buku Service</th>
+                <td>{{ deliveryOrder.isServiceBook|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Owners Manual</th>
+                <td>{{ deliveryOrder.isOwnerManual|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Dongkrak + Handle</th>
+                <td>{{ deliveryOrder.isJackHandle|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Lighter (khusus sedan)</th>
+                <td>{{ deliveryOrder.isLighter|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Set Tools (termasuk kunci roda)</th>
+                <td>{{ deliveryOrder.isToolSet|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Empat Buah Dop Roda</th>
+                <td>{{ deliveryOrder.isFourHubcap|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Kaleng Kecil Cat</th>
+                <td>{{ deliveryOrder.isPaintCan|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Karpet Dalam</th>
+                <td>{{ deliveryOrder.isCarpetKit|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Satu Segitiga Pengaman</th>
+                <td>{{ deliveryOrder.isSafetyTriangle|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Dua Pcs Kunci Kontak</th>
+                <td>{{ deliveryOrder.isTwoVehicleKey|default ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Note</th>
+                <td>{{ deliveryOrder.note|default }}</td>
+            </tr>
+        </tbody>
+    </table>
+        
+    {% if deliveryOrder.staffApproval is not null %}
+        <a target="_blank" class="btn btn-info" href="{{ path('transaction_delivery_order_memo', {'id': deliveryOrder.id}) }}">
+            <span class="glyphicon glyphicon-print"></span> Print Bukti Penyerahan
+        </a>
+        <a target="_blank" class="btn btn-info" href="{{ path('transaction_delivery_order_memo_hand_over', {'id': deliveryOrder.id}) }}">
+            <span class="glyphicon glyphicon-print"></span> Print Serah Terima
+        </a>
+    {% endif %}
+
+    <div>
+        {{ form_start(form) }}
+            <input class="btn btn-primary navbar-inverse {{ deliveryOrder.staffApproval is null ? 'show' : 'hide' }}" type="submit" value="Approve" data-confirm="Do you want to proceed?" />
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

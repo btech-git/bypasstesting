@@ -1,0 +1,368 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Memo' %}
+
+{% block body %}
+    <div class="memo">
+        <div class="header top-category">
+            <h1 class="title">PROPOSAL PENJUALAN UNIT</h1>
+        </div>
+        <div class="table content">
+            <div class="row">
+                <div class="cell width-3">
+                    Cabang: Rawasari
+                </div>
+                <div class="cell width-3">
+                    No. : {{ saleDiscountApplication.codeNumber|default }}
+                </div>
+                <div class="cell width-3">
+                    Tanggal: {{ saleDiscountApplication.transactionDate|default ? saleDiscountApplication.transactionDate|date('d M Y') }}
+                </div>
+            </div>
+        </div>
+        <div class="header category">
+            <h2 class="title left">I. PERSETUJUAN HARGA JUAL</h2>
+        </div>
+        <div class="table content">
+            <div class="row">
+                <div class="cell emphasis">Data Customer</div>
+            </div>
+            <div class="row">
+                <div class="table full">
+                    <div class="cell width-2 left">
+                        Nama: {{ saleDiscountApplication.customer.name|default }}
+                    </div>
+                    <div class="cell width-2 right">
+                        Status Customer: {{ saleDiscountApplication.transactionStatus|default }}<!--<span class="box">&nbsp;</span> Repeat <span class="box">&nbsp;</span> New-->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table full">Contact Person: {{ saleDiscountApplication.customer.contactPerson|default }}</div>
+            </div>
+            <div class="row">
+                <div class="table full">No HP: {{ saleDiscountApplication.customer.mobilePhone|default }}</div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <table class="detail">
+                        <!--<thead>
+                            <th class="width-4">Struktur Harga Per Unit</th>
+                            <th class="width-4">Type</th>
+                            <th class="width-4">Jumlah</th>
+                            <th class="width-4">Harga Jual / Unit Incl PPN</th>
+                        </thead> -->
+                        <tbody>
+                            <tr>
+                                <td rowspan="2">Struktur Harga per Unit</td>
+                                <td colspan="2">NIK: {{ saleDiscountApplication.assemblyYear|default }}</td>
+                                <td rowspan="2">Jumlah Unit</td>
+                                <td>Harga Jual/Unit</td>
+                                <td>Persetujuan</td>
+                                <td>Invoice</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Warna: {{ saleDiscountApplication.vehicleColor|default }}</td>
+                                <td>Incl PPN</td>
+                                <td>Incl PPN</td>
+                                <td>Incl PPN</td>
+                            </tr>
+                            <tr>
+                                <td>Harga Chassis (Off)</td>
+                                <td colspan="2">TIPE: {{ saleDiscountApplication.vehicleModel.vosModelName|default }}</td>
+                                <td>{{ saleDiscountApplication.requestQuantity|default }}</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.unitPrice|default|number_format(0) }}</td>
+                                <td></td>
+                                <td style="text-align: right">{{ saleDiscountApplication.totalPrice|default|number_format(0) }}</td>
+                            </tr>
+                            <tr>
+                                <td>BBN: {{ saleDiscountApplication.ownershipStatus|default }}</td>
+                                <td>{{ saleDiscountApplication.ownershipCategory|default }}</td>
+                                <td>Area: {{ saleDiscountApplication.orderArea|default }}</td>
+                                <td>{{ saleDiscountApplication.customer.isPersonal|default ? 'Perorangan' : '' }} {{ saleDiscountApplication.customer.isCompany|default ? 'Perusahaan' : '' }}</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.otherUnitPrice|default|number_format(0) }}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Bentuk Karoseri: {{ saleDiscountApplication.workshopType|default }}</td>
+                                <td>Ref: {{ saleDiscountApplication.workshopReference|default }}</td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: right">{{ saleDiscountApplication.totalOtherUnitPrice|default|number_format(0) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Kirim: {{ saleDiscountApplication.deliveryType|default }}</td>
+                                <td>Total Harga Jual</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.subTotalUnitPrice|default|number_format(0) }}</td>
+                                <td></td>
+                                <td style="text-align: right">{{ saleDiscountApplication.grandTotalUnitPrice|default|number_format(0) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Komisi a/n: {{ saleDiscountApplication.mediatorName|default }}</td>
+                                <td colspan="2">Hub: {{ saleDiscountApplication.mediatorRanking|default }}</td>
+                                <td colspan="2">No HP: {{ saleDiscountApplication.mediatorPhone|default }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Rp: {{ saleDiscountApplication.mediatorPrice|default|number_format(0) }}</td>
+                                <td colspan="2">{{ saleDiscountApplication.mediatorTaxSelection|default }}</td>
+                                <td colspan="2">Menjadi Rp:</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <table class="detail">
+                        <tbody>
+                            <tr>
+                                <td>Biaya lainnya: (per unit)</td>
+                                <td>Biaya</td>
+                                <td>Approval</td>
+                            </tr>
+                            <tr>
+                                <td>1. {{ saleDiscountApplication.otherPricingName1|default }}</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.otherPricingAmount1|default|number_format(0) }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>2. {{ saleDiscountApplication.otherPricingName2|default }}</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.otherPricingAmount2|default|number_format(0) }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>3. {{ saleDiscountApplication.otherPricingName3|default }}</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.otherPricingAmount3|default|number_format(0) }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>4. {{ saleDiscountApplication.otherPricingName4|default }}</td>
+                                <td style="text-align: right">{{ saleDiscountApplication.otherPricingAmount4|default|number_format(0) }}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <table class="detail">
+                        <tbody>
+                            <tr>
+                                <td>Karoseri: {{ saleDiscountApplication.supplier.name|default }}</td>
+                                <td colspan="2">Alamat: {{ saleDiscountApplication.supplier.officeAddress|default }}</td>
+                            </tr>
+                            <tr>
+                                <td>Nama PIC: {{ saleDiscountApplication.supplier.contactPerson|default }}</td>
+                                <td colspan="2">No. HP: {{ saleDiscountApplication.supplier.mobilePhone|default }}</td>
+                            </tr>
+                            <tr>
+                                <td>Modal (incl PPN): {{ saleDiscountApplication.workshopPrice|default|number_format(0) }}</td>
+                                <td>Profit: {{ saleDiscountApplication.workshopProfit|default|number_format(0) }}</td>
+                                <td>{{ saleDiscountApplication.isWorkshopSplitPurchase|default ? 'Split PO' : 'Tidak Split PO' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="header category">
+            <h2 class="title left">II. CARA PEMBAYARAN</h2>
+        </div>
+        <div class="table content content-5">
+            <div class="row">
+                <div class="cell">1.</div>
+                <div class="cell">Tunai</div>
+                <div class="cell">:</div>
+                <div class="cell">{{ saleDiscountApplication.isCashBeforeDelivery|default ? 'CBD, unit dikirim setelah pelunasan 100 %' : ''  }}</div>
+                <div class="cell">{{ saleDiscountApplication.isPaymentTerm|default ? 'TOP, dengan syarat: 1. PO 2. Tanda Jadi 3. DP 30%' : ''  }}</div>
+            </div>
+            <div class="row">
+                <div class="cell">2.</div>
+                <div class="cell">Kredit/Leasing </div>
+                <div class="cell">:</div>
+                <div class="cell">{{ saleDiscountApplication.financeCompany|default }}</div>
+                <div class="cell">Tenor: {{ saleDiscountApplication.termOfPayment|default }} th {% for i in 1..50 %}&nbsp;{% endfor %} {{ saleDiscountApplication.leasingReference|default }}   </div>
+            </div>
+        </div>
+        <div>
+            <table style="width: 100%;">
+                <tr style="height: 10px">
+                    <td colspan="2" style="width: 50%;background-color: #CCCCCC; font-size: .85em; padding: 2.5pt 1%">
+                        <h2 class="title left">III. Term of Payment: {% for i in 1..50 %}&nbsp;{% endfor %}hari</h2>
+                    </td>
+                    <td colspan="3" style="width: 50%; background-color: #CCCCCC; font-size: .85em;  padding: 2.5pt 1%">
+                        <h2 class="title left">IV. Detail Leasing {% for i in 1..50 %}&nbsp;{% endfor %} Invoice vs PO Leasing sesuai? Ya/Tidak</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1. Tanda Jadi:</td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.bookingFee|default|number_format(0) }}</td>
+                    <td>Harga PO Leasing: </td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.leasingPrice|default|number_format(0) }}</td>
+                    <td rowspan="4" style="vertical-align: top">(Wajib Bayar PPN 10% senilai pengajuan harga ke leasing) Rp: {{ saleDiscountApplication.leasingTaxAmount|default|number_format(0) }}</td>
+                </tr>
+                <tr>
+                    <td>2. Total DP I:</td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.downpayment1|default|number_format(0) }}</td>
+                    <td>Selisih PO-Invoice: </td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.leasingPriceDifference|default|number_format(0) }}</td>
+                </tr>
+                <tr>
+                    <td>3. Total DP II:</td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.downpayment2|default|number_format(0) }}</td>
+                    <td>Lebih Bayar: </td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.leasingOverPaid|default|number_format(0) }}</td>
+                </tr>
+                <tr>
+                    <td>4. Pelunasan:</td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.totalPayment|default|number_format(0) }}</td>
+                    <td>Net Lebih Bayar: </td>
+                    <td style="text-decoration: underline; text-align: right">{{ saleDiscountApplication.leasingOverPaidNett|default|number_format(0) }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="header category">
+            <h2 class="title left">IV. CATATAN</h2>
+        </div>
+        <div class="table content content-4">
+            <div class="row">
+                <div class="cell">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="cell">&nbsp;</div>
+            </div>
+            <div class="row">
+                <div class="cell">&nbsp;</div>
+            </div>
+        </div>
+        <div class="header category">
+            <h2 class="title left">V. PERSETUJUAN HARGA (TTD dan wajib cantumkan nama)</h2>
+        </div>
+        <div class="table content">
+            <div class="row signature">
+                <div class="table full">
+                    <div class="cell sig">
+                        <div>SALESMAN</div>
+                    </div>
+                    <div class="cell sig">
+                        <div>SPV / MNG</div>
+                    </div>
+                    <div class="cell sig">
+                        <div>ADH</div>
+                    </div>
+                    <div class="cell sig">
+                        <div>KACAB</div>
+                    </div>
+                    <div class="cell sig">
+                        <div>Menyetujui,</div>
+                        <div class="blank"></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header category">
+            <h2 class="title left">VI. PERSETUJUAN KPU</h2>
+        </div>
+        <div class="table content">
+            <div class="row signature">
+                <div class="table full">
+                    <div class="cell sig">
+                        <div style="text-align: left"><span class="box">&nbsp;</span> PO Leasing</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> Tanda Jadi</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> Total DP</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> F. Prospek Unit</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> KTP</div>
+                    </div>
+                    <div class="cell sig">
+                        <div style="text-align: left"><span class="box">&nbsp;</span> SIUP</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> NPWP</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> TDP</div>
+                        <div style="text-align: left"><span class="box">&nbsp;</span> Domisili</div>
+                        <div style="text-align: left"></div>
+                    </div>
+                    <div class="cell sig">
+                        <div>Stock Controller</div>
+                    </div>
+                    <div class="cell sig">
+                        <div>ADH/KACAB</div>
+                    </div>
+                    <div class="cell sig">
+                        <div>Menyetujui,</div>
+                        <div class="blank"></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets_include %}
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
+{% endblock %}
+
+{% block javascripts_include %}{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .emphasis {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .width-2 {
+            width: 50%;
+        }
+        .width-3 {
+            width: 33%;
+        }
+        .width-4 {
+            width: 25%;
+        }
+        .memo {
+            border: 1pt solid;
+        }
+        .memo .table .row .cell {
+            padding: 4pt 0;
+        }
+        .top-category {
+            padding: 5pt 0;
+            background-color: #999999;
+        }
+        .category {
+            width: 98%;
+            padding: 2.5pt 1%;
+            background-color: #CCCCCC;
+        }
+        .content {
+            width: 96%;
+            padding: 0 2%;
+        }
+        .box {
+            display: inline-block;
+            border: 1pt solid;
+            width: 12.5pt;
+            height: 12.5pt;
+        }
+        table.detail td {
+            border: 1pt solid;
+            padding: 0 2.5pt;
+        }
+        .sig {
+            width: 14%;
+        }
+        
+        .content-2 > .row > .cell:nth-child(1) { width: 2% }
+        .content-2 > .row > .cell:nth-child(2) { width: 10% }
+        .content-2 > .row > .cell:nth-child(3) { width: 2% }
+        .content-2 > .row > .cell:nth-child(4) { width: 86% }
+        
+        .content-3 > .row > .cell:nth-child(1) { width: 2% }
+        .content-3 > .row > .cell:nth-child(2) { width: 20% }
+        .content-3 > .row > .cell:nth-child(3) { width: 2% }
+        .content-3 > .row > .cell:nth-child(4) { width: 30% }
+        .content-3 > .row > .cell:nth-child(5) { width: 10% }
+        .content-3 > .row > .cell:nth-child(6) { width: 2% }
+        .content-3 > .row > .cell:nth-child(7) { width: 34% }
+        
+        .content-4 > .row > .cell:nth-child(1) { width: 15% }
+        .content-4 > .row > .cell:nth-child(2) { width: 2% }
+        .content-4 > .row > .cell:nth-child(3) { width: 83% }
+    </style>
+{% endblock %}
