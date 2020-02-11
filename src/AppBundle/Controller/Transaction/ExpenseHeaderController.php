@@ -150,7 +150,7 @@ class ExpenseHeaderController extends Controller
      */
     public function memoAction(ExpenseHeader $expenseHeader)
     {
-        return $this->render('transaction/expense_header/memo.html.twig', array(
+        return $this->render('transaction/expense_header/memo2.html.twig', array(
             'expenseHeader' => $expenseHeader,
         ));
     }

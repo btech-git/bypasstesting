@@ -6,7 +6,7 @@
     <div class="memo">
         <div class="header">
             <h1 class="title">PT. Bypassindo Jaya Indah</h1>
-            <h2 class="title">VOUCHER PENGELUARAN KAS/BANK</h2>
+            <h2 class="title">VOUCHER PENGELUARAN {{ expenseHeader.account.name|default }}</h2>
         </div>
         
         <br />
@@ -19,17 +19,13 @@
                             <div class="cell label">Voucher #</div>
                             <div class="cell value">{{ expenseHeader.codeNumber|default }}</div>
                         </div>
-                        <div class="row">
-                            <div class="cell label">Tanggal</div>
-                            <div class="cell value">{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</div>
-                        </div>
                     </div>
                 </div>
                 <div class="cell col">
                     <div class="table full">
                         <div class="row">
-                            <div class="cell label">Akun</div>
-                            <div class="cell value">{{ expenseHeader.account.name|default }}</div>
+                            <div class="cell label">Tanggal</div>
+                            <div class="cell value">{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</div>
                         </div>
                     </div>
                 </div>
@@ -88,13 +84,19 @@
         <div class="signature">
             <div class="table full">
                 <div class="cell sig">
-                    <div>Penerima,</div>
+                    <div>Direksi,</div>
                 </div>
                 <div class="cell sig">
-                    <div>Hormat Kami,</div>
-                    <div class="blank"></div>
-                    <div class="blank"></div>
-                    <div></div>
+                    <div>Accounting,</div>
+                </div>
+                <div class="cell sig">
+                    <div>Finance,</div>
+                </div>
+                <div class="cell sig">
+                    <div>Kas,</div>
+                </div>
+                <div class="cell sig">
+                    <div>Penerima,</div>
                 </div>
             </div>
         </div>
@@ -117,7 +119,10 @@
         .col:nth-child(2) .label { width: 35% }
         .col:nth-child(2) .value { width: 65% }
         
-        .sig:nth-child(1) { width: 50% }
-        .sig:nth-child(2) { width: 50% }
+        .sig:nth-child(1) { width: 20% }
+        .sig:nth-child(2) { width: 20% }
+        .sig:nth-child(3) { width: 20% }
+        .sig:nth-child(4) { width: 20% }
+        .sig:nth-child(5) { width: 20% }
     </style>
 {% endblock %}
