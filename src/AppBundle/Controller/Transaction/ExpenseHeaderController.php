@@ -148,10 +148,13 @@ class ExpenseHeaderController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_CASHIER_STAFF')")
      */
-    public function memoAction(ExpenseHeader $expenseHeader)
+    public function memoAction(Request $request, ExpenseHeader $expenseHeader)
     {
+        $show = $request->query->getBoolean('show', false);
+
         return $this->render('transaction/expense_header/memo2.html.twig', array(
             'expenseHeader' => $expenseHeader,
+            'show' => $show,
         ));
     }
 }
