@@ -27,7 +27,7 @@ class JournalVoucherDetail
      */
     private $credit;
     /**
-     * @ORM\Column(name="memo", type="string", length=100)
+     * @ORM\Column(name="memo", type="string", length=200)
      * @Assert\NotNull()
      */
     private $memo;

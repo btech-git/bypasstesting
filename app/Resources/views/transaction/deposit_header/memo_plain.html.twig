@@ -3,110 +3,134 @@
 {% block title 'Memo' %}
 
 {% block body %}
-    <div class="memo-content">
-        <div class="rows-1 header">
-            {{ depositHeader.codeNumber|default }}
+    <div class="memo">
+        <div class="header">
+            <h1 class="title">PT. Bypassindo Jaya Indah</h1>
+            <h2 class="title">VOUCHER PENERIMAAN {{ depositHeader.account.name|default }}</h2>
         </div>
-        <div class="rows-1 header">
-            {{ depositHeader.transactionDate|default ? depositHeader.transactionDate|date('j F Y') }}
-        </div>
-        <div class="rows-empty">
-            &nbsp;
-        </div>
-        <div>
-            <div class="rows-1 top-info content-left">
-                {{ depositHeader.objectiveReason|default }}
+        
+        <br />
+        
+        <div class="note">
+            <div class="table full">
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Voucher #</div>
+                            <div class="cell value">{{ depositHeader.codeNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Tanggal</div>
+                            <div class="cell value">{{ depositHeader.transactionDate|default ? depositHeader.transactionDate|date('j F Y') }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell col">
+                    <div class="table full">
+                        <div class="row">
+                            <div class="cell label">Rangka #:</div>
+                            <div class="cell value">{{ depositHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">Mesin #</div>
+                            <div class="cell value">{{ depositHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="rows-1 top-info content-right">
-                {{ depositHeader.totalAmount|default|number_format(0) }}
+        </div>
+        
+        <br />
+        
+        <table class="detail">
+            <thead>
+                <tr class="bg-info">
+                    <th style="width: 10%">Kode</th>
+                    <th style="width: 20%">Akun</th>
+                    <th>Keterangan</th>
+                    <th style="width: 15%">Jumlah</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set rowspan = show ? 10 : 10 %}
+                {% for row in depositHeader.depositDetails|batch(rowspan, '') %}
+                    {% for depositDetail in row %}
+                        <tr>
+                            {% for i in 1..4 if depositDetail is empty %}
+                                <td>&nbsp;</td>
+                            {% else %}
+                                <td class="left">{{ depositDetail.account.code|default }}</td>
+                                <td class="left">{{ depositDetail.account.name|default }}</td>
+                                <td class="left">{{ depositDetail.memo|default }}</td>
+                                <td class="right">{{ depositDetail.amount|default|number_format(0) }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="label right">Grand Total</td>
+                    <td class="label right">{{ depositHeader.totalAmount|default|number_format(0) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <br />
+        
+        <div class="note">
+            <div class="table">
+                <div class="cell label">Terbilang:</div>
+                <div class="cell">&nbsp;&nbsp;</div>
+                <div class="cell">{{ depositHeader.totalAmount|default|number_format(0, '.', '')|say|capitalize }} rupiah.</div>
             </div>
         </div>
-        <div class="rows-2">
-            {{ depositHeader.totalAmount|default|number_format(0, '.', '')|say|capitalize }} rupiah.
-        </div>
-        <div>
-            <div class="rows-1 bottom-info content-left">
-                {{ depositHeader.account.name|default }}
-            </div>
-            <div class="rows-1 bottom-info content-middle">
-                {{ depositHeader.chequeNumber|default }}
-            </div>
-            <div class="rows-1 bottom-info content-right">
-                {{ depositHeader.totalAmount|default|number_format(0) }}
-            </div>
-        </div>
-        <div class="rows-empty">
-            &nbsp;
-        </div>
-        <div class="rows-3">
-            {{ depositHeader.note|default }}
-        </div>
+        
+        <br />
+        
+        <table class="detail">
+            <thead>
+                <tr class="bg-info">
+                    <th style="width: 20%">Direksi</th>
+                    <th style="width: 20%">Accounting</th>
+                    <th style="width: 20%">Finance</th>
+                    <th style="width: 20%">Kas</th>
+                    <th style="width: 20%">Penerima</th>
+                <tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="height: 3cm">&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 {% endblock %}
 
 {% block stylesheets_include %}
-    
+    <link rel="stylesheet" href="{{ asset('css/memo.css') }}" />
 {% endblock %}
 
 {% block javascripts_include %}{% endblock %}
 
 {% block stylesheets %}
     <style>
-        div.memo-content {
-            font-family: Arial;
-            font-size: 4mm;
-        }
-        div.memo-content div {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        div.memo-content > div {
-            width: 20cm;
-        }
-        div.memo-content div.content-left, div.memo-content div.content-middle, div.memo-content div.content-right {
-            vertical-align: top;
-            display: inline-block;
-        }
-        div.memo-content div.rows-1.header {
-            height: 7mm;
-            padding-left: 135mm;
-        }
-        div.memo-content div.rows-1.top-info, div.memo-content div.rows-1.bottom-info {
-            height: 6mm;
-        }
-        div.memo-content div.rows-1.top-info.content-left {
-            width: 9cm;
-            padding-left: 3cm;
-        }
-        div.memo-content div.rows-1.top-info.content-right {
-            width: 6cm;
-            padding-left: 13mm;
-        }
-        div.memo-content div.rows-1.bottom-info.content-left {
-            width: 45mm;
-            padding-left: 5mm;
-        }
-        div.memo-content div.rows-1.bottom-info.content-middle {
-            width: 4cm;
-            padding-left: 25mm;
-        }
-        div.memo-content div.rows-1.bottom-info.content-right {
-            width: 55mm;
-            padding-left: 15mm;
-        }
-        div.memo-content div.rows-2 {
-            width: 16cm;
-            height: 13mm;
-            padding-left: 3cm;
-        }
-        div.memo-content div.rows-3 {
-            width: 16cm;
-            height: 2cm;
-            padding-left: 3cm;
-        }
-        div.memo-content div.rows-empty {
-            height: 7mm;
-        }
+        .col:nth-child(1) { width: 50% }
+        .col:nth-child(2) { width: 50% }
+        
+        .col:nth-child(1) .label { width: 35% }
+        .col:nth-child(1) .value { width: 65% }
+        .col:nth-child(2) .label { width: 35% }
+        .col:nth-child(2) .value { width: 65% }
+        
+        .sig:nth-child(1) { width: 20% }
+        .sig:nth-child(2) { width: 20% }
+        .sig:nth-child(3) { width: 20% }
+        .sig:nth-child(4) { width: 20% }
+        .sig:nth-child(5) { width: 20% }
     </style>
 {% endblock %}

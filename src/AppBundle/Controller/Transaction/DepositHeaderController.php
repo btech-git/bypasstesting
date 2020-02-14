@@ -148,10 +148,13 @@ class DepositHeaderController extends Controller
      * @Method("GET")
      * @Security("has_role('ROLE_CASHIER_STAFF')")
      */
-    public function memoAction(DepositHeader $depositHeader)
+    public function memoAction(Request $request, DepositHeader $depositHeader)
     {
+        $show = $request->query->getBoolean('show', false);
+
         return $this->render('transaction/deposit_header/memo_plain.html.twig', array(
             'depositHeader' => $depositHeader,
+            'show' => $show,
         ));
     }
 }

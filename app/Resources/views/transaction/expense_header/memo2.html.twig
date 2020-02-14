@@ -20,20 +20,20 @@
                             <div class="cell value">{{ expenseHeader.codeNumber|default }}</div>
                         </div>
                         <div class="row">
-                            <div class="cell label">BG/Giro #</div>
-                            <div class="cell value">{{ expenseHeader.chequeNumber|default }}</div>
+                            <div class="cell label">Tanggal</div>
+                            <div class="cell value">{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</div>
                         </div>
                     </div>
                 </div>
                 <div class="cell col">
                     <div class="table full">
                         <div class="row">
-                            <div class="cell label">Tanggal</div>
-                            <div class="cell value">{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</div>
+                            <div class="cell label">Pengeluaran Untuk:</div>
+                            <div class="cell value">{{ expenseHeader.objectiveReason|default }}</div>
                         </div>
                         <div class="row">
-                            <div class="cell label">&nbsp;</div>
-                            <div class="cell value">&nbsp;</div>
+                            <div class="cell label">BG/Giro #</div>
+                            <div class="cell value">{{ expenseHeader.chequeNumber|default }}</div>
                         </div>
                     </div>
                 </div>
@@ -83,14 +83,6 @@
                 <div class="cell label">Terbilang:</div>
                 <div class="cell">&nbsp;&nbsp;</div>
                 <div class="cell">{{ expenseHeader.totalAmount|default|number_format(0, '.', '')|say|capitalize }} rupiah.</div>
-            </div>
-        </div>
-        
-        <div class="note">
-            <div class="table">
-                <div class="cell label">Catatan:</div>
-                <div class="cell">&nbsp;&nbsp;</div>
-                <div class="cell">{{ expenseHeader.note|default }}</div>
             </div>
         </div>
         
