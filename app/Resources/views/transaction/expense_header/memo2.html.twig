@@ -19,6 +19,10 @@
                             <div class="cell label">Voucher #</div>
                             <div class="cell value">{{ expenseHeader.codeNumber|default }}</div>
                         </div>
+                        <div class="row">
+                            <div class="cell label">BG/Giro #</div>
+                            <div class="cell value">{{ expenseHeader.chequeNumber|default }}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="cell col">
@@ -26,6 +30,10 @@
                         <div class="row">
                             <div class="cell label">Tanggal</div>
                             <div class="cell value">{{ expenseHeader.transactionDate|default ? expenseHeader.transactionDate|date('j F Y') }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="cell label">&nbsp;</div>
+                            <div class="cell value">&nbsp;</div>
                         </div>
                     </div>
                 </div>
