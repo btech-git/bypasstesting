@@ -7,14 +7,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use AppBundle\Entity\Common\CodeNumberAccountEntity;
+use AppBundle\Entity\Common\CodeNumberPaymentEntity;
 use AppBundle\Entity\Admin\Staff;
 
 /**
  * @ORM\Table(name="transaction_sale_payment_header")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\Transaction\SalePaymentHeaderRepository")
  */
-class SalePaymentHeader extends CodeNumberAccountEntity
+class SalePaymentHeader extends CodeNumberPaymentEntity
 {
     /**
      * @ORM\Column(type="integer") @ORM\Id @ORM\GeneratedValue
