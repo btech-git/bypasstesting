@@ -18,8 +18,13 @@
                 &nbsp;
             </div>
             <div class="rows-2">
-                {{ saleInvoiceHeader.customer.name|default }} <br />
-                {{ saleInvoiceHeader.customer.officeAddress|nl2br }}
+                {% if saleInvoiceHeader.financeCompany|default is not empty %}
+                    {{ saleInvoiceHeader.financeCompany.name|default ~ ' QQ ' ~ saleInvoiceHeader.customer.name|default }} <br />
+                    {{ saleInvoiceHeader.financeCompany.officeAddress|default }}
+                {% else %}
+                    {{ saleInvoiceHeader.customer.name|default }} <br />
+                    {{ saleInvoiceHeader.customer.officeAddress|default }}
+                {% endif %}
             </div>
             <div class="rows-1 nominal">
                 {{ saleInvoiceHeader.grandTotalAfterDownpayment|default|number_format(0, '.', '')|say|capitalize }} rupiah.
@@ -30,13 +35,14 @@
             <div class="table-payment">
                 {% for saleInvoiceDetailUnit in batch %}
                     <div class="rows-1 price-info content-left">
-                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleModel.vldModelName|default }}
+                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }} - {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
                     </div>
                     <div class="rows-1 price-info content-right">
-                        {{ saleInvoiceDetailUnit.vehicleChassisNumber|default }} - {{ saleInvoiceDetailUnit.vehicleMachineNumber|default }} - {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }} - {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
+                        RANGKA: {{ saleInvoiceDetailUnit.vehicleChassisNumber|default }} - MESIN: {{ saleInvoiceDetailUnit.vehicleMachineNumber|default }}
                     </div>
                 {% endfor %}
             </div>
+            <br />
             <div class="rows-3">
                 {{ saleInvoiceHeader.transactionDate|default ? saleInvoiceHeader.transactionDate|date('d M Y') }}
             </div>
@@ -102,7 +108,7 @@
         }
         div.memo-content div.rows-3 {
             height: 10mm;
-            padding-left: 60mm;
+            padding-left: 50mm;
             text-align: center;
         }
         div.memo-content div.rows-empty.top {

@@ -17,76 +17,21 @@
             &nbsp;
         </div>
         <div class="rows-2 content-left">
-            {{ deliveryOrder.codeNumber|default }}
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.reference|default }}
         </div>
         <br />
         <div class="rows-3 content-left">
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }} <br />
-            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|nl2br }} <br /><br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|nl2br }} <br />
             {{ deliveryOrder.transactionDate|default ? deliveryOrder.transactionDate|date('j F Y') }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.vosModelName|default }}<br />
-            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.dmsVariantName|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.manufactureCode|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}<br />
             &nbsp;<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}<br />
-        </div>
-        <div class="rows-empty bottom">
-            &nbsp;
-        </div>
-        <div class="rows-4 content-left">
-            <table style="width: 100%">
-                <tr>
-                    <td style="width: 70%">{{ deliveryOrder.isSpareTire|default ? 'V' : '' }}</td>
-                    <td>{{ deliveryOrder.isServiceBook|default ? 'V' : '' }}</td>
-                </tr>
-                <tr>
-                    <td>{{ deliveryOrder.isJackHandle|default ? 'V' : '' }}</td>
-                    <td>{{ deliveryOrder.isOwnerManual|default ? 'V' : '' }}</td>
-                </tr>
-                <tr>
-                    <td>{{ deliveryOrder.isToolSet|default ? 'V' : '' }}</td>
-                    <td>{{ deliveryOrder.isTwoVehicleKey|default ? 'V' : '' }}</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>{{ deliveryOrder.isLighter|default ? 'V' : '' }}</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr>
-            </table>
         </div>
     </div>
 {% endblock %}
@@ -127,13 +72,13 @@
             height: 7mm;
         }
         div.memo-content div.rows-1.content-left {
-            width: 75mm;
+            width: 110mm;
             padding-left: 2mm;
             text-align: left;
         }
         div.memo-content div.rows-1.content-right {
-            width: 85mm;
-            padding-left: 85mm;
+            width: 95mm;
+            padding-left: 90mm;
             text-align: right;
         }
         div.memo-content div.rows-1.total-price {
