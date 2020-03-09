@@ -33,11 +33,12 @@ class DepositHeaderForm
         if (empty($depositHeader->getId())) {
             $transactionDate = $depositHeader->getTransactionDate();
             if ($transactionDate !== null) {
+                $account = $depositHeader->getAccount();
                 $month = intval($transactionDate->format('m'));
                 $year = intval($transactionDate->format('y'));
-                $lastDepositHeaderApplication = $this->depositHeaderRepository->findRecentBy($year, $month);
+                $lastDepositHeaderApplication = $this->depositHeaderRepository->findRecentBy($year, $month, $account);
                 $currentDepositHeader = ($lastDepositHeaderApplication === null) ? $depositHeader : $lastDepositHeaderApplication;
-                $depositHeader->setCodeNumberToNext($currentDepositHeader->getCodeNumber(), $year, $month);
+                $depositHeader->setCodeNumberToNext($currentDepositHeader->getCodeNumber(), $year, $month, $account);
             }
         }
         foreach ($depositHeader->getDepositDetails() as $depositDetail) {
@@ -80,7 +81,6 @@ class DepositHeaderForm
     protected function beforeDelete(DepositHeader $depositHeader)
     {
         $depositHeader->getDepositDetails()->clear();
-        $this->sync($depositHeader);
     }
     
     private function markJournalLedgers(DepositHeader $depositHeader, $addForHeader)

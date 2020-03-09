@@ -33,11 +33,12 @@ class ExpenseHeaderForm
         if (empty($expenseHeader->getId())) {
             $transactionDate = $expenseHeader->getTransactionDate();
             if ($transactionDate !== null) {
+                $account = $expenseHeader->getAccount();
                 $month = intval($transactionDate->format('m'));
                 $year = intval($transactionDate->format('y'));
-                $lastExpenseHeaderApplication = $this->expenseHeaderRepository->findRecentBy($year, $month);
+                $lastExpenseHeaderApplication = $this->expenseHeaderRepository->findRecentBy($year, $month, $account);
                 $currentExpenseHeader = ($lastExpenseHeaderApplication === null) ? $expenseHeader : $lastExpenseHeaderApplication;
-                $expenseHeader->setCodeNumberToNext($currentExpenseHeader->getCodeNumber(), $year, $month);
+                $expenseHeader->setCodeNumberToNext($currentExpenseHeader->getCodeNumber(), $year, $month, $account);
             }
         }
         foreach ($expenseHeader->getExpenseDetails() as $expenseDetail) {
@@ -80,7 +81,6 @@ class ExpenseHeaderForm
     protected function beforeDelete(ExpenseHeader $expenseHeader)
     {
         $expenseHeader->getExpenseDetails()->clear();
-        $this->sync($expenseHeader);
     }
     
     private function markJournalLedgers(ExpenseHeader $expenseHeader, $addForHeader)

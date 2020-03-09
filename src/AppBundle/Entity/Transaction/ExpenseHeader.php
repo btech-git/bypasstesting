@@ -4,17 +4,19 @@ namespace AppBundle\Entity\Transaction;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use AppBundle\Entity\Common\CodeNumberEntity;
+use AppBundle\Entity\Common\CodeNumberAccountEntity;
 use AppBundle\Entity\Master\Account;
 use AppBundle\Entity\Admin\Staff;
 
 /**
  * @ORM\Table(name="transaction_expense_header")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\Transaction\ExpenseHeaderRepository")
+ * @UniqueEntity({"codeNumberOrdinal", "codeNumberMonth", "codeNumberYear", "account"})
  */
-class ExpenseHeader extends CodeNumberEntity
+class ExpenseHeader extends CodeNumberAccountEntity
 {
     const TRANSACTION_TYPE_UNIT = 'unit';
     const TRANSACTION_TYPE_GENERAL = 'umum';
@@ -78,6 +80,8 @@ class ExpenseHeader extends CodeNumberEntity
     }
     
     public function getCodeNumberConstant() { return 'EXP'; }
+    
+    public function getCodeNumberAccountCode() { return $this->account->getCode(); }
     
     public function getId() { return $this->id; }
     

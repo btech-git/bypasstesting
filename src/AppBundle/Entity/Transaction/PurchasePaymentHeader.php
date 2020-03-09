@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use AppBundle\Entity\Common\CodeNumberAccountEntity;
+use AppBundle\Entity\Common\CodeNumberPaymentEntity;
 use AppBundle\Entity\Admin\Staff;
 
 /**
@@ -15,7 +15,7 @@ use AppBundle\Entity\Admin\Staff;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\Transaction\PurchasePaymentHeaderRepository")
  * @Assert\Expression("(this.getPurchaseInvoiceHeader().getRemaining() >= 0)", message = "Remaining must be greater or equal to 0")
  */
-class PurchasePaymentHeader extends CodeNumberAccountEntity
+class PurchasePaymentHeader extends CodeNumberPaymentEntity
 {
     /**
      * @ORM\Column(type="integer") @ORM\Id @ORM\GeneratedValue
