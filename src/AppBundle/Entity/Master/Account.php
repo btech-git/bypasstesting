@@ -26,6 +26,10 @@ class Account
      */
     private $code;
     /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $alias;
+    /**
      * @ORM\Column(type="string", length=100, unique=true)
      * @Assert\NotBlank()
      */
@@ -69,6 +73,9 @@ class Account
     
     public function getCode() { return $this->code; }
     public function setCode($code) { $this->code = $code; }
+
+    public function getAlias() { return $this->alias; }
+    public function setAlias($alias) { $this->alias = $alias; }
 
     public function getName() { return $this->name; }
     public function setName($name) { $this->name = $name; }

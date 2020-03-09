@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use AppBundle\Entity\Common\CodeNumberEntity;
 use AppBundle\Entity\Admin\Staff;
 use AppBundle\Entity\Master\Customer;
+use AppBundle\Entity\Master\FinanceCompany;
 
 /**
  * @ORM\Table(name="transaction_sale_invoice_header")
@@ -115,6 +116,10 @@ class SaleInvoiceHeader extends CodeNumberEntity
      */
     private $customer;
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Master\FinanceCompany")
+     */
+    private $financeCompany;
+    /**
      * @ORM\OneToMany(targetEntity="SalePaymentHeader", mappedBy="saleInvoiceHeader")
      */
     private $salePaymentHeaders;
@@ -199,6 +204,9 @@ class SaleInvoiceHeader extends CodeNumberEntity
 
     public function getCustomer() { return $this->customer; }
     public function setCustomer(Customer $customer = null) { $this->customer = $customer; }
+
+    public function getFinanceCompany() { return $this->financeCompany; }
+    public function setFinanceCompany(FinanceCompany $financeCompany = null) { $this->financeCompany = $financeCompany; }
 
     public function getSalePaymentHeaders() { return $this->salePaymentHeaders; }
     public function setSalePaymentHeaders(Collection $salePaymentHeaders) { $this->salePaymentHeaders = $salePaymentHeaders; }

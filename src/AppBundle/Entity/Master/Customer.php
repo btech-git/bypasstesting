@@ -44,6 +44,22 @@ class Customer
     private $officeCity;
     /**
      * @ORM\Column(type="string", length=60)
+     */
+    private $officeNeighbourhood;
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $officeVillage;
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $officeSubdistrict;
+    /**
+     * @ORM\Column(type="string", length=60)
+     */
+    private $officeDistrict;
+    /**
+     * @ORM\Column(type="string", length=60)
      * @Assert\NotNull()
      */
     private $officeProvince;
@@ -218,6 +234,18 @@ class Customer
 
     public function getOfficeCity() { return $this->officeCity; }
     public function setOfficeCity($officeCity) { $this->officeCity = $officeCity; }
+
+    public function getOfficeNeighbourhood() { return $this->officeNeighbourhood; }
+    public function setOfficeNeighbourhood($officeNeighbourhood) { $this->officeNeighbourhood = $officeNeighbourhood; }
+
+    public function getOfficeVillage() { return $this->officeVillage; }
+    public function setOfficeVillage($officeVillage) { $this->officeVillage = $officeVillage; }
+
+    public function getOfficeSubdistrict() { return $this->officeSubdistrict; }
+    public function setOfficeSubdistrict($officeSubdistrict) { $this->officeSubdistrict = $officeSubdistrict; }
+
+    public function getOfficeDistrict() { return $this->officeDistrict; }
+    public function setOfficeDistrict($officeDistrict) { $this->officeDistrict = $officeDistrict; }
 
     public function getOfficeProvince() { return $this->officeProvince; }
     public function setOfficeProvince($officeProvince) { $this->officeProvince = $officeProvince; }

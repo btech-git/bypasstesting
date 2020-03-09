@@ -72,6 +72,9 @@ class SaleInvoiceHeaderUnitForm
             $saleInvoiceDetailUnit->setQuantity(1);
             $saleInvoiceDetailUnit->setUnitPrice($purchaseDeliveryOrder->getSaleOrder()->getUnitPrice());
             $saleInvoiceDetailUnit->setStaffSalesman($purchaseDeliveryOrder->getSaleOrder()->getStaffFirst());
+            
+            $saleOrder = $purchaseDeliveryOrder->getSaleOrder();
+            $saleInvoiceHeader->setFinanceCompany($saleOrder->getFinanceCompany());
         }
         foreach ($saleInvoiceHeader->getSaleInvoiceDetailUnitDownpayments() as $saleInvoiceDetailUnitDownpayment) {
             $saleInvoiceDetailUnitDownpayment->setAmount($saleInvoiceDetailUnitDownpayment->getSaleInvoiceDownpayment()->getAmount());
