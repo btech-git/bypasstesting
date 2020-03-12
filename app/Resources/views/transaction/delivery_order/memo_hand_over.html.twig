@@ -26,7 +26,7 @@
             {{ deliveryOrder.transactionDate|default ? deliveryOrder.transactionDate|date('j F Y') }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleBrand|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.vosModelName|default }}<br />
-            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.manufactureCode|default }}<br />
+            {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleModel.dmsVariantName|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}<br />
             &nbsp;<br />
