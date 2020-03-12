@@ -35,7 +35,9 @@
             <div class="table-payment">
                 {% for saleInvoiceDetailUnit in batch %}
                     <div class="rows-1 price-info content-left">
-                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }} - {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
+                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }} - 
+                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }} -
+                        {{ saleInvoiceDetailUnit.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleModel.vosModelName|default }} 
                     </div>
                     <div class="rows-1 price-info content-right">
                         RANGKA: {{ saleInvoiceDetailUnit.vehicleChassisNumber|default }} - MESIN: {{ saleInvoiceDetailUnit.vehicleMachineNumber|default }}
