@@ -108,4 +108,14 @@ class PurchaseDeliveryOrderForm
             $saleOrder->setRemaining($saleOrder->getQuantity() - $purchaseDeliveryOrdersCount);
         }
     }
+    
+    public function resetSaleOrder(PurchaseDeliveryOrder $purchaseDeliveryOrder)
+    {
+        $purchaseDeliveryOrder->setSaleOrder(null);
+        if (!empty($purchaseDeliveryOrder->getId())) {
+            ObjectPersister::save(function() use ($purchaseDeliveryOrder) {
+                $this->purchaseDeliveryOrderRepository->update($purchaseDeliveryOrder);
+            });
+        }
+    }
 }

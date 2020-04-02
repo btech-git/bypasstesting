@@ -1,0 +1,15 @@
+{% extends 'transaction/layout.html.twig' %}
+
+{% block title 'Reset Sale Order' %}
+
+{% block actions %}{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger">Are you sure you want to reset this item?</div>
+    {{ form_start(form) }}
+        <div class="well text-center">
+            <input class="btn btn-warning" type="submit" value="Reset" />
+            <a class="btn btn-default" href="{{ path('transaction_sale_order_show', {'id': purchaseDeliveryOrder.saleOrder.id }) }}">Cancel</a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

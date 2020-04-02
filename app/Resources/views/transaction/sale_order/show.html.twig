@@ -7,6 +7,16 @@
 {% endblock %}
 
 {% block content %}
+    {% for type, flashes in app.session.flashBag.all %}
+        {% for flash in flashes %}
+            <div class="alert alert-{{ type }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>{{ flash.title }}</strong> {{ flash.message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
     <table class="table table-bordered table-striped">
         <tbody>
             <tr>
@@ -131,6 +141,7 @@
                 <th>Rangka #</th>
                 <th>Mesin #</th>
                 <th>Deskripsi</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -140,6 +151,11 @@
                     <td>{{ purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
                     <td>{{ purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
                     <td>{{ purchaseDeliveryOrder.vehicleDescription|default }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{{ path('transaction_purchase_delivery_order_reset_sale_order', {'id': purchaseDeliveryOrder.id}) }}">
+                            <span class="glyphicon glyphicon-minus-sign"></span>
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

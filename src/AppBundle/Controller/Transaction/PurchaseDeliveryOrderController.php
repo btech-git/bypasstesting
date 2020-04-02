@@ -179,4 +179,34 @@ class PurchaseDeliveryOrderController extends Controller
             'purchaseDeliveryOrder' => $purchaseDeliveryOrder,
         ));
     }
+    
+    /**
+     * @Route("/{id}/reset_sale_order", name="transaction_purchase_delivery_order_reset_sale_order", requirements={"id": "\d+"})
+     * @Method({"GET", "POST"})
+     * @Security("has_role('ROLE_SALES_MANAGER')")
+     */
+    public function resetSaleOrderAction(Request $request, PurchaseDeliveryOrder $purchaseDeliveryOrder)
+    {
+        $purchaseDeliveryOrderService = $this->get('app.transaction.purchase_delivery_order_form');
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $saleOrder = $purchaseDeliveryOrder->getSaleOrder();
+            if ($form->isValid()) {
+                $purchaseDeliveryOrderService->resetSaleOrder($purchaseDeliveryOrder);
+
+                $this->addFlash('success', array('title' => 'Success!', 'message' => 'The record was reset successfully.'));
+            } else {
+                $this->addFlash('danger', array('title' => 'Error!', 'message' => 'Failed to reset the record.'));
+            }
+
+            return $this->redirectToRoute('transaction_sale_order_show', array('id' => $saleOrder->getId()));
+        }
+
+        return $this->render('transaction/purchase_delivery_order/reset_sale_order.html.twig', array(
+            'purchaseDeliveryOrder' => $purchaseDeliveryOrder,
+            'form' => $form->createView(),
+        ));
+    }
 }

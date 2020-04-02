@@ -218,6 +218,7 @@ class SaleOrderController extends Controller
     {
         return $this->render('transaction/sale_order/approval.html.twig');
     }
+    
     /**
      * @Route("/{id}/approve", name="transaction_sale_order_approve", requirements={"id": "\d+"})
      * @Method({"GET", "POST"})
