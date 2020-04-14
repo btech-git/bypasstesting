@@ -20,14 +20,14 @@
             {{ receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
         </div>
         <div class="rows-1 header">
-            {{ receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}
+            {{ receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }} / {{ receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}
         </div>
         <div class="rows-empty middle">
             &nbsp;
         </div>
         <div class="rows-2">
             {{ receiveOrder.purchaseDeliveryOrder.saleOrder.customer.name|default }} <br />
-            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|default }}
+            {{ receiveOrder.purchaseDeliveryOrder.saleOrder.customer.officeAddress|default|nl2br }}
         </div>
     </div>
 {% endblock %}
