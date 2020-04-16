@@ -5,7 +5,7 @@
 {% block body %}
     <div class="memo-content">
         <div class="rows-empty top">
-            &nbsp;
+        
         </div>
         <div class="rows-1 content-left">
             &nbsp;
@@ -31,8 +31,8 @@
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.transactionDate|default ? deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.transactionDate|date('j F Y') }}<br />
             {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.staffFirst.name|default }}
         </div>
-        <br />
-        <br />
+        <br /><br /><br />
+        
         <div class="rows-3">
             <table style="width: 90%">
                 <tr>
@@ -42,8 +42,8 @@
                         {{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleProductionYear|default }}
                     </td>
                     <td style="width: 18%">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleMachineNumber|default }}</td>
-                    <td style="width: 18%; text-align: center">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
-                    <td style="width: 18%; text-align: right">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
+                    <td style="width: 23%; text-align: center">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.vehicleChassisNumber|default }}</td>
+                    <td style="width: 23%; text-align: right">{{ deliveryOrder.deliveryInspectionHeader.receiveOrder.purchaseDeliveryOrder.saleOrder.vehicleColor|default }}</td>
                 </tr>
             </table>
         </div>
@@ -106,14 +106,14 @@
         }
         div.memo-content div.rows-2.content-right {
             width: 35mm;
-            padding-left: 6mm;
+            padding-left: 8mm;
         }
         div.memo-content div.rows-3 {
             padding-left: 6mm;
             width: 100%;
         }
         div.memo-content div.rows-empty.top {
-            height: 0.01mm;
+            height: 0.1mm;
         }
         div.memo-content div.rows-empty.middle {
             height: 18mm;
