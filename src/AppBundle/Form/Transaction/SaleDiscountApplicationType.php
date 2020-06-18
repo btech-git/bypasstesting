@@ -27,6 +27,11 @@ class SaleDiscountApplicationType extends AbstractType
                 'choices' => ConstantValueList::get(SaleDiscountApplication::class, 'TRANSACTION_STATUS'),
                 'choices_as_values' => true,
             ))
+            ->add('vehicleTestingStatus', ChoiceType::class, array(
+                'expanded' => true,
+                'choices' => ConstantValueList::get(SaleDiscountApplication::class, 'VEHICLE_TESTING_STATUS'),
+                'choices_as_values' => true,
+            ))
             ->add('ownershipStatus', ChoiceType::class, array(
                 'expanded' => true,
                 'choices' => ConstantValueList::get(SaleDiscountApplication::class, 'OWNERSHIP_STATUS'),

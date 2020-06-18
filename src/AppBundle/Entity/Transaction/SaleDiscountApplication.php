@@ -24,6 +24,8 @@ class SaleDiscountApplication extends CodeNumberEntity
     const PAYMENT_METHOD_FINANCE_COMPANY = 'leasing';
     const TRANSACTION_STATUS_NEW = 'new';
     const TRANSACTION_STATUS_REPEAT = 'repeat';
+    const VEHICLE_TESTING_STATUS_YES = 'kir';
+    const VEHICLE_TESTING_STATUS_NO = 'tanpa';
     const LEASING_STATUS_MATCHED = 'ya';
     const LEASING_STATUS_UNMATCHED = 'tidak';
     const OWNERSHIP_STATUS_OFFTHEROAD = 'Off TR';
@@ -311,6 +313,11 @@ class SaleDiscountApplication extends CodeNumberEntity
      */
     private $mediatorPrice;
     /**
+     * @ORM\Column(type="string", length=20)
+     * @Assert\NotNull()
+     */
+    private $vehicleTestingStatus;
+    /**
      * @ORM\Column(type="text")
      * @Assert\NotNull()
      */
@@ -515,6 +522,9 @@ class SaleDiscountApplication extends CodeNumberEntity
 
     public function getMediatorPrice() { return $this->mediatorPrice; }
     public function setMediatorPrice($mediatorPrice) { $this->mediatorPrice = $mediatorPrice; }
+
+    public function getVehicleTestingStatus() { return $this->vehicleTestingStatus; }
+    public function setVehicleTestingStatus($vehicleTestingStatus) { $this->vehicleTestingStatus = $vehicleTestingStatus; }
 
     public function getNote() { return $this->note; }
     public function setNote($note) { $this->note = $note; }
